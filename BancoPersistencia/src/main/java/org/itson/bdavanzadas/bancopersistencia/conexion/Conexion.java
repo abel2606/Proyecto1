@@ -7,7 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Conexion implements IConexion {
-    
+
     final String cadenaConexion;
     final String usuario;
     final String password;
@@ -15,6 +15,7 @@ public class Conexion implements IConexion {
 
     /**
      * Constructor que recibe e inicializa los atributoos de la clase.
+     *
      * @param cadenaConexion La dirección de la base de datos
      * @param usuario El usuario de la base de datos
      * @param password La contraseña del usuario
