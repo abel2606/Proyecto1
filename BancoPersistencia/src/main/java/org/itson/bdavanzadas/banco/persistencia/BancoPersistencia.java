@@ -6,6 +6,6 @@ public class BancoPersistencia {
         System.out.println("Hello World!");
         
         
-        System.out.println("Hola richi :)");
+        System.out.println("Hola richi :)   ");
     }
 }
