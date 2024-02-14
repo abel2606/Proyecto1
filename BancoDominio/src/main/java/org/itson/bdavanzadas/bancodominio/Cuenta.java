@@ -5,6 +5,7 @@ import java.util.Objects;
 public class Cuenta {
 
     private String numero;
+    private String alias;
     private float saldo;
     private Fecha fechaApertura;
     private boolean activa;
@@ -19,25 +20,30 @@ public class Cuenta {
      * Constructor que recibe e inicializa los atributos de la clase.
      *
      * @param numero El número de la cuenta
+     * @param alias El alias de la cuenta
      * @param saldo El saldo que tiene la cuenta
      * @param fechaApertura La fecha en la que se abrió la cuenta
      * @param activa Si la cuenta está activa o no
      */
-    public Cuenta(String numero, float saldo, Fecha fechaApertura, boolean activa) {
+    public Cuenta(String numero, String alias, float saldo, Fecha fechaApertura, boolean activa) {
         this.numero = numero;
+        this.alias = alias;
         this.saldo = saldo;
         this.fechaApertura = fechaApertura;
+        this.activa = activa;
     }
 
     /**
      * Constructor que recibe e inicializa todos los atributos de la clase menos
      * el número de cuenta.
      *
+     * @param alias El alias de la cuenta
      * @param saldo El saldo que tiene la cuenta
      * @param fechaApertura La fecha en la que se abrió la cuenta
      * @param activa Si la cuenta está activa o no
      */
-    public Cuenta(float saldo, Fecha fechaApertura, boolean activa) {
+    public Cuenta(String alias, float saldo, Fecha fechaApertura, boolean activa) {
+        this.alias = alias;
         this.saldo = saldo;
         this.fechaApertura = fechaApertura;
         this.activa = activa;
@@ -59,6 +65,24 @@ public class Cuenta {
      */
     public void setNumero(String numero) {
         this.numero = numero;
+    }
+
+    /**
+     * Permite obtener el alias de la cuenta.
+     *
+     * @return El alias de la cuenta
+     */
+    public String getAlias() {
+        return alias;
+    }
+
+    /**
+     * Permite establecer el alias de la cuenta.
+     *
+     * @param alias El alias de la cuenta
+     */
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     /**
@@ -126,7 +150,7 @@ public class Cuenta {
         hash = 89 * hash + Objects.hashCode(this.numero);
         return hash;
     }
-    
+
     /**
      * Permite comparar una cuenta con otra entidad.
      *
