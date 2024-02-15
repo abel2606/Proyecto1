@@ -6,10 +6,6 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Permite establecer una conexion con mysql
- * @author Abel
- */
 public class Conexion implements IConexion {
 
     final String cadenaConexion;
