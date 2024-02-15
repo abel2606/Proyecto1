@@ -42,7 +42,7 @@ public class CuentasDAO implements ICuentasDAO {
                              """;
         try (
             Connection conexion = this.conexionBD.obtenerConexion(); 
-            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS)
+            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);
         ) {
             int esActiva = 0;
             if (cuentaNueva.isActiva()) {
