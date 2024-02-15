@@ -19,37 +19,45 @@ public class Cliente {
     }
 
     /**
-     * Constructor que recibe id, nombre, apellido paterno, apellido materno y
-     * fecha de nacimiento del cliente.
+     * Constructor que recibe id, nombre, apellido paterno, apellido materno,
+     * fecha de nacimiento, usuario y contraseña del cliente.
      *
      * @param id El id en la base de datos
      * @param nombre El nombre
      * @param apellidoPaterno El apellido paterno
      * @param apellidoMaterno El apellido materno
      * @param fechaNacimiento La fecha de nacimiento
+     * @param usuario El usuario del cliente
+     * @param contrasena La contraseña del cliente
      */
-    public Cliente(Long id, String nombre, String apellidoPaterno, String apellidoMaterno, Fecha fechaNacimiento) {
+    public Cliente(Long id, String nombre, String apellidoPaterno, String apellidoMaterno, Fecha fechaNacimiento, String usuario, String contrasena) {
         this.id = id;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
         this.fechaNacimiento = fechaNacimiento;
+        this.usuario = usuario;
+        this.contrasena = contrasena;
     }
 
     /**
-     * Constructor que recibe nombre, apellido paterno, apellido materno y fecha
-     * de nacimiento del cliente.
+     * Constructor que recibe nombre, apellido paterno, apellido materno, fecha
+     * de nacimiento, usuario y contraseña del cliente.
      *
      * @param nombre El nombre
      * @param apellidoPaterno El apellido paterno
      * @param apellidoMaterno El apellido materno
      * @param fechaNacimiento La fecha de nacimiento
+     * @param usuario El usuario del cliente
+     * @param contrasena La contraseña del cliente
      */
-    public Cliente(String nombre, String apellidoPaterno, String apellidoMaterno, Fecha fechaNacimiento) {
+    public Cliente(String nombre, String apellidoPaterno, String apellidoMaterno, Fecha fechaNacimiento, String usuario, String contrasena) {
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
         this.fechaNacimiento = fechaNacimiento;
+        this.usuario = usuario;
+        this.contrasena = contrasena;
     }
 
     /**
