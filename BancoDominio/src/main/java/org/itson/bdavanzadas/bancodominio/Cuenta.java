@@ -9,6 +9,7 @@ public class Cuenta {
     private Float saldo;
     private Fecha fechaApertura;
     private Boolean activa;
+    private Long idCliente;
 
     /**
      * Constructor vacío.
@@ -24,13 +25,15 @@ public class Cuenta {
      * @param saldo El saldo que tiene la cuenta
      * @param fechaApertura La fecha en la que se abrió la cuenta
      * @param activa Si la cuenta está activa o no
+     * @param idCliente El id del cliente al que pertenece la cuenta
      */
-    public Cuenta(String numero, String alias, float saldo, Fecha fechaApertura, boolean activa) {
+    public Cuenta(String numero, String alias, Float saldo, Fecha fechaApertura, Boolean activa, Long idCliente) {
         this.numero = numero;
         this.alias = alias;
         this.saldo = saldo;
         this.fechaApertura = fechaApertura;
         this.activa = activa;
+        this.idCliente = idCliente;
     }
 
     /**
@@ -41,12 +44,14 @@ public class Cuenta {
      * @param saldo El saldo que tiene la cuenta
      * @param fechaApertura La fecha en la que se abrió la cuenta
      * @param activa Si la cuenta está activa o no
+     * @param idCliente El id del cliente al que pertenece la cuenta
      */
-    public Cuenta(String alias, float saldo, Fecha fechaApertura, boolean activa) {
+    public Cuenta(String alias, Float saldo, Fecha fechaApertura, Boolean activa, Long idCliente) {
         this.alias = alias;
         this.saldo = saldo;
         this.fechaApertura = fechaApertura;
         this.activa = activa;
+        this.idCliente = idCliente;
     }
 
     /**
@@ -137,6 +142,24 @@ public class Cuenta {
      */
     public void setActiva(boolean activa) {
         this.activa = activa;
+    }
+
+    /**
+     * Permite obtener el id del cliente al que pertenece la cuenta.
+     *
+     * @return El id del cliente al que pertenece la cuenta
+     */
+    public Long getIdCliente() {
+        return idCliente;
+    }
+
+    /**
+     * Permite establecer el id del cliente al que pertenece la cuenta.
+     *
+     * @param idCliente El id del cliente al que pertence la cuenta
+     */
+    public void setIdCliente(Long idCliente) {
+        this.idCliente = idCliente;
     }
 
     /**
