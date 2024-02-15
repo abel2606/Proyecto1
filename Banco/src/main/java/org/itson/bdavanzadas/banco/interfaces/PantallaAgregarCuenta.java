@@ -1,6 +1,7 @@
 package org.itson.bdavanzadas.banco.interfaces;
 
 import javax.swing.JOptionPane;
+import org.itson.bdavanzadas.bancodominio.Cliente;
 import org.itson.bdavanzadas.bancodominio.Cuenta;
 import org.itson.bdavanzadas.bancodominio.Fecha;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
@@ -15,11 +16,14 @@ public class PantallaAgregarCuenta extends javax.swing.JFrame {
      * Creates new form PantallaAgregarCuenta.
      *
      * @param conexion La conexión a la base de datos
+     * @param cliente
      */
-    public PantallaAgregarCuenta(IConexion conexion) {
+    public PantallaAgregarCuenta(IConexion conexion, Cliente cliente) {
         initComponents();
         setTitle("Agregar Cuenta");
         cuentasDAO = new CuentasDAO(conexion);
+        this.cliente = cliente;
+        txtPropietario.setText(cliente.getNombre() + " " + cliente.getApellidoPaterno() + " " + cliente.getApellidoMaterno());
     }
 
     /**
@@ -36,6 +40,7 @@ public class PantallaAgregarCuenta extends javax.swing.JFrame {
         cuentaNueva.setFechaApertura(new Fecha());
         cuentaNueva.setSaldo(0.0f);
         cuentaNueva.setActiva(true);
+        cuentaNueva.setIdCliente(cliente.getId());
 
         try {
             cuentaNueva.isValid();
@@ -49,14 +54,6 @@ public class PantallaAgregarCuenta extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage(),
                     "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-    /**
-     * Permite limpiar los datos de los campos de texto.
-     */
-    private void limpiarDatos() {
-        txtPropietario.setText("");
-        txtAliasCuenta.setText("");
     }
 
     /**
@@ -126,6 +123,7 @@ public class PantallaAgregarCuenta extends javax.swing.JFrame {
         lblPropietario.setForeground(new java.awt.Color(41, 92, 52));
         lblPropietario.setText("Propietario");
 
+        txtPropietario.setEditable(false);
         txtPropietario.setFont(new java.awt.Font("Arial", 1, 34)); // NOI18N
         txtPropietario.setForeground(new java.awt.Color(99, 134, 107));
         txtPropietario.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 117), 2, true));
@@ -238,4 +236,5 @@ public class PantallaAgregarCuenta extends javax.swing.JFrame {
     private javax.swing.JTextField txtPropietario;
     // End of variables declaration//GEN-END:variables
     private CuentasDAO cuentasDAO;
+    private Cliente cliente;
 }
