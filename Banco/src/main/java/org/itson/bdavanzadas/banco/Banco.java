@@ -3,7 +3,7 @@ package org.itson.bdavanzadas.banco;
 import org.itson.bdavanzadas.bancopersistencia.conexion.Conexion;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import java.util.logging.Logger;
-import org.itson.bdavanzadas.banco.interfaces.PantallaAgregarCuenta;
+import org.itson.bdavanzadas.banco.interfaces.PantallaCuentas;
 import org.itson.bdavanzadas.bancopersistencia.daos.CuentasDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.ICuentasDAO;
 
@@ -18,8 +18,8 @@ public class Banco {
 
         IConexion conexion = new Conexion(cadenaConexion, usuario, contrasenia);
         ICuentasDAO cuentaDAO = new CuentasDAO(conexion);
-        PantallaAgregarCuenta pantallaAgregarCuenta = new PantallaAgregarCuenta(conexion);
-        pantallaAgregarCuenta.setVisible(true);
+        PantallaCuentas pantallaCuentas = new PantallaCuentas(conexion);
+        pantallaCuentas.setVisible(true);
 
 //        CuentaNuevaDTO cuentaNueva = new CuentaNuevaDTO();
 //        cuentaNueva.setSaldo(0);
