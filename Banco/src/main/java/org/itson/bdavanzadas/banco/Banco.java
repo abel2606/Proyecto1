@@ -37,7 +37,7 @@ public class Banco {
         clienteNuevo.setContrasena("password");
         
         try {
-            Cliente cliente = clientesDAO
+            Cliente clienteAgregado = clientesDAO.agregar(clienteNuevo);
         } catch (PersistenciaException e) {
             logger.log(Level.SEVERE, null, e);
         }

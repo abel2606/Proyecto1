@@ -41,9 +41,7 @@ public class CuentasDAO implements ICuentasDAO {
                              VALUES (?, ?, ?, ?);
                              """;
         try (
-            Connection conexion = this.conexionBD.obtenerConexion(); 
-            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);
-        ) {
+                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);) {
             int esActiva = 0;
             if (cuentaNueva.isActiva()) {
                 esActiva = 1;
@@ -57,7 +55,8 @@ public class CuentasDAO implements ICuentasDAO {
             ResultSet idsGenerados = comando.getGeneratedKeys();
             idsGenerados.next();
             Cuenta cuenta = new Cuenta(idsGenerados.getString(1), cuentaNueva.getAlias(),
-                    cuentaNueva.getSaldo(), cuentaNueva.getFechaApertura(), cuentaNueva.isActiva());
+                    cuentaNueva.getSaldo(), cuentaNueva.getFechaApertura(), cuentaNueva.isActiva(),
+                    cuentaNueva.getIdCliente());
             return cuenta;
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, "No se pudo guardar la cuenta", ex);
