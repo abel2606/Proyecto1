@@ -90,21 +90,11 @@ public class PantallaCuentas extends javax.swing.JFrame {
         btnActualizarCliente.setBorderPainted(false);
         btnActualizarCliente.setContentAreaFilled(false);
         btnActualizarCliente.setFocusPainted(false);
-        btnActualizarCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnActualizarClienteActionPerformed(evt);
-            }
-        });
 
         btnCerrarSesion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/CerrarSesion.png"))); // NOI18N
         btnCerrarSesion.setBorderPainted(false);
         btnCerrarSesion.setContentAreaFilled(false);
         btnCerrarSesion.setFocusPainted(false);
-        btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCerrarSesionActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -151,14 +141,6 @@ public class PantallaCuentas extends javax.swing.JFrame {
         PantallaAgregarCuenta pantallaAgregarCuenta = new PantallaAgregarCuenta(conexion);
         pantallaAgregarCuenta.setVisible(true);
     }//GEN-LAST:event_btnAgregarCuentaActionPerformed
-
-    private void btnActualizarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarClienteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnActualizarClienteActionPerformed
-
-    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizarCliente;
