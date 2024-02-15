@@ -3,6 +3,10 @@ package org.itson.bdavanzadas.bancopersistencia.conexion;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * 
+ * @author Abel
+ */
 public interface IConexion {
 
     /**
