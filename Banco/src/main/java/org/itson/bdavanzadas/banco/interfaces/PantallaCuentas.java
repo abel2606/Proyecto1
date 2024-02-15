@@ -1,7 +1,13 @@
 package org.itson.bdavanzadas.banco.interfaces;
 
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+import org.itson.bdavanzadas.bancodominio.Cuenta;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.daos.CuentasDAO;
+import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
 public class PantallaCuentas extends javax.swing.JFrame {
 
@@ -15,6 +21,41 @@ public class PantallaCuentas extends javax.swing.JFrame {
         setTitle("Cuentas");
         this.conexion = conexion;
         cuentasDAO = new CuentasDAO(conexion);
+    }
+    
+    private void llenarTabla() {
+        // Obtener la lista de socios
+        List<Cuenta> listaCuentas;
+        try {
+            listaCuentas = cuentasDAO.consultar();
+            DefaultTableModel modelo = new DefaultTableModel();
+            modelo.addColumn("ALIAS");
+            modelo.addColumn("SALDO");
+            modelo.addColumn("FECHA APERTURA");
+            modelo.addColumn("ACTIVA");
+            modelo.addColumn("");
+
+            // Agregar los socios al modelo de la tabla
+            for (Cuenta cuenta : listaCuentas) {
+                Object[] fila = {cuenta.getAlias(), cuenta.getSaldo(), cuenta.getFechaApertura(), cuenta.isActiva(), "Ver"};
+                modelo.addRow(fila);
+            }
+
+            tblCuentas.setModel(modelo);
+            TableColumnModel columnModel = tblCuentas.getColumnModel();
+
+        } catch (PersistenciaException e) {
+            JOptionPane.showMessageDialog(this, "Error al consultar la información de los socios: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private Cuenta obtenerCuentaDesdeFila(int fila) throws PersistenciaException {
+        List<Cuenta> listaSocios = cuentasDAO.consultar();
+        if (fila >= 0 && fila < listaSocios.size()) {
+            return listaSocios.get(fila);
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -34,6 +75,8 @@ public class PantallaCuentas extends javax.swing.JFrame {
         btnAgregarCuenta = new javax.swing.JButton();
         btnActualizarCliente = new javax.swing.JButton();
         btnCerrarSesion = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblCuentas = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -61,7 +104,7 @@ public class PantallaCuentas extends javax.swing.JFrame {
                 .addComponent(lblPokebolaIzq)
                 .addGap(354, 354, 354)
                 .addComponent(lblTitulo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 354, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblPokebolaDer)
                 .addGap(19, 19, 19))
         );
@@ -96,12 +139,25 @@ public class PantallaCuentas extends javax.swing.JFrame {
         btnCerrarSesion.setContentAreaFilled(false);
         btnCerrarSesion.setFocusPainted(false);
 
+        tblCuentas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tblCuentas);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1100, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnCerrarSesion)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -109,6 +165,10 @@ public class PantallaCuentas extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnAgregarCuenta)
                 .addGap(12, 12, 12))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(77, 77, 77)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 946, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(77, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -119,7 +179,9 @@ public class PantallaCuentas extends javax.swing.JFrame {
                     .addComponent(btnAgregarCuenta)
                     .addComponent(btnActualizarCliente)
                     .addComponent(btnCerrarSesion))
-                .addContainerGap(453, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -148,9 +210,11 @@ public class PantallaCuentas extends javax.swing.JFrame {
     private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblPokebolaDer;
     private javax.swing.JLabel lblPokebolaIzq;
     private javax.swing.JLabel lblTitulo;
+    private javax.swing.JTable tblCuentas;
     // End of variables declaration//GEN-END:variables
     private CuentasDAO cuentasDAO;
     private IConexion conexion;
