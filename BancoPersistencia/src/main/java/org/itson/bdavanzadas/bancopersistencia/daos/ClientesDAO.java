@@ -37,12 +37,13 @@ public class ClientesDAO implements IClientesDAO {
     @Override
     public Cliente agregar(ClienteNuevoDTO clienteNuevo) throws PersistenciaException {
         String sentenciaSQL = """
-                             INSERT INTO clientes(nombre,apellidoPaterno,apellidoMaterno,fechaNacimiento,usuario,contrasena)
+                             INSERT INTO clientes(nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, usuario, contrasena)
                              VALUES (?,?,?,?,?,?);
                              """;
         try (
-                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);) {
-
+            Connection conexion = this.conexionBD.obtenerConexion(); 
+            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);
+        ) {
             comando.setString(1, clienteNuevo.getNombre());
             comando.setString(2, clienteNuevo.getApellidoPaterno());
             comando.setString(3, clienteNuevo.getApellidoMaterno());
@@ -52,7 +53,6 @@ public class ClientesDAO implements IClientesDAO {
 
             int numRegistrosInsertados = comando.executeUpdate();
             logger.log(Level.INFO, "Se agregaron {0} clientes", numRegistrosInsertados);
-
             ResultSet idsGenerados = comando.getGeneratedKeys();
             idsGenerados.next();
             Cliente cliente = new Cliente(idsGenerados.getLong(1), clienteNuevo.getNombre(), 

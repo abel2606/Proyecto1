@@ -37,11 +37,13 @@ public class CuentasDAO implements ICuentasDAO {
     @Override
     public Cuenta agregar(CuentaNuevaDTO cuentaNueva) throws PersistenciaException {
         String sentenciaSQL = """
-                             INSERT INTO cuentas(saldo, alias, fechaApertura, activa)
-                             VALUES (?, ?, ?, ?);
+                             INSERT INTO cuentas(saldo, alias, fechaApertura, identificadorCliente, activa)
+                             VALUES (?, ?, ?, ?, ?);
                              """;
         try (
-                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);) {
+            Connection conexion = this.conexionBD.obtenerConexion(); 
+            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);
+        ) {
             int esActiva = 0;
             if (cuentaNueva.isActiva()) {
                 esActiva = 1;
@@ -49,7 +51,8 @@ public class CuentasDAO implements ICuentasDAO {
             comando.setFloat(1, cuentaNueva.getSaldo());
             comando.setString(2, cuentaNueva.getAlias());
             comando.setString(3, cuentaNueva.getFechaApertura().toString());
-            comando.setString(4, String.valueOf(esActiva));
+            comando.setString(4, cuentaNueva.getIdCliente().toString());
+            comando.setString(5, String.valueOf(esActiva));
             int numRegistrosInsertados = comando.executeUpdate();
             logger.log(Level.INFO, "Se agregaron {0} cuentas", numRegistrosInsertados);
             ResultSet idsGenerados = comando.getGeneratedKeys();

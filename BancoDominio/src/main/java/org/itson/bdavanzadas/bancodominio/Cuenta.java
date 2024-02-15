@@ -207,6 +207,7 @@ public class Cuenta {
         sb.append("numero=").append(numero);
         sb.append(", saldo=").append(saldo);
         sb.append(", fechaApertura=").append(fechaApertura);
+        sb.append(", idCliente=").append(idCliente);
         sb.append(", activa=").append(activa);
         sb.append('}');
         return sb.toString();
