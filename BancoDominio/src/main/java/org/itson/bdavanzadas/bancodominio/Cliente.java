@@ -3,14 +3,18 @@ package org.itson.bdavanzadas.bancodominio;
 import java.util.Objects;
 
 public class Cliente {
-
-    private Long id;
+private Long id;
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
     private Fecha fechaNacimiento;
     private String usuario;
     private String contrasena;
+    private String calle;
+    private String colonia;
+    private String numero;
+    private String codigoPostal;
+    private String ciudad;
 
     /**
      * Constructor vacío.
@@ -20,7 +24,9 @@ public class Cliente {
 
     /**
      * Constructor que recibe id, nombre, apellido paterno, apellido materno,
-     * fecha de nacimiento, usuario y contraseña del cliente.
+     * fecha de nacimiento, usuario, contraseña, calle, colonia, numero,
+     * codigo postal, y ciudad
+   
      *
      * @param id El id en la base de datos
      * @param nombre El nombre
@@ -29,8 +35,13 @@ public class Cliente {
      * @param fechaNacimiento La fecha de nacimiento
      * @param usuario El usuario del cliente
      * @param contrasena La contraseña del cliente
+     * @param calle La ciudad
+     * @param colonia La colonia
+     * @param numero El número de casa 
+     * @param codigoPostal El codigo postal
+     * @param ciudad La ciudad
      */
-    public Cliente(Long id, String nombre, String apellidoPaterno, String apellidoMaterno, Fecha fechaNacimiento, String usuario, String contrasena) {
+    public Cliente(Long id, String nombre, String apellidoPaterno, String apellidoMaterno, Fecha fechaNacimiento, String usuario, String contrasena, String calle, String colonia, String numero, String codigoPostal, String ciudad) {    
         this.id = id;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -38,11 +49,17 @@ public class Cliente {
         this.fechaNacimiento = fechaNacimiento;
         this.usuario = usuario;
         this.contrasena = contrasena;
+        this.calle = calle;
+        this.colonia = colonia;
+        this.numero = numero;
+        this.codigoPostal = codigoPostal;
+        this.ciudad = ciudad;
     }
 
     /**
      * Constructor que recibe nombre, apellido paterno, apellido materno, fecha
-     * de nacimiento, usuario y contraseña del cliente.
+     * de nacimiento, usuario y contraseña del cliente, Además de los datos de
+     * dimicilio que son colonia, numero, codigo postal y ciudad
      *
      * @param nombre El nombre
      * @param apellidoPaterno El apellido paterno
@@ -50,14 +67,24 @@ public class Cliente {
      * @param fechaNacimiento La fecha de nacimiento
      * @param usuario El usuario del cliente
      * @param contrasena La contraseña del cliente
+     * @param calle La ciudad
+     * @param colonia La colonia
+     * @param numero El número de casa 
+     * @param codigoPostal El codigo postal
+     * @param ciudad La ciudad
      */
-    public Cliente(String nombre, String apellidoPaterno, String apellidoMaterno, Fecha fechaNacimiento, String usuario, String contrasena) {
+    public Cliente(String nombre, String apellidoPaterno, String apellidoMaterno, Fecha fechaNacimiento, String usuario, String contrasena, String calle, String colonia, String numero, String codigoPostal, String ciudad) {    
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
         this.fechaNacimiento = fechaNacimiento;
         this.usuario = usuario;
         this.contrasena = contrasena;
+        this.calle = calle;
+        this.colonia = colonia;
+        this.numero = numero;
+        this.codigoPostal = codigoPostal;
+        this.ciudad = ciudad;
     }
 
     /**
@@ -235,6 +262,12 @@ public class Cliente {
         sb.append(", fechaNacimiento=").append(fechaNacimiento);
         sb.append(", usuario=").append(usuario);
         sb.append(", contrasena=").append(contrasena);
+        sb.append(", calle=").append(calle);
+        sb.append(", colonia=").append(colonia);
+        sb.append(", numero=").append(numero);
+        sb.append(", codigoPostal=").append(codigoPostal);
+        sb.append(", ciudad=").append(ciudad);
+        
         sb.append('}');
         return sb.toString();
     }
