@@ -10,7 +10,12 @@ public class ClienteNuevoDTO {
     private Fecha fechaNacimiento;
     private String usuario;
     private String contrasena;
-    
+    private String calle;
+    private String numero;
+    private String colonia;
+    private String codigoPostal;
+    private String ciudad;
+
     /**
      * Permite obtener el nombre del cliente.
      *
@@ -117,6 +122,89 @@ public class ClienteNuevoDTO {
      */
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
+    }
+
+    /**
+     * Permite obtener la calle del cliente
+     *
+     * @return la calle del cliente
+     */
+    public String getCalle() {
+        return calle;
+    }
+
+    /**
+     * Permite establecer el valor de la calle del cliente
+     *
+     * @param calle la calle del cliente
+     */
+    public void setCalle(String calle) {
+        this.calle = calle;
+    }
+
+    /**
+     * Permite establecer el valor del numero de domicilio del cliente
+     *
+     * @return numero de domicilio del cliente
+     */
+    public String getNumero() {
+        return numero;
+    }
+
+    /**
+     * Permite establecer el valor de un numeroo
+     * @param numero valor del numero
+     */
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    /**
+     * permite obtener el valor de la colonia del cliente
+     * @return la colonia del cliente
+     */
+    public String getColonia() {
+        return colonia;
+    }
+
+    /**
+     * permite establecer el valor de la colonia
+     * @param colonia la colonia del cliente
+     */
+    public void setColonia(String colonia) {
+        this.colonia = colonia;
+    }
+
+    /**
+     * permite obtener el codigo postal del cliente
+     * @return regresa el valor del codigo postal del cliente
+     */
+    public String getCodigoPostal() {
+        return codigoPostal;
+    }
+
+    /**
+     * permite obtener el codigo postal
+     * @param codigoPostal valor del codigo postal del cliente
+     */
+    public void setCodigoPostal(String codigoPostal) {
+        this.codigoPostal = codigoPostal;
+    }
+
+    /** 
+     * permite obtener la ciudad del cliente
+     * @return la ciudad del cliente
+     */
+    public String getCiudad() {
+        return ciudad;
+    }
+
+    /**
+     * permite establecer el valor de la ciudad
+     * @param ciudad la ciudad
+     */
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
     }
     
 }
