@@ -3,7 +3,7 @@ package org.itson.bdavanzadas.banco.interfaces;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
+import org.itson.bdavanzadas.bancodominio.Cliente;
 import org.itson.bdavanzadas.bancodominio.Cuenta;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.daos.CuentasDAO;
@@ -15,19 +15,22 @@ public class PantallaCuentas extends javax.swing.JFrame {
      * Creates new form PantallaCuentas.
      *
      * @param conexion La conexión a la base de datos
+     * @param cliente
      */
-    public PantallaCuentas(IConexion conexion) {
+    public PantallaCuentas(IConexion conexion, Cliente cliente) {
         initComponents();
         setTitle("Cuentas");
         this.conexion = conexion;
+        this.cliente = cliente;
         cuentasDAO = new CuentasDAO(conexion);
+        llenarTabla();
     }
     
     private void llenarTabla() {
         // Obtener la lista de socios
         List<Cuenta> listaCuentas;
         try {
-            listaCuentas = cuentasDAO.consultar();
+            listaCuentas = cuentasDAO.consultar(cliente.getId());
             DefaultTableModel modelo = new DefaultTableModel();
             modelo.addColumn("ALIAS");
             modelo.addColumn("SALDO");
@@ -40,21 +43,9 @@ public class PantallaCuentas extends javax.swing.JFrame {
                 Object[] fila = {cuenta.getAlias(), cuenta.getSaldo(), cuenta.getFechaApertura(), cuenta.isActiva(), "Ver"};
                 modelo.addRow(fila);
             }
-
             tblCuentas.setModel(modelo);
-            TableColumnModel columnModel = tblCuentas.getColumnModel();
-
         } catch (PersistenciaException e) {
             JOptionPane.showMessageDialog(this, "Error al consultar la información de los socios: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    private Cuenta obtenerCuentaDesdeFila(int fila) throws PersistenciaException {
-        List<Cuenta> listaSocios = cuentasDAO.consultar();
-        if (fila >= 0 && fila < listaSocios.size()) {
-            return listaSocios.get(fila);
-        } else {
-            return null;
         }
     }
 
@@ -77,6 +68,7 @@ public class PantallaCuentas extends javax.swing.JFrame {
         btnCerrarSesion = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblCuentas = new javax.swing.JTable();
+        btnActualizarTabla = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -152,6 +144,13 @@ public class PantallaCuentas extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblCuentas);
 
+        btnActualizarTabla.setText("Actualizar Tabla");
+        btnActualizarTabla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarTablaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -167,7 +166,9 @@ public class PantallaCuentas extends javax.swing.JFrame {
                 .addGap(12, 12, 12))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(77, 77, 77)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 946, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnActualizarTabla)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 946, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(77, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -180,8 +181,10 @@ public class PantallaCuentas extends javax.swing.JFrame {
                     .addComponent(btnActualizarCliente)
                     .addComponent(btnCerrarSesion))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addComponent(btnActualizarTabla)
+                .addGap(18, 18, 18))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -200,12 +203,17 @@ public class PantallaCuentas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCuentaActionPerformed
-        PantallaAgregarCuenta pantallaAgregarCuenta = new PantallaAgregarCuenta(conexion);
+        PantallaAgregarCuenta pantallaAgregarCuenta = new PantallaAgregarCuenta(conexion, cliente);
         pantallaAgregarCuenta.setVisible(true);
     }//GEN-LAST:event_btnAgregarCuentaActionPerformed
 
+    private void btnActualizarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarTablaActionPerformed
+        llenarTabla();
+    }//GEN-LAST:event_btnActualizarTablaActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizarCliente;
+    private javax.swing.JButton btnActualizarTabla;
     private javax.swing.JButton btnAgregarCuenta;
     private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JPanel jPanel1;
@@ -218,4 +226,5 @@ public class PantallaCuentas extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     private CuentasDAO cuentasDAO;
     private IConexion conexion;
+    private Cliente cliente;
 }

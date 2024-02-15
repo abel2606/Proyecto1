@@ -5,9 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.itson.bdavanzadas.bancodominio.Cuenta;
+import org.itson.bdavanzadas.bancodominio.Fecha;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.dtos.CuentaNuevaDTO;
 import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
@@ -24,6 +27,34 @@ public class CuentasDAO implements ICuentasDAO {
      */
     public CuentasDAO(IConexion conexion) {
         this.conexionBD = conexion;
+    }
+
+    @Override
+    public List<Cuenta> consultar(Long idCliente) throws PersistenciaException {
+        String sentenciaSQL = """
+                              SELECT numero, saldo, alias, fechaApertura, activa, identificadorCliente 
+                              FROM cuentas 
+                              WHERE identificadorCliente = ?
+                              """;
+        List<Cuenta> cuentas = new LinkedList<>();
+        try (
+            Connection conexion = this.conexionBD.obtenerConexion(); 
+            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
+        ) {
+            comando.setString(1, idCliente.toString());
+            ResultSet resultado = comando.executeQuery();
+
+            while (resultado.next()) {
+                Cuenta cuenta = new Cuenta(resultado.getString("numero"), resultado.getString("alias"), 
+                        resultado.getFloat("saldo"), new Fecha(resultado.getString("fechaApertura")),
+                        resultado.getBoolean("activa"), resultado.getLong("identificadorCliente"));
+                cuentas.add(cuenta);
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Error al consultar las cuentas del cliente", ex);
+            throw new PersistenciaException("Error al consultar las cuentas del cliente");
+        }
+        return cuentas;
     }
 
     /**
