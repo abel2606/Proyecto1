@@ -174,7 +174,7 @@ public class Cliente {
      *
      * @param contrasena La contraseña del cliente
      */
-    public void setContrasenia(String contrasena) {
+    public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
     }
 
