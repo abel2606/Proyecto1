@@ -1,5 +1,9 @@
 package org.itson.bdavanzadas.bancopersistencia.excepciones;
 
+/**
+ *
+ * @author Abe
+ */
 public class PersistenciaException extends Exception {
 
     /**

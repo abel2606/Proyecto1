@@ -189,12 +189,12 @@ public class Fecha extends GregorianCalendar {
     }
 
     /**
-     * Devuelve una cadena de texto con una fecha con formato "dd/mm/aaaa"
+     * Devuelve una cadena de texto con una fecha con formato "aaaa-mm-dd"
      *
-     * @return Una cadena de texto con una fecha con formato "dd/mm/aaaa"
+     * @return Una cadena de texto con una fecha con formato "aaaa-mm-dd"
      */
     @Override
     public String toString() {
-        return getDia() + "/" + getMes() + "/" + getAnio();
+        return getAnio()+"-"+getMes()+"-"+getDia();
     }
 }
