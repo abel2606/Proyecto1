@@ -1,15 +1,11 @@
 package org.itson.bdavanzadas.banco;
 
-import org.itson.bdavanzadas.bancodominio.Cuenta;
 import org.itson.bdavanzadas.bancopersistencia.conexion.Conexion;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.itson.bdavanzadas.bancodominio.Fecha;
+import org.itson.bdavanzadas.banco.interfaces.PantallaAgregarCuenta;
 import org.itson.bdavanzadas.bancopersistencia.daos.CuentasDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.ICuentasDAO;
-import org.itson.bdavanzadas.bancopersistencia.dtos.CuentaNuevaDTO;
-import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
 public class Banco {
 
@@ -18,23 +14,25 @@ public class Banco {
     public static void main(String[] args) {
         String cadenaConexion = "jdbc:mysql://localhost/banco";
         String usuario = "root";
-        String contrasenia = "Abel123";
+        String contrasenia = "password";
 
         IConexion conexion = new Conexion(cadenaConexion, usuario, contrasenia);
         ICuentasDAO cuentaDAO = new CuentasDAO(conexion);
+        PantallaAgregarCuenta pantallaAgregarCuenta = new PantallaAgregarCuenta(conexion);
+        pantallaAgregarCuenta.setVisible(true);
 
-        CuentaNuevaDTO cuentaNueva = new CuentaNuevaDTO();
-        cuentaNueva.setSaldo(0);
-        cuentaNueva.setAlias("Pokemones");
-        cuentaNueva.setFechaApertura(new Fecha(12, 12, 2023));
-        cuentaNueva.setActiva(true);
-
-        try {
-            Cuenta cuentaAgregada = cuentaDAO.agregar(cuentaNueva);
-            logger.log(Level.INFO, cuentaAgregada.toString());
-        } catch (PersistenciaException e) {
-            logger.log(Level.SEVERE, null, e);
-        }
+//        CuentaNuevaDTO cuentaNueva = new CuentaNuevaDTO();
+//        cuentaNueva.setSaldo(0);
+//        cuentaNueva.setAlias("Pokemones");
+//        cuentaNueva.setFechaApertura(new Fecha(12, 12, 2023));
+//        cuentaNueva.setActiva(true);
+//
+//        try {
+//            Cuenta cuentaAgregada = cuentaDAO.agregar(cuentaNueva);
+//            logger.log(Level.INFO, cuentaAgregada.toString());
+//        } catch (PersistenciaException e) {
+//            logger.log(Level.SEVERE, null, e);
+//        }
 
     }
 }
