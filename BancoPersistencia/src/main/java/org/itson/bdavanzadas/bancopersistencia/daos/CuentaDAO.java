@@ -12,6 +12,9 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.itson.bdavanzadas.bancodominio.Cuenta;
+import org.itson.bdavanzadas.bancopersistencia.dtos.CuentaDTO;
+import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
+import org.itson.bdavanzadas.bancodominio.Cuenta;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.dtos.CuentaDTO;
 import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
@@ -74,6 +77,6 @@ public class CuentaDAO implements ICuentaDAO{
             logger.log(Level.SEVERE, "No se pudo guardar la cuenta", ex);
             throw new PersistenciaException("No se pudo guardar la cuenta");
         }
-    }
+}
     
 }
