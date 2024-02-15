@@ -5,9 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.itson.bdavanzadas.bancodominio.Cliente;
+import org.itson.bdavanzadas.bancodominio.Fecha;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.dtos.ClienteNuevoDTO;
 import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
@@ -24,6 +27,37 @@ public class ClientesDAO implements IClientesDAO {
      */
     public ClientesDAO(IConexion conexionBD) {
         this.conexionBD = conexionBD;
+    }
+    
+    @Override
+    public List<Cliente> consultar() throws PersistenciaException {
+        String sentenciaSQL = """
+                              SELECT identificador, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, usuario, contrasena
+                              FROM clientes;
+                              """;
+        List<Cliente> listaCliente = new LinkedList<>();
+        try (
+            Connection conexion = this.conexionBD.obtenerConexion(); 
+            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
+        ) {
+            ResultSet resultados = comando.executeQuery();
+            while (resultados.next()) {
+                Long id = resultados.getLong("identificador");
+                String nombre = resultados.getString("nombre");
+                String apellidoPaterno = resultados.getString("apellidoPaterno");
+                String apellidoMaterno = resultados.getString("apellidoMaterno");
+                Fecha fechaNacimiento  = new Fecha(resultados.getString("fechaNacimiento"));
+                String usuario = resultados.getString("usuario");
+                String contrasena = resultados.getString("contrasena");
+                Cliente cliente = new Cliente(id, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, usuario, contrasena);
+                listaCliente.add(cliente);
+            }
+            logger.log(Level.INFO, "Se consultaron {0} clientes", listaCliente.size());
+            return listaCliente;
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "No se pudieron consultar los clientes.", e);
+            throw new PersistenciaException("No se pudieron consultar los clientes.", e);
+        }
     }
 
     /**
