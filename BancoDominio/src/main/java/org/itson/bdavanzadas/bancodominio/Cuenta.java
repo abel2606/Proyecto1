@@ -6,9 +6,9 @@ public class Cuenta {
 
     private String numero;
     private String alias;
-    private float saldo;
+    private Float saldo;
     private Fecha fechaApertura;
-    private boolean activa;
+    private Boolean activa;
 
     /**
      * Constructor vacío.
