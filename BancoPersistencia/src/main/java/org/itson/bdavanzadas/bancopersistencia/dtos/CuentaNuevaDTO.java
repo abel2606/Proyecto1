@@ -11,6 +11,7 @@ public class CuentaNuevaDTO {
     private Float saldo;
     private Fecha fechaApertura;
     private Boolean activa;
+    private Long idCliente;
 
     /**
      * Permite obtener el nombre del propietario de la cuenta.
@@ -100,6 +101,24 @@ public class CuentaNuevaDTO {
      */
     public void setActiva(boolean activa) {
         this.activa = activa;
+    }
+
+    /**
+     * Permite obtener el id del cliente al que pertenece la cuenta.
+     *
+     * @return El id del cliente al que pertenece la cuenta
+     */
+    public Long getIdCliente() {
+        return idCliente;
+    }
+
+    /**
+     * Permite establecer el id del cliente al que pertenece la cuenta.
+     *
+     * @param idCliente El id del cliente al que pertenece la cuenta
+     */
+    public void setIdCliente(Long idCliente) {
+        this.idCliente = idCliente;
     }
 
     /**
