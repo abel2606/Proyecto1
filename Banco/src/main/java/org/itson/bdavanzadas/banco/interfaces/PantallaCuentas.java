@@ -40,7 +40,15 @@ public class PantallaCuentas extends javax.swing.JFrame {
 
             // Agregar los socios al modelo de la tabla
             for (Cuenta cuenta : listaCuentas) {
-                Object[] fila = {cuenta.getAlias(), cuenta.getSaldo(), cuenta.getFechaApertura(), cuenta.isActiva(), "Ver"};
+                Boolean activa = cuenta.isActiva();
+                String activaString; 
+                if (activa) {
+                    activaString = "Si";
+                } else {
+                    activaString = "No";
+                }
+                
+                Object[] fila = {cuenta.getAlias(), cuenta.getSaldo(), cuenta.getFechaApertura().formatearFecha(), activaString, "Ver"};
                 modelo.addRow(fila);
             }
             tblCuentas.setModel(modelo);
