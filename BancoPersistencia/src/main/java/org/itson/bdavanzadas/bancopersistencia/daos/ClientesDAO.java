@@ -38,8 +38,8 @@ public class ClientesDAO implements IClientesDAO {
     @Override
     public List<Cliente> consultar() throws PersistenciaException {
         String sentenciaSQL = """
-        SELECT nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, usuario, contrasena,
-        calle, numero, colonia, identificadorCliente
+        SELECT identificador, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, usuario, contrasena,
+        calle, numero, colonia,codigoPostal,ciudad
         FROM clientes c
         INNER JOIN domicilios d ON c.identificador = d.identificadorCliente;
         """;
@@ -50,7 +50,7 @@ public class ClientesDAO implements IClientesDAO {
         ) {
             ResultSet resultados = comando.executeQuery();
             while (resultados.next()) {
-                Long id = resultados.getLong("identificador");
+                Long id = (long)resultados.getInt("identificador");
                 String nombre = resultados.getString("nombre");
                 String apellidoPaterno = resultados.getString("apellidoPaterno");
                 String apellidoMaterno = resultados.getString("apellidoMaterno");
