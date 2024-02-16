@@ -11,36 +11,6 @@ public class Fecha extends GregorianCalendar {
      */
     public Fecha() {
         super();
-        set(Calendar.HOUR, 0);
-        set(Calendar.MINUTE, 0);
-        set(Calendar.SECOND, 0);
-        set(Calendar.MILLISECOND, 0);
-    }
-
-    /**
-     * Constructor que crea una fecha con los valores de los parámetros
-     *
-     * @param dia El día
-     * @param mes El mes
-     * @param anio El año
-     */
-    public Fecha(int dia, int mes, int anio) {
-        super(anio, mes - 1, dia);
-        set(Calendar.HOUR, 0);
-        set(Calendar.MINUTE, 0);
-        set(Calendar.SECOND, 0);
-        set(Calendar.MILLISECOND, 0);
-    }
-
-    /**
-     * Constructor que crea una fecha copiando los valores de la fecha recibida
-     * en el parámetro
-     *
-     * @param fecha La fecha
-     */
-    public Fecha(Fecha fecha) {
-        super(fecha.get(fecha.YEAR), fecha.get(fecha.MONTH), fecha.get(fecha.DATE), fecha.get(Calendar.HOUR), fecha.get(Calendar.MINUTE), fecha.get(Calendar.SECOND));
-        set(Calendar.MILLISECOND, fecha.get(Calendar.MILLISECOND));
     }
 
     /**
@@ -51,15 +21,11 @@ public class Fecha extends GregorianCalendar {
      */
     public Fecha(String s) {
         super();
-
         String fechaTexto[] = s.split("-");
-
         int dia, mes, anio;
-
         anio = Integer.parseInt(fechaTexto[0]);
         mes = Integer.parseInt(fechaTexto[1]);
         dia = Integer.parseInt(fechaTexto[2]);
-
         set(Calendar.YEAR, anio);
         set(Calendar.MONTH, mes - 1);
         set(Calendar.DATE, dia);
@@ -137,55 +103,27 @@ public class Fecha extends GregorianCalendar {
     }
 
     /**
-     * Suma los días, meses y años de los parámetros a una fecha
+     * Permite darle formato a la fecha de "dia de mes de año".
      *
-     * @param dias Los días
-     * @param meses Los meses
-     * @param anios Los años
-     * @return Una nueva fecha con los días, meses y años ya sumados
+     * @return La fecha con formato de "dia de mes de año"
      */
-    public Fecha vencimiento(int dias, int meses, int anios) {
-        Fecha fecha = new Fecha(this);
-        fecha.add(Calendar.DATE, dias);
-        fecha.add(Calendar.MONTH, meses);
-        fecha.add(Calendar.YEAR, anios);
-        return fecha;
-    }
-
-    /**
-     * Suma los días y meses de los parámetros a una fecha
-     *
-     * @param dias Los días
-     * @param meses Los meses
-     * @return Una nueva fecha con los días y meses ya sumados
-     */
-    public Fecha vencimiento(int dias, int meses) {
-        Fecha fecha = new Fecha(this);
-        fecha.add(Calendar.DATE, dias);
-        fecha.add(Calendar.MONTH, meses);
-        return fecha;
-    }
-
-    /**
-     * Suma los días del parámetro a una fecha
-     *
-     * @param dias Los días
-     * @return Una nueva fecha con los días ya sumados
-     */
-    public Fecha vencimiento(int dias) {
-        Fecha fecha = new Fecha(this);
-        fecha.add(Calendar.DATE, dias);
-        return fecha;
-    }
-
-    /**
-     * Calcula los días entre dos fechas
-     *
-     * @param desde Una fecha
-     * @return Los días entre dos fechas
-     */
-    public int lapso(Fecha desde) {
-        return (int) (((((desde.getTimeInMillis() - this.getTimeInMillis()) / 1000) / 60) / 60) / 24) + 1;
+    public String formatearFecha() {
+        String mes = "";
+        switch (MONTH - 1) {
+            case 0 -> mes = "Enero";
+            case 1 -> mes = "Febrero";
+            case 2 -> mes = "Marzo";
+            case 3 -> mes = "Abril";
+            case 4 -> mes = "Mayo";
+            case 5 -> mes = "Junio";
+            case 6 -> mes = "Julio";
+            case 7 -> mes = "Agosto";
+            case 8 -> mes = "Septiembre";
+            case 9 -> mes = "Octubre";
+            case 10 -> mes = "Noviembre";
+            case 11 -> mes = "Diciembre";
+        }
+        return getDia() + " de " + mes + " de " + getAnio();
     }
 
     /**
@@ -195,6 +133,7 @@ public class Fecha extends GregorianCalendar {
      */
     @Override
     public String toString() {
-        return getAnio()+"-"+getMes()+"-"+getDia();
+        return getAnio() + "-" + getMes() + "-" + getDia();
     }
+
 }
