@@ -55,7 +55,7 @@ public class CuentasDAO implements ICuentasDAO {
             ResultSet resultado = comando.executeQuery();
 
             while (resultado.next()) {
-                Cuenta cuenta = new Cuenta(resultado.getString("numero"), resultado.getString("alias"), 
+                Cuenta cuenta = new Cuenta(resultado.getLong("numero"), resultado.getString("alias"), 
                         resultado.getFloat("saldo"), new Fecha(resultado.getString("fechaApertura")),
                         resultado.getBoolean("activa"), resultado.getLong("identificadorCliente"));
                 cuentas.add(cuenta);
@@ -98,7 +98,7 @@ public class CuentasDAO implements ICuentasDAO {
             logger.log(Level.INFO, "Se agregaron {0} cuentas", numRegistrosInsertados);
             ResultSet idsGenerados = comando.getGeneratedKeys();
             idsGenerados.next();
-            Cuenta cuenta = new Cuenta(idsGenerados.getString(1), cuentaNueva.getAlias(),
+            Cuenta cuenta = new Cuenta(idsGenerados.getLong(1), cuentaNueva.getAlias(),
                     cuentaNueva.getSaldo(), cuentaNueva.getFechaApertura(), cuentaNueva.isActiva(),
                     cuentaNueva.getIdCliente());
             return cuenta;
