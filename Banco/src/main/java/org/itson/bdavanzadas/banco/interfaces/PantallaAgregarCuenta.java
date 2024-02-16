@@ -124,11 +124,11 @@ public class PantallaAgregarCuenta extends javax.swing.JFrame {
         lblPropietario.setText("Propietario");
 
         txtPropietario.setEditable(false);
-        txtPropietario.setFont(new java.awt.Font("Arial", 1, 34)); // NOI18N
+        txtPropietario.setFont(new java.awt.Font("Arial", 1, 30)); // NOI18N
         txtPropietario.setForeground(new java.awt.Color(99, 134, 107));
         txtPropietario.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 117), 2, true));
 
-        txtAliasCuenta.setFont(new java.awt.Font("Arial", 1, 34)); // NOI18N
+        txtAliasCuenta.setFont(new java.awt.Font("Arial", 1, 30)); // NOI18N
         txtAliasCuenta.setForeground(new java.awt.Color(99, 134, 107));
         txtAliasCuenta.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 117), 2, true));
 
@@ -196,7 +196,7 @@ public class PantallaAgregarCuenta extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
                     .addComponent(btnAceptar))
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
