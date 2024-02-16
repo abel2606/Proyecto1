@@ -29,15 +29,23 @@ public class ClientesDAO implements IClientesDAO {
         this.conexionBD = conexionBD;
     }
 
+    /**
+     * Permite obtener una lista con todos los clientes de la base de datos.
+     *
+     * @return Una lista con todos los clientes
+     * @throws PersistenciaException Si no se pueden obtener los clientes
+     */
     @Override
     public List<Cliente> consultar() throws PersistenciaException {
         String sentenciaSQL = """
-                              SELECT c.*, d.* FROM clientes c
-                              INNER JOIN domicilios d ON c.identificador = d.identificadorCliente;
-                              """;
+        SELECT c.*, d.* FROM clientes c
+        INNER JOIN domicilios d ON c.identificador = d.identificadorCliente;
+        """;
         List<Cliente> listaCliente = new LinkedList<>();
         try (
-                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
+            Connection conexion = this.conexionBD.obtenerConexion(); 
+            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
+        ) {
             ResultSet resultados = comando.executeQuery();
             while (resultados.next()) {
                 Long id = resultados.getLong("identificador");
@@ -77,15 +85,16 @@ public class ClientesDAO implements IClientesDAO {
         String sentenciaClienteSQL = """
         INSERT INTO clientes(nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, usuario, contrasena)
         VALUES (?, ?, ?, ?, ?, ?)
-    """;
-
+        """;
         String sentenciaDomicilioSQL = """
         INSERT INTO domicilios(calle, numero, colonia, codigoPostal, ciudad, identificadorCliente)
         VALUES (?, ?, ?, ?, ?, ?)
-    """;
-
+        """;
         try (
-                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comandoCliente = conexion.prepareStatement(sentenciaClienteSQL, Statement.RETURN_GENERATED_KEYS); PreparedStatement comandoDomicilio = conexion.prepareStatement(sentenciaDomicilioSQL);) {
+            Connection conexion = this.conexionBD.obtenerConexion(); 
+            PreparedStatement comandoCliente = conexion.prepareStatement(sentenciaClienteSQL, Statement.RETURN_GENERATED_KEYS); 
+            PreparedStatement comandoDomicilio = conexion.prepareStatement(sentenciaDomicilioSQL);
+        ) {
             conexion.setAutoCommit(false);
 
             comandoCliente.setString(1, clienteNuevo.getNombre());
@@ -103,7 +112,6 @@ public class ClientesDAO implements IClientesDAO {
             if (idsGenerados.next()) {
                 idClienteGenerado = idsGenerados.getLong(1);
             }
-
             comandoDomicilio.setString(1, clienteNuevo.getCalle());
             comandoDomicilio.setString(2, clienteNuevo.getNumero());
             comandoDomicilio.setString(3, clienteNuevo.getColonia());
@@ -125,7 +133,6 @@ public class ClientesDAO implements IClientesDAO {
             logger.log(Level.SEVERE, "No se pudo guardar el cliente", ex);
             throw new PersistenciaException("No se pudo guardar el cliente");
         }
-
     }
 
     public Cliente iniciarSesion(String usuario, String contrasena) throws PersistenciaException {
