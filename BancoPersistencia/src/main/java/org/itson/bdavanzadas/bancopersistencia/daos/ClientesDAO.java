@@ -38,7 +38,9 @@ public class ClientesDAO implements IClientesDAO {
     @Override
     public List<Cliente> consultar() throws PersistenciaException {
         String sentenciaSQL = """
-        SELECT c.*, d.* FROM clientes c
+        SELECT nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, usuario, contrasena,
+        calle, numero, colonia, identificadorCliente
+        FROM clientes c
         INNER JOIN domicilios d ON c.identificador = d.identificadorCliente;
         """;
         List<Cliente> listaCliente = new LinkedList<>();
@@ -135,19 +137,31 @@ public class ClientesDAO implements IClientesDAO {
         }
     }
 
+    /**
+     * Permite que un cliente inicie sesión en el sistema.
+     *
+     * @param usuario El usuario del cliente
+     * @param contrasena La contraseña del cliente
+     * @return El cliente que inició sesión
+     * @throws PersistenciaException Si el cliente no puede iniciar sesion
+     */
+    @Override
     public Cliente iniciarSesion(String usuario, String contrasena) throws PersistenciaException {
         String consultaSQL = """
-            SELECT c.*, d.calle, d.numero, d.colonia, d.codigoPostal, d.ciudad
-            FROM clientes c
-            JOIN domicilios d ON c.identificador = d.identificadorCliente
-            WHERE c.usuario = ? AND c.contrasena = ?;
+        SELECT c.*, d.calle, d.numero, d.colonia, d.codigoPostal, d.ciudad
+        FROM clientes c
+        JOIN domicilios d ON c.identificador = d.identificadorCliente
+        WHERE c.usuario = ? AND c.contrasena = ?;
         """;
-
-        try (Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement consulta = conexion.prepareStatement(consultaSQL)) {
+        try (
+            Connection conexion = this.conexionBD.obtenerConexion(); 
+            PreparedStatement consulta = conexion.prepareStatement(consultaSQL);
+        ) {
             consulta.setString(1, usuario);
             consulta.setString(2, contrasena);
-
-            try (ResultSet resultado = consulta.executeQuery()) {
+            try (
+                ResultSet resultado = consulta.executeQuery()
+            ) {
                 if (resultado.next()) {
                     long idCliente = resultado.getLong("identificador");
                     String nombre = resultado.getString("nombre");
@@ -159,10 +173,8 @@ public class ClientesDAO implements IClientesDAO {
                     String colonia = resultado.getString("colonia");
                     String codigoPostal = resultado.getString("codigoPostal");
                     String ciudad = resultado.getString("ciudad");
-
                     Cliente cliente = new Cliente(idCliente, nombre, apellidoPaterno, apellidoMaterno, new Fecha(fechaNacimiento), usuario, contrasena,
                             calle, numero, colonia, codigoPostal, ciudad);
-
                     return cliente;
                 }
             }
@@ -170,9 +182,7 @@ public class ClientesDAO implements IClientesDAO {
             logger.log(Level.SEVERE, "Error al iniciar sesión", ex);
             throw new PersistenciaException("No se pudo acceder al cliente");
         }
-
         return null;
-
     }
 
 }

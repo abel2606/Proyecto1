@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Cuenta {
 
-    private String numero;
+    private Long numero;
     private String alias;
     private Float saldo;
     private Fecha fechaApertura;
@@ -27,7 +27,7 @@ public class Cuenta {
      * @param activa Si la cuenta está activa o no
      * @param idCliente El id del cliente al que pertenece la cuenta
      */
-    public Cuenta(String numero, String alias, Float saldo, Fecha fechaApertura, Boolean activa, Long idCliente) {
+    public Cuenta(Long numero, String alias, Float saldo, Fecha fechaApertura, Boolean activa, Long idCliente) {
         this.numero = numero;
         this.alias = alias;
         this.saldo = saldo;
@@ -59,7 +59,7 @@ public class Cuenta {
      *
      * @return El número de la cuenta
      */
-    public String getNumero() {
+    public Long getNumero() {
         return numero;
     }
 
@@ -68,7 +68,7 @@ public class Cuenta {
      *
      * @param numero El número de la cuenta
      */
-    public void setNumero(String numero) {
+    public void setNumero(Long numero) {
         this.numero = numero;
     }
 
@@ -167,10 +167,10 @@ public class Cuenta {
      *
      * @return Un código único.
      */
-    @Override
+    @Override    
     public int hashCode() {
-        int hash = 7;
-        hash = 89 * hash + Objects.hashCode(this.numero);
+        int hash = 3;
+        hash = 23 * hash + Objects.hashCode(this.numero);
         return hash;
     }
 
@@ -180,7 +180,7 @@ public class Cuenta {
      * @param obj con el que se comparará al Socio
      * @return true si son el mismo objeto, false en caso contrario.
      */
-    @Override
+    @Override    
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -192,7 +192,7 @@ public class Cuenta {
             return false;
         }
         final Cuenta other = (Cuenta) obj;
-        return this.numero == other.numero;
+        return Objects.equals(this.numero, other.numero);
     }
 
     /**
