@@ -29,6 +29,16 @@ public class CuentasDAO implements ICuentasDAO {
         this.conexionBD = conexion;
     }
 
+    /**
+     * Permite obtener de la base de datos una lista con las cuentas del cliente
+     * con el id del parámetro.
+     *
+     * @param idCliente El id del cliente del cual se quieren obtener las
+     * cuentas
+     * @return Una lista con las cuentas del cliente con el id del parámetro
+     * @throws PersistenciaException Si no se pueden obtener las cuentas del
+     * cliente
+     */
     @Override
     public List<Cuenta> consultar(Long idCliente) throws PersistenciaException {
         String sentenciaSQL = """
