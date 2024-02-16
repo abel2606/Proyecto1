@@ -203,7 +203,7 @@
               <Font name="Arial" size="36" style="1"/>
             </Property>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="25" green="a8" red="0" type="rgb"/>
+              <Color blue="34" green="5c" red="29" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="SELECCIONE UNA OPCI&#xd3;N"/>
           </Properties>

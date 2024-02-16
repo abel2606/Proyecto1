@@ -11,7 +11,7 @@ public class PantallaInicio extends javax.swing.JFrame {
      */
     public PantallaInicio(IConexion conexion) {
         initComponents();
-        setTitle("Cuentas");
+        setTitle("Inicio");
         this.conexion = conexion;
     }
     
@@ -99,7 +99,7 @@ public class PantallaInicio extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 168, 37));
+        jLabel1.setForeground(new java.awt.Color(41, 92, 52));
         jLabel1.setText("SELECCIONE UNA OPCIÓN");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -156,7 +156,7 @@ public class PantallaInicio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarClienteActionPerformed
-       
+        
     }//GEN-LAST:event_btnRegistrarClienteActionPerformed
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed

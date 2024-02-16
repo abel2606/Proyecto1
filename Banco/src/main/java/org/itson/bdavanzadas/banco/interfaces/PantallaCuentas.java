@@ -22,6 +22,8 @@ public class PantallaCuentas extends javax.swing.JFrame {
         setTitle("Cuentas");
         this.conexion = conexion;
         this.cliente = cliente;
+        String[] nombresCliente = cliente.getNombre().split(" ");
+        lblNombreCliente.setText(nombresCliente[0]);
         cuentasDAO = new CuentasDAO(conexion);
         llenarTabla();
     }
@@ -77,6 +79,7 @@ public class PantallaCuentas extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblCuentas = new javax.swing.JTable();
         btnActualizarTabla = new javax.swing.JButton();
+        lblNombreCliente = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -159,6 +162,10 @@ public class PantallaCuentas extends javax.swing.JFrame {
             }
         });
 
+        lblNombreCliente.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
+        lblNombreCliente.setForeground(new java.awt.Color(41, 92, 52));
+        lblNombreCliente.setText("jLabel1");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -169,6 +176,8 @@ public class PantallaCuentas extends javax.swing.JFrame {
                 .addComponent(btnCerrarSesion)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnActualizarCliente)
+                .addGap(397, 397, 397)
+                .addComponent(lblNombreCliente)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnAgregarCuenta)
                 .addGap(12, 12, 12))
@@ -183,12 +192,18 @@ public class PantallaCuentas extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAgregarCuenta)
-                    .addComponent(btnActualizarCliente)
-                    .addComponent(btnCerrarSesion))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnActualizarCliente)
+                            .addComponent(btnCerrarSesion)
+                            .addComponent(btnAgregarCuenta))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                        .addComponent(lblNombreCliente)
+                        .addGap(31, 31, 31)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(37, 37, 37)
                 .addComponent(btnActualizarTabla)
@@ -227,6 +242,7 @@ public class PantallaCuentas extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblNombreCliente;
     private javax.swing.JLabel lblPokebolaDer;
     private javax.swing.JLabel lblPokebolaIzq;
     private javax.swing.JLabel lblTitulo;
