@@ -7,6 +7,12 @@ import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException
 
 public interface IClientesDAO {
 
+    /**
+     * Permite obtener una lista con todos los clientes de la base de datos.
+     *
+     * @return Una lista con todos los clientes
+     * @throws PersistenciaException Si no se pueden obtener los clientes
+     */
     List<Cliente> consultar() throws PersistenciaException;
     
     /**
