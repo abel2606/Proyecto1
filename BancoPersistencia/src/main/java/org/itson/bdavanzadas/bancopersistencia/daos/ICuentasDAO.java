@@ -6,7 +6,17 @@ import org.itson.bdavanzadas.bancopersistencia.dtos.CuentaNuevaDTO;
 import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
 public interface ICuentasDAO {
-    
+
+    /**
+     * Permite obtener de la base de datos una lista con las cuentas del cliente
+     * con el id del parámetro.
+     *
+     * @param idCliente El id del cliente del cual se quieren obtener las
+     * cuentas
+     * @return Una lista con las cuentas del cliente con el id del parámetro
+     * @throws PersistenciaException Si no se pueden obtener las cuentas del
+     * cliente
+     */
     List<Cuenta> consultar(Long idCliente) throws PersistenciaException;
 
     /**
