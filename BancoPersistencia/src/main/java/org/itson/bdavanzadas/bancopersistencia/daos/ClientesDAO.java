@@ -16,7 +16,8 @@ import org.itson.bdavanzadas.bancopersistencia.dtos.ClienteNuevoDTO;
 import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
 public class ClientesDAO implements IClientesDAO {
-final IConexion conexionBD;
+
+    final IConexion conexionBD;
     static final Logger logger = Logger.getLogger(ClientesDAO.class.getName());
 
     /**
@@ -52,7 +53,7 @@ final IConexion conexionBD;
                 String codigoPostal = resultados.getString("codigoPostal");
                 String ciudad = resultados.getString("ciudad");
                 Cliente cliente = new Cliente(id, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, usuario, contrasena,
-                         calle, colonia, numero, codigoPostal, ciudad);
+                        calle, colonia, numero, codigoPostal, ciudad);
                 listaCliente.add(cliente);
             }
             logger.log(Level.INFO, "Se consultaron {0} clientes", listaCliente.size());
@@ -73,60 +74,98 @@ final IConexion conexionBD;
      */
     @Override
     public Cliente agregar(ClienteNuevoDTO clienteNuevo) throws PersistenciaException {
-    String sentenciaClienteSQL = """
+        String sentenciaClienteSQL = """
         INSERT INTO clientes(nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, usuario, contrasena)
         VALUES (?, ?, ?, ?, ?, ?)
     """;
 
-    String sentenciaDomicilioSQL = """
+        String sentenciaDomicilioSQL = """
         INSERT INTO domicilios(calle, numero, colonia, codigoPostal, ciudad, identificadorCliente)
         VALUES (?, ?, ?, ?, ?, ?)
     """;
 
-    try (
-        Connection conexion = this.conexionBD.obtenerConexion();
-        PreparedStatement comandoCliente = conexion.prepareStatement(sentenciaClienteSQL, Statement.RETURN_GENERATED_KEYS);
-        PreparedStatement comandoDomicilio = conexion.prepareStatement(sentenciaDomicilioSQL);
-    ) {
-        conexion.setAutoCommit(false);
+        try (
+                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comandoCliente = conexion.prepareStatement(sentenciaClienteSQL, Statement.RETURN_GENERATED_KEYS); PreparedStatement comandoDomicilio = conexion.prepareStatement(sentenciaDomicilioSQL);) {
+            conexion.setAutoCommit(false);
 
-        comandoCliente.setString(1, clienteNuevo.getNombre());
-        comandoCliente.setString(2, clienteNuevo.getApellidoPaterno());
-        comandoCliente.setString(3, clienteNuevo.getApellidoMaterno());
-        comandoCliente.setString(4, clienteNuevo.getFechaNacimiento().toString());
-        comandoCliente.setString(5, clienteNuevo.getUsuario());
-        comandoCliente.setString(6, clienteNuevo.getContrasena());
+            comandoCliente.setString(1, clienteNuevo.getNombre());
+            comandoCliente.setString(2, clienteNuevo.getApellidoPaterno());
+            comandoCliente.setString(3, clienteNuevo.getApellidoMaterno());
+            comandoCliente.setString(4, clienteNuevo.getFechaNacimiento().toString());
+            comandoCliente.setString(5, clienteNuevo.getUsuario());
+            comandoCliente.setString(6, clienteNuevo.getContrasena());
 
-        int numRegistrosInsertadosCliente = comandoCliente.executeUpdate();
-        logger.log(Level.INFO, "Se agregaron {0} clientes", numRegistrosInsertadosCliente);
+            int numRegistrosInsertadosCliente = comandoCliente.executeUpdate();
+            logger.log(Level.INFO, "Se agregaron {0} clientes", numRegistrosInsertadosCliente);
 
-        ResultSet idsGenerados = comandoCliente.getGeneratedKeys();
-        long idClienteGenerado = 0;
-        if (idsGenerados.next()) {
-            idClienteGenerado = idsGenerados.getLong(1);
+            ResultSet idsGenerados = comandoCliente.getGeneratedKeys();
+            long idClienteGenerado = 0;
+            if (idsGenerados.next()) {
+                idClienteGenerado = idsGenerados.getLong(1);
+            }
+
+            comandoDomicilio.setString(1, clienteNuevo.getCalle());
+            comandoDomicilio.setString(2, clienteNuevo.getNumero());
+            comandoDomicilio.setString(3, clienteNuevo.getColonia());
+            comandoDomicilio.setString(4, clienteNuevo.getCodigoPostal());
+            comandoDomicilio.setString(5, clienteNuevo.getCiudad());
+            comandoDomicilio.setLong(6, idClienteGenerado);
+
+            int numRegistrosInsertadosDomicilio = comandoDomicilio.executeUpdate();
+            logger.log(Level.INFO, "Se agregaron {0} domicilios", numRegistrosInsertadosDomicilio);
+
+            conexion.commit();
+
+            Cliente cliente = new Cliente(idClienteGenerado, clienteNuevo.getNombre(), clienteNuevo.getApellidoPaterno(),
+                    clienteNuevo.getApellidoMaterno(), clienteNuevo.getFechaNacimiento(), clienteNuevo.getUsuario(),
+                    clienteNuevo.getContrasena(), clienteNuevo.getCalle(), clienteNuevo.getColonia(), clienteNuevo.getNumero(),
+                    clienteNuevo.getCodigoPostal(), clienteNuevo.getCiudad());
+            return cliente;
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "No se pudo guardar el cliente", ex);
+            throw new PersistenciaException("No se pudo guardar el cliente");
         }
 
-        comandoDomicilio.setString(1, clienteNuevo.getCalle());
-        comandoDomicilio.setString(2, clienteNuevo.getNumero());
-        comandoDomicilio.setString(3, clienteNuevo.getColonia());
-        comandoDomicilio.setString(4, clienteNuevo.getCodigoPostal());
-        comandoDomicilio.setString(5, clienteNuevo.getCiudad());
-        comandoDomicilio.setLong(6, idClienteGenerado);
-
-        int numRegistrosInsertadosDomicilio = comandoDomicilio.executeUpdate();
-        logger.log(Level.INFO, "Se agregaron {0} domicilios", numRegistrosInsertadosDomicilio);
-
-        conexion.commit();
-
-        Cliente cliente = new Cliente(idClienteGenerado, clienteNuevo.getNombre(), clienteNuevo.getApellidoPaterno(),
-                clienteNuevo.getApellidoMaterno(), clienteNuevo.getFechaNacimiento(), clienteNuevo.getUsuario(),
-                clienteNuevo.getContrasena(), clienteNuevo.getCalle(), clienteNuevo.getColonia(), clienteNuevo.getNumero(),
-                clienteNuevo.getCodigoPostal(), clienteNuevo.getCiudad());
-        return cliente;
-    } catch (SQLException ex) {
-        logger.log(Level.SEVERE, "No se pudo guardar el cliente", ex);
-        throw new PersistenciaException("No se pudo guardar el cliente");
     }
-}
+
+    public Cliente iniciarSesion(String usuario, String contrasena) throws PersistenciaException {
+        String consultaSQL = """
+            SELECT c.*, d.calle, d.numero, d.colonia, d.codigoPostal, d.ciudad
+            FROM clientes c
+            JOIN domicilios d ON c.identificador = d.identificadorCliente
+            WHERE c.usuario = ? AND c.contrasena = ?;
+        """;
+
+        try (Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement consulta = conexion.prepareStatement(consultaSQL)) {
+            consulta.setString(1, usuario);
+            consulta.setString(2, contrasena);
+
+            try (ResultSet resultado = consulta.executeQuery()) {
+                if (resultado.next()) {
+                    long idCliente = resultado.getLong("identificador");
+                    String nombre = resultado.getString("nombre");
+                    String apellidoPaterno = resultado.getString("apellidoPaterno");
+                    String apellidoMaterno = resultado.getString("apellidoMaterno");
+                    String fechaNacimiento = resultado.getString("fechaNacimiento");
+                    String calle = resultado.getString("calle");
+                    String numero = resultado.getString("numero");
+                    String colonia = resultado.getString("colonia");
+                    String codigoPostal = resultado.getString("codigoPostal");
+                    String ciudad = resultado.getString("ciudad");
+
+                    Cliente cliente = new Cliente(idCliente, nombre, apellidoPaterno, apellidoMaterno, new Fecha(fechaNacimiento), usuario, contrasena,
+                            calle, numero, colonia, codigoPostal, ciudad);
+
+                    return cliente;
+                }
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Error al iniciar sesión", ex);
+            throw new PersistenciaException("No se pudo acceder al cliente");
+        }
+
+        return null;
+
+    }
 
 }
