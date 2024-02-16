@@ -26,11 +26,20 @@ public class Banco {
         ICuentasDAO cuentasDAO = new CuentasDAO(conexion);
         IClientesDAO clientesDAO = new ClientesDAO(conexion);
 
+        Cliente clienteBuscado = null; 
+        try {
+            clienteBuscado = clientesDAO.iniciarSesion("abel123", "Password");;
+            logger.log(Level.INFO, clienteBuscado.toString());
+        } catch (PersistenciaException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+
 //        ClienteNuevoDTO clienteNuevo = new ClienteNuevoDTO();
 //        clienteNuevo.setNombre("Ricardo Alán");
 //        clienteNuevo.setApellidoPaterno("Gutiérrez");
 //        clienteNuevo.setApellidoMaterno("Garcés");
 //        clienteNuevo.setFechaNacimiento(new Fecha());
+//        clienteNuevo.setFechaNacimiento(new Fecha(21, 03, 2004));
 //        clienteNuevo.setUsuario("imnotrichi");
 //        clienteNuevo.setContrasena("password");
 //        clienteNuevo.setCalle("Jalisco");
@@ -48,6 +57,7 @@ public class Banco {
 //            logger.log(Level.SEVERE, null, e);
 //        }
 
+
         List<Cliente> listaClientes = null;
         try {
             listaClientes = clientesDAO.consultar();
@@ -63,6 +73,17 @@ public class Banco {
         PantallaCuentas pc = new PantallaCuentas(conexion, cliente);
         pc.setVisible(true);
 
+//        List<Cliente> listaClientes = null;
+//        try {
+//            listaClientes = clientesDAO.consultar();
+//            listaClientes.forEach(cliente -> System.out.println(cliente));
+//        } catch (PersistenciaException ex) {
+//            logger.log(Level.SEVERE, null, ex);
+//        }
+//        Cliente cliente = listaClientes.get(1);
+//        
+//        PantallaCuentas pantallaCuentas = new PantallaCuentas(conexion, cliente);
+//        pantallaCuentas.setVisible(true);
 //        try {     
                 //            List<Cuenta> listaCuentas = cuentasDAO.consultar(Long.valueOf("1"));
                 //            listaCuentas.forEach(socio -> System.out.println(socio));

@@ -61,7 +61,7 @@ public class ClientesDAO implements IClientesDAO {
                 String codigoPostal = resultados.getString("codigoPostal");
                 String ciudad = resultados.getString("ciudad");
                 Cliente cliente = new Cliente(id, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, usuario, contrasena,
-                         calle, colonia, numero, codigoPostal, ciudad);
+                        calle, colonia, numero, codigoPostal, ciudad);
                 listaCliente.add(cliente);
             }
             logger.log(Level.INFO, "Se consultaron {0} clientes", listaCliente.size());
@@ -93,7 +93,7 @@ public class ClientesDAO implements IClientesDAO {
         try (
             Connection conexion = this.conexionBD.obtenerConexion(); 
             PreparedStatement comandoCliente = conexion.prepareStatement(sentenciaClienteSQL, Statement.RETURN_GENERATED_KEYS); 
-                PreparedStatement comandoDomicilio = conexion.prepareStatement(sentenciaDomicilioSQL);
+            PreparedStatement comandoDomicilio = conexion.prepareStatement(sentenciaDomicilioSQL);
         ) {
             conexion.setAutoCommit(false);
 
@@ -112,7 +112,6 @@ public class ClientesDAO implements IClientesDAO {
             if (idsGenerados.next()) {
                 idClienteGenerado = idsGenerados.getLong(1);
             }
-
             comandoDomicilio.setString(1, clienteNuevo.getCalle());
             comandoDomicilio.setString(2, clienteNuevo.getNumero());
             comandoDomicilio.setString(3, clienteNuevo.getColonia());
@@ -134,6 +133,46 @@ public class ClientesDAO implements IClientesDAO {
             logger.log(Level.SEVERE, "No se pudo guardar el cliente", ex);
             throw new PersistenciaException("No se pudo guardar el cliente");
         }
+    }
+
+    public Cliente iniciarSesion(String usuario, String contrasena) throws PersistenciaException {
+        String consultaSQL = """
+            SELECT c.*, d.calle, d.numero, d.colonia, d.codigoPostal, d.ciudad
+            FROM clientes c
+            JOIN domicilios d ON c.identificador = d.identificadorCliente
+            WHERE c.usuario = ? AND c.contrasena = ?;
+        """;
+
+        try (Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement consulta = conexion.prepareStatement(consultaSQL)) {
+            consulta.setString(1, usuario);
+            consulta.setString(2, contrasena);
+
+            try (ResultSet resultado = consulta.executeQuery()) {
+                if (resultado.next()) {
+                    long idCliente = resultado.getLong("identificador");
+                    String nombre = resultado.getString("nombre");
+                    String apellidoPaterno = resultado.getString("apellidoPaterno");
+                    String apellidoMaterno = resultado.getString("apellidoMaterno");
+                    String fechaNacimiento = resultado.getString("fechaNacimiento");
+                    String calle = resultado.getString("calle");
+                    String numero = resultado.getString("numero");
+                    String colonia = resultado.getString("colonia");
+                    String codigoPostal = resultado.getString("codigoPostal");
+                    String ciudad = resultado.getString("ciudad");
+
+                    Cliente cliente = new Cliente(idCliente, nombre, apellidoPaterno, apellidoMaterno, new Fecha(fechaNacimiento), usuario, contrasena,
+                            calle, numero, colonia, codigoPostal, ciudad);
+
+                    return cliente;
+                }
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Error al iniciar sesión", ex);
+            throw new PersistenciaException("No se pudo acceder al cliente");
+        }
+
+        return null;
+
     }
 
 }

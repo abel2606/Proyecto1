@@ -24,4 +24,6 @@ public interface IClientesDAO {
      * de datos
      */
     Cliente agregar(ClienteNuevoDTO clienteNuevo) throws PersistenciaException;
+    Cliente iniciarSesion(String usuario, String contrasena) throws PersistenciaException;
+      
 }
