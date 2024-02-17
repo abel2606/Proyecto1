@@ -2,30 +2,27 @@ package org.itson.bdavanzadas.banco.interfaces;
 
 import java.awt.Dimension;
 import java.awt.Point;
-import javax.swing.JOptionPane;
-import org.itson.bdavanzadas.bancodominio.Fecha;
+import org.itson.bdavanzadas.bancodominio.Cliente;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.daos.ClientesDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.IClientesDAO;
-import org.itson.bdavanzadas.bancopersistencia.dtos.ClienteNuevoDTO;
-import org.itson.bdavanzadas.bancopersistencia.excepciones.ClienteNoValidoException;
-import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
-public class PantallaRegistrarCliente extends javax.swing.JDialog {
+public class PantallaActualizarCliente extends javax.swing.JDialog {
 
     /**
-     * Creates new form PantallaRegistrarCliente.
+     * Creates new form PantallaActualizarCliente
      *
      * @param parent
      * @param modal
      * @param conexion
+     * @param cliente
      */
-    public PantallaRegistrarCliente(java.awt.Frame parent, boolean modal, IConexion conexion) {
+    public PantallaActualizarCliente(java.awt.Frame parent, boolean modal, IConexion conexion, Cliente cliente) {
         super(parent, modal);
         initComponents();
         centraCuadroDialogo(parent);
-        setTitle("Registrar Cliente");
         this.conexion = conexion;
+        this.cliente = cliente;
         clientesDAO = new ClientesDAO(conexion);
     }
 
@@ -43,48 +40,6 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
         Dimension dlgSize = getPreferredSize();
         // Centra el cuadro de diálogo sobre la ventana padre
         setLocation((frameSize.width - dlgSize.width) / 2 + loc.x, (frameSize.height - dlgSize.height) / 2 + loc.y);
-    }
-
-    /**
-     * Permite capturar la información del cliente del formulario y guardarla en
-     * la base de datos.
-     */
-    public void guardar() {
-        String nombre = txtNombre.getText();
-        String apellidoPaterno = txtApellidoMaterno.getText();
-        String apellidoMaterno = txtApellidoPaterno.getText();
-        String fechaNacimiento = txtFechaNacimiento.getText();
-        String calle = txtCalle.getText();
-        String numero = txtNumero.getText();
-        String colonia = txtColonia.getText();
-        String codigoPostal = txtCodigoPostal.getText();
-        String ciudad = txtCiudad.getText();
-        String usuario = txtUsuario.getText();
-        String contrasena = pswContrasena.getText();
-
-        ClienteNuevoDTO clienteNuevo = new ClienteNuevoDTO();
-        clienteNuevo.setNombre(nombre);
-        clienteNuevo.setApellidoPaterno(apellidoPaterno);
-        clienteNuevo.setApellidoMaterno(apellidoMaterno);
-        clienteNuevo.setFechaNacimiento(new Fecha(fechaNacimiento));
-        clienteNuevo.setCalle(calle);
-        clienteNuevo.setNumero(numero);
-        clienteNuevo.setColonia(colonia);
-        clienteNuevo.setCodigoPostal(codigoPostal);
-        clienteNuevo.setCiudad(ciudad);
-        clienteNuevo.setUsuario(usuario);
-        clienteNuevo.setContrasena(contrasena);
-
-        try {
-            clienteNuevo.isValid();
-            clientesDAO.agregar(clienteNuevo);
-        } catch (PersistenciaException ex) {
-            JOptionPane.showMessageDialog(this, "No fue posible agregar el cliente.",
-                    "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
-        } catch (ClienteNoValidoException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(),
-                    "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
-        }
     }
 
     /**
@@ -126,15 +81,14 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
         lblCuenta = new javax.swing.JLabel();
         lblUsuario = new javax.swing.JLabel();
         txtUsuario = new javax.swing.JTextField();
-        lblContrasena = new javax.swing.JLabel();
-        pswContrasena = new javax.swing.JPasswordField();
-        lblConfirmarContrasena = new javax.swing.JLabel();
-        pswConfirmarContrasena = new javax.swing.JPasswordField();
+        lblAntiguaContrasena = new javax.swing.JLabel();
+        pswAntiguaContrasena = new javax.swing.JPasswordField();
+        lblNuevaContrasena = new javax.swing.JLabel();
+        pswNuevaContrasena = new javax.swing.JPasswordField();
         btnAceptar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(189, 255, 188));
         jPanel1.setPreferredSize(new java.awt.Dimension(1100, 450));
@@ -144,7 +98,7 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
 
         lblTitulo.setFont(new java.awt.Font("Arial", 1, 48)); // NOI18N
         lblTitulo.setForeground(new java.awt.Color(255, 255, 255));
-        lblTitulo.setText("REGISTRAR CLIENTE");
+        lblTitulo.setText("ACTUALIZAR CLIENTE");
 
         lblPokebolaIzq.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PokeBolaBlancaVerde.png"))); // NOI18N
 
@@ -157,9 +111,9 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addComponent(lblPokebolaIzq)
-                .addGap(219, 219, 219)
-                .addComponent(lblTitulo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblTitulo)
+                .addGap(208, 208, 208)
                 .addComponent(lblPokebolaDer)
                 .addGap(19, 19, 19))
         );
@@ -363,21 +317,21 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
         txtUsuario.setForeground(new java.awt.Color(99, 134, 107));
         txtUsuario.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 117), 2, true));
 
-        lblContrasena.setFont(new java.awt.Font("Arial", 1, 19)); // NOI18N
-        lblContrasena.setForeground(new java.awt.Color(0, 168, 37));
-        lblContrasena.setText("Contraseña");
+        lblAntiguaContrasena.setFont(new java.awt.Font("Arial", 1, 19)); // NOI18N
+        lblAntiguaContrasena.setForeground(new java.awt.Color(0, 168, 37));
+        lblAntiguaContrasena.setText("Antigua Contraseña");
 
-        pswContrasena.setFont(new java.awt.Font("Arial", 1, 19)); // NOI18N
-        pswContrasena.setForeground(new java.awt.Color(99, 134, 107));
-        pswContrasena.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 117), 2, true));
+        pswAntiguaContrasena.setFont(new java.awt.Font("Arial", 1, 19)); // NOI18N
+        pswAntiguaContrasena.setForeground(new java.awt.Color(99, 134, 107));
+        pswAntiguaContrasena.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 117), 2, true));
 
-        lblConfirmarContrasena.setFont(new java.awt.Font("Arial", 1, 19)); // NOI18N
-        lblConfirmarContrasena.setForeground(new java.awt.Color(0, 168, 37));
-        lblConfirmarContrasena.setText("Confirmar Contraseña");
+        lblNuevaContrasena.setFont(new java.awt.Font("Arial", 1, 19)); // NOI18N
+        lblNuevaContrasena.setForeground(new java.awt.Color(0, 168, 37));
+        lblNuevaContrasena.setText("Nueva Contraseña");
 
-        pswConfirmarContrasena.setFont(new java.awt.Font("Arial", 1, 19)); // NOI18N
-        pswConfirmarContrasena.setForeground(new java.awt.Color(99, 134, 107));
-        pswConfirmarContrasena.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 117), 2, true));
+        pswNuevaContrasena.setFont(new java.awt.Font("Arial", 1, 19)); // NOI18N
+        pswNuevaContrasena.setForeground(new java.awt.Color(99, 134, 107));
+        pswNuevaContrasena.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 117), 2, true));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -387,15 +341,15 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
                 .addGap(16, 16, 16)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(lblContrasena)
+                        .addComponent(lblAntiguaContrasena)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblConfirmarContrasena)
+                            .addComponent(lblNuevaContrasena)
                             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(txtUsuario)
-                                .addComponent(pswContrasena)
-                                .addComponent(pswConfirmarContrasena)
+                                .addComponent(pswAntiguaContrasena)
+                                .addComponent(pswNuevaContrasena)
                                 .addGroup(jPanel4Layout.createSequentialGroup()
                                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(lblUsuario)
@@ -413,13 +367,13 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblContrasena)
+                .addComponent(lblAntiguaContrasena)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pswContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pswAntiguaContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblConfirmarContrasena)
+                .addComponent(lblNuevaContrasena)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pswConfirmarContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pswNuevaContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(24, Short.MAX_VALUE))
         );
 
@@ -453,7 +407,7 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -467,15 +421,15 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 130, Short.MAX_VALUE)
+                        .addGap(129, 129, 129)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 454, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -493,7 +447,7 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        guardar();
+//        guardar();
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -507,26 +461,26 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JLabel lblAntiguaContrasena;
     private javax.swing.JLabel lblApellidoMarteno;
     private javax.swing.JLabel lblApellidoPaterno;
     private javax.swing.JLabel lblCalle;
     private javax.swing.JLabel lblCiudad;
     private javax.swing.JLabel lblCodigoPostal;
     private javax.swing.JLabel lblColonia;
-    private javax.swing.JLabel lblConfirmarContrasena;
-    private javax.swing.JLabel lblContrasena;
     private javax.swing.JLabel lblCuenta;
     private javax.swing.JLabel lblDatosPersonales;
     private javax.swing.JLabel lblDomicilio;
     private javax.swing.JLabel lblFechaNacimiento;
     private javax.swing.JLabel lblNombre;
+    private javax.swing.JLabel lblNuevaContrasena;
     private javax.swing.JLabel lblNumero;
     private javax.swing.JLabel lblPokebolaDer;
     private javax.swing.JLabel lblPokebolaIzq;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblUsuario;
-    private javax.swing.JPasswordField pswConfirmarContrasena;
-    private javax.swing.JPasswordField pswContrasena;
+    private javax.swing.JPasswordField pswAntiguaContrasena;
+    private javax.swing.JPasswordField pswNuevaContrasena;
     private javax.swing.JTextField txtApellidoMaterno;
     private javax.swing.JTextField txtApellidoPaterno;
     private javax.swing.JTextField txtCalle;
@@ -540,4 +494,5 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
     private IConexion conexion;
     private IClientesDAO clientesDAO;
+    private Cliente cliente;
 }
