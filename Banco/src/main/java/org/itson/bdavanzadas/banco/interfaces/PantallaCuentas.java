@@ -32,10 +32,10 @@ public class PantallaCuentas extends javax.swing.JDialog {
         this.conexion = conexion;
         cuentasDAO = new CuentasDAO(conexion);
         this.cliente = cliente;
-        String[] nombresCliente = cliente.getNombre().split(" ");
-        lblNombreCliente.setText(nombresCliente[0]);
+//        String[] nombresCliente = cliente.getNombre().split(" ");
+//        lblNombreCliente.setText(nombresCliente[0]);
         cuentasDAO = new CuentasDAO(conexion);
-        llenarTabla();
+//        llenarTabla();
     }
 
     /**
@@ -52,7 +52,6 @@ public class PantallaCuentas extends javax.swing.JDialog {
         Dimension dlgSize = getPreferredSize();
         // Centra el cuadro de diálogo sobre la ventana padre
         setLocation((frameSize.width - dlgSize.width) / 2 + loc.x, (frameSize.height - dlgSize.height) / 2 + loc.y);
-
     }
 
     private void llenarTabla() {
@@ -163,11 +162,21 @@ public class PantallaCuentas extends javax.swing.JDialog {
         btnActualizarCliente.setBorderPainted(false);
         btnActualizarCliente.setContentAreaFilled(false);
         btnActualizarCliente.setFocusPainted(false);
+        btnActualizarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarClienteActionPerformed(evt);
+            }
+        });
 
         btnCerrarSesion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/CerrarSesion.png"))); // NOI18N
         btnCerrarSesion.setBorderPainted(false);
         btnCerrarSesion.setContentAreaFilled(false);
         btnCerrarSesion.setFocusPainted(false);
+        btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarSesionActionPerformed(evt);
+            }
+        });
 
         tblCuentas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -259,6 +268,18 @@ public class PantallaCuentas extends javax.swing.JDialog {
     private void btnActualizarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarTablaActionPerformed
         llenarTabla();
     }//GEN-LAST:event_btnActualizarTablaActionPerformed
+
+    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
+        int operacion = JOptionPane.showConfirmDialog(this, "¿Seguro que deseas cerrar sesión?", "Cerrar Sesión", JOptionPane.OK_CANCEL_OPTION);
+        if (operacion == JOptionPane.OK_OPTION) {
+            dispose();
+        }
+    }//GEN-LAST:event_btnCerrarSesionActionPerformed
+
+    private void btnActualizarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarClienteActionPerformed
+        PantallaActualizarCliente pantallaActualizarCliente = new PantallaActualizarCliente(parent, true, conexion, cliente);
+        pantallaActualizarCliente.setVisible(true);
+    }//GEN-LAST:event_btnActualizarClienteActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizarCliente;

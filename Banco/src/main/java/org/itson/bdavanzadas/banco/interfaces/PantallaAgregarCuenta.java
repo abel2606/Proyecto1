@@ -48,7 +48,6 @@ public class PantallaAgregarCuenta extends javax.swing.JDialog {
         Dimension dlgSize = getPreferredSize();
         // Centra el cuadro de diálogo sobre la ventana padre
         setLocation((frameSize.width - dlgSize.width) / 2 + loc.x, (frameSize.height - dlgSize.height) / 2 + loc.y);
-        
     }
 
     /**

@@ -166,7 +166,8 @@ public class PantallaInicio extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     private void btnRetiroSinCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroSinCuentaActionPerformed
-        
+        PantallaRetiro pantallaRetiro = new PantallaRetiro(this, true, conexion);
+        pantallaRetiro.setVisible(true);
     }//GEN-LAST:event_btnRetiroSinCuentaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

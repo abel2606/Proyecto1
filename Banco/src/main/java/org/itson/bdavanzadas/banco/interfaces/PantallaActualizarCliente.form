@@ -3,7 +3,6 @@
 <Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
-    <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -51,7 +50,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                   <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="23" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="jPanel4" alignment="1" min="-2" pref="458" max="-2" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
@@ -69,10 +68,10 @@
               <Group type="102" alignment="0" attributes="0">
                   <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" groupAlignment="1" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="jPanel4" min="-2" pref="278" max="-2" attributes="0"/>
-                          <EmptySpace pref="130" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="129" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="btnCancelar" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="btnAceptar" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -80,7 +79,7 @@
                       </Group>
                       <Component id="jPanel3" min="-2" pref="454" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="31" max="32767" attributes="0"/>
+                  <EmptySpace pref="32" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -102,9 +101,9 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                       <Component id="lblPokebolaIzq" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="219" max="-2" attributes="0"/>
-                      <Component id="lblTitulo" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
+                      <Component id="lblTitulo" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="208" max="-2" attributes="0"/>
                       <Component id="lblPokebolaDer" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                   </Group>
@@ -133,7 +132,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="REGISTRAR CLIENTE"/>
+                <Property name="text" type="java.lang.String" value="ACTUALIZAR CLIENTE"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lblPokebolaIzq">
@@ -271,6 +270,7 @@
                               <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                           </Group>
                       </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="lblCiudad" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="txtCiudad" min="-2" max="-2" attributes="0"/>
@@ -580,16 +580,16 @@
                       <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="lblContrasena" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblAntiguaContrasena" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lblConfirmarContrasena" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblNuevaContrasena" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="txtUsuario" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="pswContrasena" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="pswConfirmarContrasena" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="pswAntiguaContrasena" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="pswNuevaContrasena" alignment="0" max="32767" attributes="0"/>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Component id="lblUsuario" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -615,13 +615,13 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="txtUsuario" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="lblContrasena" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblAntiguaContrasena" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="pswContrasena" min="-2" max="-2" attributes="0"/>
+                      <Component id="pswAntiguaContrasena" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="lblConfirmarContrasena" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblNuevaContrasena" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="pswConfirmarContrasena" min="-2" max="-2" attributes="0"/>
+                      <Component id="pswNuevaContrasena" min="-2" max="-2" attributes="0"/>
                       <EmptySpace pref="24" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -667,7 +667,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblContrasena">
+            <Component class="javax.swing.JLabel" name="lblAntiguaContrasena">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="19" style="1"/>
@@ -675,10 +675,10 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="25" green="a8" red="0" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Contrase&#xf1;a"/>
+                <Property name="text" type="java.lang.String" value="Antigua Contrase&#xf1;a"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JPasswordField" name="pswContrasena">
+            <Component class="javax.swing.JPasswordField" name="pswAntiguaContrasena">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="19" style="1"/>
@@ -695,7 +695,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblConfirmarContrasena">
+            <Component class="javax.swing.JLabel" name="lblNuevaContrasena">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="19" style="1"/>
@@ -703,10 +703,10 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="25" green="a8" red="0" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Confirmar Contrase&#xf1;a"/>
+                <Property name="text" type="java.lang.String" value="Nueva Contrase&#xf1;a"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JPasswordField" name="pswConfirmarContrasena">
+            <Component class="javax.swing.JPasswordField" name="pswNuevaContrasena">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="19" style="1"/>
