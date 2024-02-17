@@ -16,7 +16,7 @@ import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException
 public class PantallaAgregarCuenta extends javax.swing.JDialog {
 
     /**
-     * Creates new form PantallaAgregarCuentaD
+     * Creates new form PantallaAgregarCuenta.
      *
      * @param parent
      * @param modal
@@ -27,6 +27,7 @@ public class PantallaAgregarCuenta extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         centraCuadroDialogo(parent);
+        setTitle("Agregar Cuenta");
         this.conexion = conexion;
         cuentasDAO = new CuentasDAO(conexion);
         this.cliente = cliente;
@@ -102,6 +103,7 @@ public class PantallaAgregarCuenta extends javax.swing.JDialog {
         btnAceptar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(189, 255, 188));
         jPanel1.setPreferredSize(new java.awt.Dimension(1100, 450));

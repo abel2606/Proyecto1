@@ -16,7 +16,8 @@ import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException
 public class PantallaCuentas extends javax.swing.JDialog {
 
     /**
-     * Creates new form PantallaCuentasD
+     * Creates new form PantallaCuentas.
+     *
      * @param parent
      * @param modal
      * @param conexion
@@ -26,6 +27,7 @@ public class PantallaCuentas extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         centraCuadroDialogo(parent);
+        setTitle("Cuentas");
         this.parent = parent;
         this.conexion = conexion;
         cuentasDAO = new CuentasDAO(conexion);
@@ -35,7 +37,7 @@ public class PantallaCuentas extends javax.swing.JDialog {
         cuentasDAO = new CuentasDAO(conexion);
         llenarTabla();
     }
-    
+
     /**
      * Este método centra el cuadro de dialogo sobre la ventana de la
      * aplicación.
@@ -50,9 +52,9 @@ public class PantallaCuentas extends javax.swing.JDialog {
         Dimension dlgSize = getPreferredSize();
         // Centra el cuadro de diálogo sobre la ventana padre
         setLocation((frameSize.width - dlgSize.width) / 2 + loc.x, (frameSize.height - dlgSize.height) / 2 + loc.y);
-        
+
     }
-    
+
     private void llenarTabla() {
         // Obtener la lista de socios
         List<Cuenta> listaCuentas;
@@ -68,13 +70,13 @@ public class PantallaCuentas extends javax.swing.JDialog {
             // Agregar los socios al modelo de la tabla
             for (Cuenta cuenta : listaCuentas) {
                 Boolean activa = cuenta.isActiva();
-                String activaString; 
+                String activaString;
                 if (activa) {
                     activaString = "Si";
                 } else {
                     activaString = "No";
                 }
-                
+
                 Object[] fila = {cuenta.getAlias(), cuenta.getSaldo(), cuenta.getFechaApertura().formatearFecha(), activaString, "Ver"};
                 modelo.addRow(fila);
             }
@@ -107,6 +109,7 @@ public class PantallaCuentas extends javax.swing.JDialog {
         lblNombreCliente = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(189, 255, 188));
         jPanel1.setPreferredSize(new java.awt.Dimension(1100, 450));

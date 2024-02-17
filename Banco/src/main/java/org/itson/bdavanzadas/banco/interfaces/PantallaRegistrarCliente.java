@@ -13,7 +13,8 @@ import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException
 public class PantallaRegistrarCliente extends javax.swing.JDialog {
 
     /**
-     * Creates new form PantallaRegistrarClienteD
+     * Creates new form PantallaRegistrarCliente.
+     *
      * @param parent
      * @param modal
      * @param conexion
@@ -26,7 +27,7 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
         this.conexion = conexion;
         clientesDAO = new ClientesDAO(conexion);
     }
-    
+
     /**
      * Este método centra el cuadro de dialogo sobre la ventana de la
      * aplicación.
@@ -41,9 +42,9 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
         Dimension dlgSize = getPreferredSize();
         // Centra el cuadro de diálogo sobre la ventana padre
         setLocation((frameSize.width - dlgSize.width) / 2 + loc.x, (frameSize.height - dlgSize.height) / 2 + loc.y);
-        
+
     }
-    
+
     /**
      * Permite capturar la información del cliente del formulario y guardarla en
      * la base de datos.
@@ -52,7 +53,7 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
         String nombre = txtNombre.getText();
         String apellidoPaterno = txtApellidoMaterno.getText();
         String apellidoMaterno = txtApellidoPaterno.getText();
-        String fechaNacimiento = txtFechaNacimiento.getText();  
+        String fechaNacimiento = txtFechaNacimiento.getText();
         String calle = txtCalle.getText();
         String numero = txtNumero.getText();
         String colonia = txtColonia.getText();
@@ -60,7 +61,7 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
         String ciudad = txtCiudad.getText();
         String usuario = txtUsuario.getText();
         String contrasena = pswContrasena.getText();
-        
+
         ClienteNuevoDTO clienteNuevo = new ClienteNuevoDTO();
         clienteNuevo.setNombre(nombre);
         clienteNuevo.setApellidoPaterno(apellidoPaterno);
@@ -73,8 +74,8 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
         clienteNuevo.setCiudad(ciudad);
         clienteNuevo.setUsuario(usuario);
         clienteNuevo.setContrasena(contrasena);
-        
-        try{
+
+        try {
             clienteNuevo.isValid();
             clientesDAO.agregar(clienteNuevo);
         } catch (PersistenciaException ex) {
@@ -133,6 +134,7 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
         btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(189, 255, 188));
         jPanel1.setPreferredSize(new java.awt.Dimension(1100, 450));
@@ -338,10 +340,11 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(lblCodigoPostal)
                         .addGap(33, 33, 33)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblCiudad)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(189, 255, 188));
@@ -366,6 +369,7 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
 
         pswContrasena.setFont(new java.awt.Font("Arial", 1, 19)); // NOI18N
         pswContrasena.setForeground(new java.awt.Color(99, 134, 107));
+        pswContrasena.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 117), 2, true));
 
         lblConfirmarContrasena.setFont(new java.awt.Font("Arial", 1, 19)); // NOI18N
         lblConfirmarContrasena.setForeground(new java.awt.Color(0, 168, 37));
@@ -373,6 +377,7 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
 
         pswConfirmarContrasena.setFont(new java.awt.Font("Arial", 1, 19)); // NOI18N
         pswConfirmarContrasena.setForeground(new java.awt.Color(99, 134, 107));
+        pswConfirmarContrasena.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 117), 2, true));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -415,7 +420,7 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
                 .addComponent(lblConfirmarContrasena)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pswConfirmarContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         btnAceptar.setBackground(new java.awt.Color(0, 255, 117));
