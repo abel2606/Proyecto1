@@ -3,7 +3,8 @@ package org.itson.bdavanzadas.bancodominio;
 import java.util.Objects;
 
 public class Cliente {
-private Long id;
+
+    private Long id;
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
@@ -24,9 +25,9 @@ private Long id;
 
     /**
      * Constructor que recibe id, nombre, apellido paterno, apellido materno,
-     * fecha de nacimiento, usuario, contraseña, calle, colonia, numero,
-     * codigo postal, y ciudad
-   
+     * fecha de nacimiento, usuario y contraseña del cliente, además de los
+     * datos de dimicilio que son calle, número, colonia, código postal y ciudad
+     *
      *
      * @param id El id en la base de datos
      * @param nombre El nombre
@@ -37,11 +38,11 @@ private Long id;
      * @param contrasena La contraseña del cliente
      * @param calle La ciudad
      * @param colonia La colonia
-     * @param numero El número de casa 
+     * @param numero El número de casa
      * @param codigoPostal El codigo postal
      * @param ciudad La ciudad
      */
-    public Cliente(Long id, String nombre, String apellidoPaterno, String apellidoMaterno, Fecha fechaNacimiento, String usuario, String contrasena, String calle, String colonia, String numero, String codigoPostal, String ciudad) {    
+    public Cliente(Long id, String nombre, String apellidoPaterno, String apellidoMaterno, Fecha fechaNacimiento, String usuario, String contrasena, String calle, String colonia, String numero, String codigoPostal, String ciudad) {
         this.id = id;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -58,8 +59,8 @@ private Long id;
 
     /**
      * Constructor que recibe nombre, apellido paterno, apellido materno, fecha
-     * de nacimiento, usuario y contraseña del cliente, Además de los datos de
-     * dimicilio que son colonia, numero, codigo postal y ciudad
+     * de nacimiento, usuario y contraseña del cliente, además de los datos de
+     * dimicilio que son calle, número, colonia, código postal y ciudad
      *
      * @param nombre El nombre
      * @param apellidoPaterno El apellido paterno
@@ -69,11 +70,11 @@ private Long id;
      * @param contrasena La contraseña del cliente
      * @param calle La ciudad
      * @param colonia La colonia
-     * @param numero El número de casa 
+     * @param numero El número de casa
      * @param codigoPostal El codigo postal
      * @param ciudad La ciudad
      */
-    public Cliente(String nombre, String apellidoPaterno, String apellidoMaterno, Fecha fechaNacimiento, String usuario, String contrasena, String calle, String colonia, String numero, String codigoPostal, String ciudad) {    
+    public Cliente(String nombre, String apellidoPaterno, String apellidoMaterno, Fecha fechaNacimiento, String usuario, String contrasena, String calle, String colonia, String numero, String codigoPostal, String ciudad) {
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
@@ -213,47 +214,96 @@ private Long id;
         this.contrasena = contrasena;
     }
 
+    /**
+     * Permite obtener la calle del domicilio del cliente.
+     *
+     * @return La calle del domicilio del cliente
+     */
     public String getCalle() {
         return calle;
     }
 
+    /**
+     * Permite establecer la calle del domicilio del cliente.
+     *
+     * @param calle La calle del domicilio del cliente
+     */
     public void setCalle(String calle) {
         this.calle = calle;
     }
 
+    /**
+     * Permite obtener la colonia del domicilio del cliente.
+     *
+     * @return La colonia del domicilio del cliente
+     */
     public String getColonia() {
         return colonia;
     }
 
+    /**
+     * Permite establecer la colonia del domicilio del cliente.
+     *
+     * @param colonia Permite establecer la colonia del domicilio del cliente
+     */
     public void setColonia(String colonia) {
         this.colonia = colonia;
     }
 
+    /**
+     * Permite obtener el número del domicilio del cliente.
+     *
+     * @return El número del domicilio del cliente
+     */
     public String getNumero() {
         return numero;
     }
 
+    /**
+     * Permite establecer el número del domicilio del cliente.
+     *
+     * @param numero El número del domicilio del cliente
+     */
     public void setNumero(String numero) {
         this.numero = numero;
     }
 
+    /**
+     * Permite obtener el código postal del domicilio del cliente.
+     *
+     * @return El código postal del domicilio del cliente
+     */
     public String getCodigoPostal() {
         return codigoPostal;
     }
 
+    /**
+     * Permite establecer el código postal del domicilio del cliente.
+     *
+     * @param codigoPostal El código postal del domicilio del cliente
+     */
     public void setCodigoPostal(String codigoPostal) {
         this.codigoPostal = codigoPostal;
     }
 
+    /**
+     * Permite obtener la ciudad del domicilio del cliente.
+     *
+     * @return La ciudad del domicilio del cliente
+     */
     public String getCiudad() {
         return ciudad;
     }
 
+    /**
+     * Permite establecer la ciudad del domicilio del cliente.
+     *
+     * @param ciudad La ciudad del domicilio del cliente
+     */
     public void setCiudad(String ciudad) {
         this.ciudad = ciudad;
     }
 
-    
     /**
      * Permite establecer un código único al cliente basándose en el id.
      *
@@ -308,7 +358,6 @@ private Long id;
         sb.append(", numero=").append(numero);
         sb.append(", codigoPostal=").append(codigoPostal);
         sb.append(", ciudad=").append(ciudad);
-        
         sb.append('}');
         return sb.toString();
     }
