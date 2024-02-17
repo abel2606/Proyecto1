@@ -3,7 +3,7 @@ package org.itson.bdavanzadas.bancodominio;
 import java.util.Objects;
 
 public class Cliente {
-private Long id;
+    private Long id;
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
