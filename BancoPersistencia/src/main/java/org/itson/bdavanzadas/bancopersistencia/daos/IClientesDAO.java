@@ -35,4 +35,6 @@ public interface IClientesDAO {
      */
     Cliente iniciarSesion(String usuario, String contrasena) throws PersistenciaException;
 
+    Cliente actualizar(Cliente cliente) throws PersistenciaException;
+    
 }
