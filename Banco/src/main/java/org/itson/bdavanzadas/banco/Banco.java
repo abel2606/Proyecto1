@@ -1,19 +1,13 @@
 package org.itson.bdavanzadas.banco;
 
-import java.util.List;
-import java.util.logging.Level;
 import org.itson.bdavanzadas.bancopersistencia.conexion.Conexion;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import java.util.logging.Logger;
-import org.itson.bdavanzadas.banco.interfaces.PantallaCuentas;
-import org.itson.bdavanzadas.bancodominio.Cliente;
-import org.itson.bdavanzadas.bancodominio.Fecha;
+import org.itson.bdavanzadas.banco.interfaces.PantallaInicio;
 import org.itson.bdavanzadas.bancopersistencia.daos.ClientesDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.CuentasDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.IClientesDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.ICuentasDAO;
-import org.itson.bdavanzadas.bancopersistencia.dtos.ClienteNuevoDTO;
-import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
 public class Banco {
 
@@ -22,62 +16,61 @@ public class Banco {
     public static void main(String[] args) {
         String cadenaConexion = "jdbc:mysql://localhost/banco";
         String usuario = "root";
-        String contrasenia = "Abel123";
+        String contrasenia = "password";
 
         IConexion conexion = new Conexion(cadenaConexion, usuario, contrasenia);
         ICuentasDAO cuentasDAO = new CuentasDAO(conexion);
         IClientesDAO clientesDAO = new ClientesDAO(conexion);
+        
+        PantallaInicio pi = new PantallaInicio(conexion);
+        pi.setVisible(true);
 
-        Cliente clienteBuscado = null; 
-        try {
-            clienteBuscado = clientesDAO.iniciarSesion("abel123", "Password");;
-            logger.log(Level.INFO, clienteBuscado.toString());
-        } catch (PersistenciaException e) {
-            logger.log(Level.SEVERE, null, e);
-        }
-
-        ClienteNuevoDTO clienteNuevo = new ClienteNuevoDTO();
-        clienteNuevo.setNombre("Ricardo Alán");
-        clienteNuevo.setApellidoPaterno("Gutiérrez");
-        clienteNuevo.setApellidoMaterno("Garcés");
-        clienteNuevo.setFechaNacimiento(new Fecha("2004-03-21"));
-        clienteNuevo.setUsuario("imnotrichi");
-        clienteNuevo.setContrasena("password");
-        clienteNuevo.setCalle("Jalisco");
-        clienteNuevo.setColonia("Primavera");
-        clienteNuevo.setNumero("1782");
-        clienteNuevo.setCodigoPostal("85099");
-        clienteNuevo.setCiudad("Nogales");
-        
-       Cliente clienteAgregado = null;
-
-        try {
-            clienteAgregado = clientesDAO.agregar(clienteNuevo);
-            logger.log(Level.INFO, clienteAgregado.toString());
-        } catch (PersistenciaException e) {
-            logger.log(Level.SEVERE, null, e);
-        }
-        
-        clienteNuevo.setColonia("Primero de mayo");
-        try {
-            clienteAgregado = clientesDAO.agregar(clienteNuevo);
-            logger.log(Level.INFO, clienteAgregado.toString());
-        } catch (PersistenciaException e) {
-            logger.log(Level.SEVERE, null, e);
-        }
-        
-        
-        Cliente clienteActualizado = null;
-        try {
-            clienteActualizado = clientesDAO.actualizar(clienteAgregado);
-            logger.log(Level.INFO, clienteActualizado.toString());
-        } catch (PersistenciaException e) {
-            logger.log(Level.SEVERE, null, e);
-        }
-        
+//        Cliente clienteBuscado = null; 
+//        try {
+//            clienteBuscado = clientesDAO.iniciarSesion("abel123", "Password");;
+//            logger.log(Level.INFO, clienteBuscado.toString());
+//        } catch (PersistenciaException e) {
+//            logger.log(Level.SEVERE, null, e);
+//        }
+//
+//        ClienteNuevoDTO clienteNuevo = new ClienteNuevoDTO();
+//        clienteNuevo.setNombre("Ricardo Alán");
+//        clienteNuevo.setApellidoPaterno("Gutiérrez");
+//        clienteNuevo.setApellidoMaterno("Garcés");
+//        clienteNuevo.setFechaNacimiento(new Fecha("2004-03-21"));
+//        clienteNuevo.setUsuario("imnotrichi");
+//        clienteNuevo.setContrasena("password");
+//        clienteNuevo.setCalle("Jalisco");
+//        clienteNuevo.setColonia("Primavera");
+//        clienteNuevo.setNumero("1782");
+//        clienteNuevo.setCodigoPostal("85099");
+//        clienteNuevo.setCiudad("Nogales");
+//
+//        Cliente clienteAgregado = null;
+//
+//        try {
+//            clienteAgregado = clientesDAO.agregar(clienteNuevo);
+//            logger.log(Level.INFO, clienteAgregado.toString());
+//        } catch (PersistenciaException e) {
+//            logger.log(Level.SEVERE, null, e);
+//        }
 //        
-
-
+//        clienteNuevo.setColonia("Primero de mayo");
+//        try {
+//            clienteAgregado = clientesDAO.agregar(clienteNuevo);
+//            logger.log(Level.INFO, clienteAgregado.toString());
+//        } catch (PersistenciaException e) {
+//            logger.log(Level.SEVERE, null, e);
+//        }
+//        
+//        Cliente clienteActualizado = null;
+//        try {
+//            clienteActualizado = clientesDAO.actualizar(clienteAgregado);
+//            logger.log(Level.INFO, clienteActualizado.toString());
+//        } catch (PersistenciaException e) {
+//            logger.log(Level.SEVERE, null, e);
+//        }
+        
 //        List<Cliente> listaClientes = null;
 //        try {
 //            listaClientes = clientesDAO.consultar();

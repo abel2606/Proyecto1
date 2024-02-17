@@ -222,6 +222,7 @@ public class PantallaAgregarCuenta extends javax.swing.JFrame {
         guardar();
         dispose();
     }//GEN-LAST:event_btnAceptarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnCancelar;
