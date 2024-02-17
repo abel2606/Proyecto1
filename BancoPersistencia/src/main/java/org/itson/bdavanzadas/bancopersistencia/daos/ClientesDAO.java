@@ -45,12 +45,10 @@ public class ClientesDAO implements IClientesDAO {
         """;
         List<Cliente> listaCliente = new LinkedList<>();
         try (
-            Connection conexion = this.conexionBD.obtenerConexion(); 
-            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
-        ) {
+                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
             ResultSet resultados = comando.executeQuery();
             while (resultados.next()) {
-                Long id = (long)resultados.getInt("identificador");
+                Long id = resultados.getLong("identificador");
                 String nombre = resultados.getString("nombre");
                 String apellidoPaterno = resultados.getString("apellidoPaterno");
                 String apellidoMaterno = resultados.getString("apellidoMaterno");
@@ -62,8 +60,8 @@ public class ClientesDAO implements IClientesDAO {
                 String colonia = resultados.getString("colonia");
                 String codigoPostal = resultados.getString("codigoPostal");
                 String ciudad = resultados.getString("ciudad");
-                Cliente cliente = new Cliente(id, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, usuario, contrasena,
-                        calle, colonia, numero, codigoPostal, ciudad);
+                Cliente cliente = new Cliente(id, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, usuario, contrasena, calle, colonia, numero, codigoPostal, ciudad);
+
                 listaCliente.add(cliente);
             }
             logger.log(Level.INFO, "Se consultaron {0} clientes", listaCliente.size());
@@ -93,10 +91,7 @@ public class ClientesDAO implements IClientesDAO {
         VALUES (?, ?, ?, ?, ?, ?)
         """;
         try (
-            Connection conexion = this.conexionBD.obtenerConexion(); 
-            PreparedStatement comandoCliente = conexion.prepareStatement(sentenciaClienteSQL, Statement.RETURN_GENERATED_KEYS); 
-            PreparedStatement comandoDomicilio = conexion.prepareStatement(sentenciaDomicilioSQL);
-        ) {
+                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comandoCliente = conexion.prepareStatement(sentenciaClienteSQL, Statement.RETURN_GENERATED_KEYS); PreparedStatement comandoDomicilio = conexion.prepareStatement(sentenciaDomicilioSQL);) {
             conexion.setAutoCommit(false);
 
             comandoCliente.setString(1, clienteNuevo.getNombre());
@@ -154,14 +149,11 @@ public class ClientesDAO implements IClientesDAO {
         WHERE c.usuario = ? AND c.contrasena = ?;
         """;
         try (
-            Connection conexion = this.conexionBD.obtenerConexion(); 
-            PreparedStatement consulta = conexion.prepareStatement(consultaSQL);
-        ) {
+                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement consulta = conexion.prepareStatement(consultaSQL);) {
             consulta.setString(1, usuario);
             consulta.setString(2, contrasena);
             try (
-                ResultSet resultado = consulta.executeQuery()
-            ) {
+                    ResultSet resultado = consulta.executeQuery()) {
                 if (resultado.next()) {
                     long idCliente = resultado.getLong("identificador");
                     String nombre = resultado.getString("nombre");
@@ -184,7 +176,7 @@ public class ClientesDAO implements IClientesDAO {
         }
         return null;
     }
-    
+
     /**
      * Permite actualizar la información de un cliente en la base de datos.
      *
@@ -194,47 +186,44 @@ public class ClientesDAO implements IClientesDAO {
      */
     @Override
     public Cliente actualizar(Cliente cliente) throws PersistenciaException {
-    String sentenciaSQL = """
+        String sentenciaSQL = """
                          UPDATE clientes 
                          SET nombre=?, apellidoPaterno=?, apellidoMaterno=?, fechaNacimiento=?, usuario=?, contrasena=?
                          WHERE identificador=?
                          """;
-    String sentenciaDomicilioSQL = """
+        String sentenciaDomicilioSQL = """
                                 UPDATE domicilios
                                 SET calle=?, numero=?, colonia=?, codigoPostal=?, ciudad=?
                                 WHERE identificadorCliente=?
                                 """;
-    try (
-        Connection conexion = this.conexionBD.obtenerConexion(); 
-        PreparedStatement comandoCliente = conexion.prepareStatement(sentenciaSQL);
-        PreparedStatement comandoDomicilio = conexion.prepareStatement(sentenciaDomicilioSQL);
-    ) {
-        conexion.setAutoCommit(false);
+        try (
+                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comandoCliente = conexion.prepareStatement(sentenciaSQL); PreparedStatement comandoDomicilio = conexion.prepareStatement(sentenciaDomicilioSQL);) {
+            conexion.setAutoCommit(false);
 
-        // Actualizar datos del cliente
-        comandoCliente.setString(1, cliente.getNombre());
-        comandoCliente.setString(2, cliente.getApellidoPaterno());
-        comandoCliente.setString(3, cliente.getApellidoMaterno());
-        comandoCliente.setString(4, cliente.getFechaNacimiento().toString());
-        comandoCliente.setString(5, cliente.getUsuario());
-        comandoCliente.setString(6, cliente.getContrasena());
-        comandoCliente.setLong(7, cliente.getId());
+            // Actualizar datos del cliente
+            comandoCliente.setString(1, cliente.getNombre());
+            comandoCliente.setString(2, cliente.getApellidoPaterno());
+            comandoCliente.setString(3, cliente.getApellidoMaterno());
+            comandoCliente.setString(4, cliente.getFechaNacimiento().toString());
+            comandoCliente.setString(5, cliente.getUsuario());
+            comandoCliente.setString(6, cliente.getContrasena());
+            comandoCliente.setLong(7, cliente.getId());
 
-        int numRegistrosActualizadosCliente = comandoCliente.executeUpdate();
-        logger.log(Level.INFO, "Se actualizaron {0} registros en la tabla clientes", numRegistrosActualizadosCliente);
+            int numRegistrosActualizadosCliente = comandoCliente.executeUpdate();
+            logger.log(Level.INFO, "Se actualizaron {0} registros en la tabla clientes", numRegistrosActualizadosCliente);
 
-        // Actualizar datos del domicilio
-        comandoDomicilio.setString(1, cliente.getCalle());
-        comandoDomicilio.setString(2, cliente.getNumero());
-        comandoDomicilio.setString(3, cliente.getColonia());
-        comandoDomicilio.setString(4, cliente.getCodigoPostal());
-        comandoDomicilio.setString(5, cliente.getCiudad());
-        comandoDomicilio.setLong(6, cliente.getId());
+            // Actualizar datos del domicilio
+            comandoDomicilio.setString(1, cliente.getCalle());
+            comandoDomicilio.setString(2, cliente.getNumero());
+            comandoDomicilio.setString(3, cliente.getColonia());
+            comandoDomicilio.setString(4, cliente.getCodigoPostal());
+            comandoDomicilio.setString(5, cliente.getCiudad());
+            comandoDomicilio.setLong(6, cliente.getId());
 
-        int numRegistrosActualizadosDomicilio = comandoDomicilio.executeUpdate();
-        logger.log(Level.INFO, "Se actualizaron {0} registros en la tabla domicilios", numRegistrosActualizadosDomicilio);
+            int numRegistrosActualizadosDomicilio = comandoDomicilio.executeUpdate();
+            logger.log(Level.INFO, "Se actualizaron {0} registros en la tabla domicilios", numRegistrosActualizadosDomicilio);
 
-        conexion.commit();
+            conexion.commit();
 
             return cliente;
         } catch (SQLException ex) {
@@ -243,5 +232,32 @@ public class ClientesDAO implements IClientesDAO {
         }
     }
 
+    /**
+     * Regresa un valor booleano si existe un usuario
+     * @param nombreUsuario El nombre del usuario
+     * @return regresa si existe el usuario
+     * @throws PersistenciaException lanza una exception si existe un error
+     */
+    public boolean existeUsuario(String nombreUsuario) throws PersistenciaException {
+
+        String sentenciaSQL = "SELECT COUNT(*) AS total FROM clientes WHERE usuario = ?";
+        try (
+                Connection conexion = this.conexionBD.obtenerConexion();
+                PreparedStatement consulta = conexion.prepareStatement(sentenciaSQL);) {
+
+            consulta.setString(1, nombreUsuario);
+            ResultSet cantidadUsuario = consulta.executeQuery();
+
+            // Verificar si se encontró algún resultado
+            if (cantidadUsuario.next()) {
+                int total = cantidadUsuario.getInt("total");
+                return total > 0; // Retorna true si se encontró al menos un usuario con ese nombre
+            }
+            return false; // Si no se encontraron resultados, retorna false
+        } catch (SQLException e) {
+            throw new PersistenciaException("Error al verificar la existencia del usuario", e);
+        } 
+
+    }
 
 }
