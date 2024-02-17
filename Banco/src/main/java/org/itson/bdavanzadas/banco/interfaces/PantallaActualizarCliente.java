@@ -2,10 +2,15 @@ package org.itson.bdavanzadas.banco.interfaces;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import javax.swing.JOptionPane;
 import org.itson.bdavanzadas.bancodominio.Cliente;
+import org.itson.bdavanzadas.bancodominio.Fecha;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.daos.ClientesDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.IClientesDAO;
+import org.itson.bdavanzadas.bancopersistencia.dtos.ClienteActualizadoDTO;
+import org.itson.bdavanzadas.bancopersistencia.excepciones.ClienteNoValidoException;
+import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
 public class PantallaActualizarCliente extends javax.swing.JDialog {
 
@@ -24,6 +29,17 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
         this.conexion = conexion;
         this.cliente = cliente;
         clientesDAO = new ClientesDAO(conexion);
+        this.txtNombre.setText(cliente.getNombre());
+        this.txtApellidoPaterno.setText(cliente.getApellidoPaterno());
+        this.txtApellidoMaterno.setText(cliente.getApellidoMaterno());
+        this.txtFechaNacimiento.setText(cliente.getFechaNacimiento().toString());
+
+        this.txtCalle.setText(cliente.getCalle());
+        this.txtNumero.setText(cliente.getNumero());
+        this.txtColonia.setText(cliente.getColonia());
+        this.txtCodigoPostal.setText(cliente.getCodigoPostal());
+        this.txtCiudad.setText(cliente.getCiudad());
+        this.txtUsuario.setText(cliente.getUsuario());
     }
 
     /**
@@ -40,6 +56,53 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
         Dimension dlgSize = getPreferredSize();
         // Centra el cuadro de diálogo sobre la ventana padre
         setLocation((frameSize.width - dlgSize.width) / 2 + loc.x, (frameSize.height - dlgSize.height) / 2 + loc.y);
+    }
+
+    public void guardar() {
+        String nombre = txtNombre.getText();
+        String apellidoPaterno = txtApellidoMaterno.getText();
+        String apellidoMaterno = txtApellidoPaterno.getText();
+        String fechaNacimiento = txtFechaNacimiento.getText();
+        String calle = txtCalle.getText();
+        String numero = txtNumero.getText();
+        String colonia = txtColonia.getText();
+        String codigoPostal = txtCodigoPostal.getText();
+        String ciudad = txtCiudad.getText();
+        String usuario = txtUsuario.getText();
+        String contrasena = pswAntiguaContrasena.getText().trim();
+        String contrasenaConfirmar = pswNuevaContrasena.getText().trim();
+
+        ClienteActualizadoDTO clienteActualizar = new ClienteActualizadoDTO();
+        clienteActualizar.setId(cliente.getId());
+        clienteActualizar.setNombre(nombre);
+        clienteActualizar.setApellidoPaterno(apellidoPaterno);
+        clienteActualizar.setApellidoMaterno(apellidoMaterno);
+        clienteActualizar.setFechaNacimiento(new Fecha(fechaNacimiento));
+        clienteActualizar.setCalle(calle);
+        clienteActualizar.setNumero(numero);
+        clienteActualizar.setColonia(colonia);
+        clienteActualizar.setCodigoPostal(codigoPostal);
+        clienteActualizar.setCiudad(ciudad);
+        clienteActualizar.setUsuario(usuario);
+        clienteActualizar.setContrasena(contrasena);
+
+        try {
+            if (clienteActualizar.isValid()) {
+
+                this.clientesDAO.actualizar(clienteActualizar);
+                JOptionPane.showMessageDialog(this, "Cliente actualizado",
+                        "Actualizar cliente", JOptionPane.INFORMATION_MESSAGE);
+
+            }
+
+        } catch (PersistenciaException ex) {
+            JOptionPane.showMessageDialog(this, "No fue posible agregar el cliente.",
+                    "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
+        } catch (ClienteNoValidoException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 
     /**
@@ -447,7 +510,7 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-//        guardar();
+        guardar();
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed

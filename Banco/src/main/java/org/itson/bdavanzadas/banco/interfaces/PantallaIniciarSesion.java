@@ -60,10 +60,11 @@ public class PantallaIniciarSesion extends javax.swing.JDialog {
 
                 if (clienteEncontrado != null) {
                     //Este código es para poder obtener la clase padre del jdialog
+                    dispose();
                     Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(this);
                     PantallaCuentas pantallaCuentas = new PantallaCuentas(parentFrame, true, conexion, clienteEncontrado);
                     pantallaCuentas.setVisible(true);
-                    dispose();
+                    
                 } else {
                     JOptionPane.showMessageDialog(this, "Contraseña incorrecta", "Iniciar sesión", JOptionPane.ERROR_MESSAGE);
                 }
