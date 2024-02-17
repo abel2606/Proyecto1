@@ -78,6 +78,9 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
         try {
             clienteNuevo.isValid();
             clientesDAO.agregar(clienteNuevo);
+            JOptionPane.showMessageDialog(this, "Se registró correctamente el cliente.", 
+                    "Información", JOptionPane.INFORMATION_MESSAGE);
+            dispose();
         } catch (PersistenciaException ex) {
             JOptionPane.showMessageDialog(this, "No fue posible agregar el cliente.",
                     "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
