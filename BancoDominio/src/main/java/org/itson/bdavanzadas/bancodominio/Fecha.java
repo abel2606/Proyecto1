@@ -15,17 +15,21 @@ public class Fecha extends GregorianCalendar {
 
     /**
      * Constructor que crea una fecha a partir de una cadena de texto con
-     * formato "dd/mm/aaaa"
+     * formato "aaaa-mm-dd"
      *
      * @param s Cadena de texto con formato "aaaa-mm-dd"
      */
     public Fecha(String s) {
         super();
+        
         String fechaTexto[] = s.split("-");
+        
         int dia, mes, anio;
+        
         anio = Integer.parseInt(fechaTexto[0]);
         mes = Integer.parseInt(fechaTexto[1]);
         dia = Integer.parseInt(fechaTexto[2]);
+        
         set(Calendar.YEAR, anio);
         set(Calendar.MONTH, mes - 1);
         set(Calendar.DATE, dia);
