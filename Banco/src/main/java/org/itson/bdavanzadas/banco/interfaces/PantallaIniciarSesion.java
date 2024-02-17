@@ -46,25 +46,29 @@ public class PantallaIniciarSesion extends javax.swing.JDialog {
         setLocation((frameSize.width - dlgSize.width) / 2 + loc.x, (frameSize.height - dlgSize.height) / 2 + loc.y);
     }
 
+    /**
+     * Permite iniciar sesion mediante un usuario y una contraseña
+     */
     public void inciarSesion() {
         String usuario = txtUsuario.getText();
         String contrasena = jPasswordField1.getText();
-        
+
         try {
+            if (clientesDAO.existeUsuario(usuario)) {
 
-            Cliente clienteEncontrado = clientesDAO.iniciarSesion(usuario, contrasena);
-            //Este código es para poder obtener la clase padre del jdialog
+                Cliente clienteEncontrado = clientesDAO.iniciarSesion(usuario, contrasena);
 
-            
-            if (clienteEncontrado != null) {
-                Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(this);
-
-                PantallaCuentas pantallaCuentas = new PantallaCuentas(parentFrame, true, conexion, clienteEncontrado);
-                pantallaCuentas.setVisible(true);
-                dispose();
-            }
-            else{
-                JOptionPane.showMessageDialog(this, "Usuario no encontrado","Iniciar sesión",JOptionPane.ERROR_MESSAGE);
+                if (clienteEncontrado != null) {
+                    //Este código es para poder obtener la clase padre del jdialog
+                    Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(this);
+                    PantallaCuentas pantallaCuentas = new PantallaCuentas(parentFrame, true, conexion, clienteEncontrado);
+                    pantallaCuentas.setVisible(true);
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Contraseña incorrecta", "Iniciar sesión", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "No existe el usuario", "Iniciar sesión", JOptionPane.ERROR_MESSAGE);
             }
         } catch (PersistenciaException e) {
             JOptionPane.showMessageDialog(this, "No se ha encontrado el usuario", "Usurio no encontrado", JOptionPane.ERROR_MESSAGE);
