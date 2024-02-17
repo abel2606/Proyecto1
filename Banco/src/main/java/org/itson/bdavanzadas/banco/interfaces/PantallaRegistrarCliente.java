@@ -3,6 +3,7 @@ package org.itson.bdavanzadas.banco.interfaces;
 import java.awt.Dimension;
 import java.awt.Point;
 import javax.swing.JOptionPane;
+import org.itson.bdavanzadas.banco.Encriptar;
 import org.itson.bdavanzadas.bancodominio.Fecha;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.daos.ClientesDAO;
@@ -60,8 +61,8 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
         String codigoPostal = txtCodigoPostal.getText();
         String ciudad = txtCiudad.getText();
         String usuario = txtUsuario.getText();
-        String contrasena = pswContrasena.getText().trim();
-        String contrasenaConfirmar = pswConfirmarContrasena.getText().trim();
+        String contrasena = Encriptar.encriptar(pswContrasena.getText().trim());
+        String contrasenaConfirmar = Encriptar.encriptar(pswConfirmarContrasena.getText().trim());
 
         ClienteNuevoDTO clienteNuevo = new ClienteNuevoDTO();
         clienteNuevo.setNombre(nombre);
@@ -74,7 +75,7 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
         clienteNuevo.setCodigoPostal(codigoPostal);
         clienteNuevo.setCiudad(ciudad);
         clienteNuevo.setUsuario(usuario);
-        clienteNuevo.setContrasena(contrasena);
+        clienteNuevo.setContrasena(Encriptar.encriptar(contrasena));
 
         try {
             if (clienteNuevo.isValid()) {
@@ -350,11 +351,10 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(lblCodigoPostal)
                         .addGap(33, 33, 33)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblCiudad)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(189, 255, 188));
@@ -380,6 +380,11 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
         pswContrasena.setFont(new java.awt.Font("Arial", 1, 19)); // NOI18N
         pswContrasena.setForeground(new java.awt.Color(99, 134, 107));
         pswContrasena.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 117), 2, true));
+        pswContrasena.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pswContrasenaActionPerformed(evt);
+            }
+        });
 
         lblConfirmarContrasena.setFont(new java.awt.Font("Arial", 1, 19)); // NOI18N
         lblConfirmarContrasena.setForeground(new java.awt.Color(0, 168, 37));
@@ -411,7 +416,7 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
                                         .addComponent(lblUsuario)
                                         .addComponent(lblCuenta))
                                     .addGap(331, 331, 331))))
-                        .addGap(0, 16, Short.MAX_VALUE))))
+                        .addGap(0, 14, Short.MAX_VALUE))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -509,6 +514,10 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void pswContrasenaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pswContrasenaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pswContrasenaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
