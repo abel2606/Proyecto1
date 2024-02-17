@@ -1,27 +1,49 @@
 package org.itson.bdavanzadas.banco.interfaces;
 
+import java.awt.Dimension;
+import java.awt.Point;
 import javax.swing.JOptionPane;
-import org.itson.bdavanzadas.bancodominio.Fecha;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.daos.ClientesDAO;
+import org.itson.bdavanzadas.bancopersistencia.daos.IClientesDAO;
 import org.itson.bdavanzadas.bancopersistencia.dtos.ClienteNuevoDTO;
 import org.itson.bdavanzadas.bancopersistencia.excepciones.ClienteNoValidoException;
 import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
-public class PantallaRegistrarCliente extends javax.swing.JFrame {
+public class PantallaRegistrarCliente extends javax.swing.JDialog {
 
     /**
-     * Creates new form PantallaCuentas.
-     *
-     * @param conexion La conexión a la base de datos
+     * Creates new form PantallaRegistrarClienteD
+     * @param parent
+     * @param modal
+     * @param conexion
      */
-    public PantallaRegistrarCliente(IConexion conexion) {
+    public PantallaRegistrarCliente(java.awt.Frame parent, boolean modal, IConexion conexion) {
+        super(parent, modal);
         initComponents();
+        centraCuadroDialogo(parent);
         setTitle("Registrar Cliente");
         this.conexion = conexion;
         clientesDAO = new ClientesDAO(conexion);
     }
-
+    
+    /**
+     * Este método centra el cuadro de dialogo sobre la ventana de la
+     * aplicación.
+     *
+     * @param parent Ventana sobre la que aparecerá el cuadro de diálogo
+     */
+    private void centraCuadroDialogo(java.awt.Frame parent) {
+        // Obtiene el tamaño y posición de la ventana de la aplicación
+        Dimension frameSize = parent.getSize();
+        Point loc = parent.getLocation();
+        // Obtiene el tamaño del cuadro de diálogo
+        Dimension dlgSize = getPreferredSize();
+        // Centra el cuadro de diálogo sobre la ventana padre
+        setLocation((frameSize.width - dlgSize.width) / 2 + loc.x, (frameSize.height - dlgSize.height) / 2 + loc.y);
+        
+    }
+    
     /**
      * Permite capturar la información del cliente del formulario y guardarla en
      * la base de datos.
@@ -43,7 +65,7 @@ public class PantallaRegistrarCliente extends javax.swing.JFrame {
         clienteNuevo.setNombre(nombre);
         clienteNuevo.setApellidoPaterno(apellidoPaterno);
         clienteNuevo.setApellidoMaterno(apellidoMaterno);
-        clienteNuevo.setFechaNacimiento();
+//        clienteNuevo.setFechaNacimiento();
         clienteNuevo.setCalle(calle);
         clienteNuevo.setNumero(numero);
         clienteNuevo.setColonia(colonia);
@@ -110,8 +132,7 @@ public class PantallaRegistrarCliente extends javax.swing.JFrame {
         btnAceptar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setResizable(false);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(189, 255, 188));
         jPanel1.setPreferredSize(new java.awt.Dimension(1100, 450));
@@ -136,7 +157,7 @@ public class PantallaRegistrarCliente extends javax.swing.JFrame {
                 .addComponent(lblPokebolaIzq)
                 .addGap(219, 219, 219)
                 .addComponent(lblTitulo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 242, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblPokebolaDer)
                 .addGap(19, 19, 19))
         );
@@ -317,11 +338,10 @@ public class PantallaRegistrarCliente extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(lblCodigoPostal)
                         .addGap(33, 33, 33)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblCiudad)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(189, 255, 188));
@@ -424,11 +444,11 @@ public class PantallaRegistrarCliente extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1122, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1100, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -445,19 +465,19 @@ public class PantallaRegistrarCliente extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 130, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 454, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1122, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -465,7 +485,6 @@ public class PantallaRegistrarCliente extends javax.swing.JFrame {
         );
 
         pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
@@ -514,6 +533,6 @@ public class PantallaRegistrarCliente extends javax.swing.JFrame {
     private javax.swing.JTextField txtNumero;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
-    private ClientesDAO clientesDAO;
     private IConexion conexion;
+    private IClientesDAO clientesDAO;
 }

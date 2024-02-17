@@ -1,5 +1,7 @@
 package org.itson.bdavanzadas.banco.interfaces;
 
+import java.awt.Dimension;
+import java.awt.Point;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 
 public class PantallaInicio extends javax.swing.JFrame {
@@ -13,6 +15,7 @@ public class PantallaInicio extends javax.swing.JFrame {
         initComponents();
         setTitle("Inicio");
         this.conexion = conexion;
+        
     }
     
     /**
@@ -156,12 +159,13 @@ public class PantallaInicio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarClienteActionPerformed
-        PantallaRegistrarCliente pantallaRegistrarCliente = new PantallaRegistrarCliente(conexion);
+        PantallaRegistrarCliente pantallaRegistrarCliente = new PantallaRegistrarCliente(this, true, conexion);
         pantallaRegistrarCliente.setVisible(true);
     }//GEN-LAST:event_btnRegistrarClienteActionPerformed
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-        
+        PantallaIniciarSesion pantallaIniciarSesion = new PantallaIniciarSesion(this, true, conexion);
+        pantallaIniciarSesion.setVisible(true);
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     private void btnRetiroSinCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroSinCuentaActionPerformed
