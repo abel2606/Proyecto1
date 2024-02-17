@@ -185,6 +185,14 @@ public class ClientesDAO implements IClientesDAO {
         return null;
     }
     
+    /**
+     * Permite actualizar la información de un cliente en la base de datos.
+     *
+     * @param cliente El cliente a actulizar
+     * @return El cliente actualizado
+     * @throws PersistenciaException Si no se puede actualizar el cliente
+     */
+    @Override
     public Cliente actualizar(Cliente cliente) throws PersistenciaException {
     String sentenciaSQL = """
                          UPDATE clientes 
@@ -228,12 +236,12 @@ public class ClientesDAO implements IClientesDAO {
 
         conexion.commit();
 
-        return cliente;
-    } catch (SQLException ex) {
-        logger.log(Level.SEVERE, "Error al actualizar el cliente", ex);
-        throw new PersistenciaException("No se pudo actualizar el cliente");
+            return cliente;
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Error al actualizar el cliente", ex);
+            throw new PersistenciaException("No se pudo actualizar el cliente");
+        }
     }
-}
 
 
 }
