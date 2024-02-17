@@ -1,6 +1,8 @@
 package org.itson.bdavanzadas.bancopersistencia.dtos;
 
 import org.itson.bdavanzadas.bancodominio.Fecha;
+import org.itson.bdavanzadas.bancopersistencia.excepciones.ClienteNoValidoException;
+import org.itson.bdavanzadas.bancopersistencia.validadores.Validadores;
 
 public class ClienteActualizadoDTO {
 
@@ -231,5 +233,34 @@ public class ClienteActualizadoDTO {
      */
     public void setCiudad(String ciudad) {
         this.ciudad = ciudad;
+    }
+    
+    public boolean isValid() throws ClienteNoValidoException {
+        Validadores validador = new Validadores();
+        if (!validador.validarNombre(nombre)) {
+            throw new ClienteNoValidoException("El nombre del cliente no es válido.");
+        }
+        if (!validador.validarNombre(apellidoPaterno)) {
+            throw new ClienteNoValidoException("El apellido paterno del cliente no es válido.");
+        }
+        if (!validador.validarNombre(apellidoMaterno)) {
+            throw new ClienteNoValidoException("El apellido materno del cliente no es válido.");
+        }
+        if (!validador.validarCalle(calle)) {
+            throw new ClienteNoValidoException("El nombre de la calle no es válida.");
+        }
+        if (!validador.validarNumero(numero)) {
+            throw new ClienteNoValidoException("El número no es válida.");
+        }
+        if (colonia.isBlank()) {
+            throw new ClienteNoValidoException("La colonia no es válida.");
+        }
+        if (!validador.validarCodigoPostal(codigoPostal)) {
+            throw new ClienteNoValidoException("El código postal no es válido.");
+        }
+        if (!validador.validarNombre(ciudad)) {
+            throw new ClienteNoValidoException("La ciudad no es válida.");
+        }
+        return true;
     }
 }
