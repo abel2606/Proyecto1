@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import org.itson.bdavanzadas.bancodominio.Cliente;
 import org.itson.bdavanzadas.bancodominio.Fecha;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
+import org.itson.bdavanzadas.bancopersistencia.dtos.ClienteActualizadoDTO;
 import org.itson.bdavanzadas.bancopersistencia.dtos.ClienteNuevoDTO;
 import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
@@ -170,7 +171,7 @@ public class ClientesDAO implements IClientesDAO {
                     String codigoPostal = resultado.getString("codigoPostal");
                     String ciudad = resultado.getString("ciudad");
                     Cliente cliente = new Cliente(idCliente, nombre, apellidoPaterno, apellidoMaterno, new Fecha(fechaNacimiento), usuario, contrasena,
-                            calle, numero, colonia, codigoPostal, ciudad);
+                            calle, colonia, numero, codigoPostal, ciudad);
                     return cliente;
                 }
             }
@@ -189,7 +190,7 @@ public class ClientesDAO implements IClientesDAO {
      * @throws PersistenciaException Si no se puede actualizar el cliente
      */
     @Override
-    public Cliente actualizar(Cliente cliente) throws PersistenciaException {
+    public Cliente actualizar(ClienteActualizadoDTO clienteActualizar) throws PersistenciaException {
         String sentenciaSQL = """
                          UPDATE clientes 
                          SET nombre=?, apellidoPaterno=?, apellidoMaterno=?, fechaNacimiento=?, usuario=?, contrasena=?
@@ -206,29 +207,44 @@ public class ClientesDAO implements IClientesDAO {
             PreparedStatement comandoDomicilio = conexion.prepareStatement(sentenciaDomicilioSQL);
         ) {
             // Actualizar datos del cliente
-            comandoCliente.setString(1, cliente.getNombre());
-            comandoCliente.setString(2, cliente.getApellidoPaterno());
-            comandoCliente.setString(3, cliente.getApellidoMaterno());
-            comandoCliente.setString(4, cliente.getFechaNacimiento().toString());
-            comandoCliente.setString(5, cliente.getUsuario());
-            comandoCliente.setString(6, cliente.getContrasena());
-            comandoCliente.setLong(7, cliente.getId());
+            comandoCliente.setString(1, clienteActualizar.getNombre());
+            comandoCliente.setString(2, clienteActualizar.getApellidoPaterno());
+            comandoCliente.setString(3, clienteActualizar.getApellidoMaterno());
+            comandoCliente.setString(4, clienteActualizar.getFechaNacimiento().toString());
+            comandoCliente.setString(5, clienteActualizar.getUsuario());
+            comandoCliente.setString(6, clienteActualizar.getContrasena());
+            comandoCliente.setLong(7, clienteActualizar.getId());
 
             int numRegistrosActualizadosCliente = comandoCliente.executeUpdate();
             logger.log(Level.INFO, "Se actualizaron {0} registros en la tabla clientes", numRegistrosActualizadosCliente);
 
             // Actualizar datos del domicilio
-            comandoDomicilio.setString(1, cliente.getCalle());
-            comandoDomicilio.setString(2, cliente.getNumero());
-            comandoDomicilio.setString(3, cliente.getColonia());
-            comandoDomicilio.setString(4, cliente.getCodigoPostal());
-            comandoDomicilio.setString(5, cliente.getCiudad());
-            comandoDomicilio.setLong(6, cliente.getId());
+            comandoDomicilio.setString(1, clienteActualizar.getCalle());
+            comandoDomicilio.setString(2, clienteActualizar.getNumero());
+            comandoDomicilio.setString(3, clienteActualizar.getColonia());
+            comandoDomicilio.setString(4, clienteActualizar.getCodigoPostal());
+            comandoDomicilio.setString(5, clienteActualizar.getCiudad());
+            comandoDomicilio.setLong(6, clienteActualizar.getId());
 
             int numRegistrosActualizadosDomicilio = comandoDomicilio.executeUpdate();
             logger.log(Level.INFO, "Se actualizaron {0} registros en la tabla domicilios", numRegistrosActualizadosDomicilio);
+            
+            conexion.commit();
+            Cliente clienteActualizado = new Cliente();
+            clienteActualizado.setId(clienteActualizar.getId());
+            clienteActualizado.setNombre(clienteActualizar.getNombre());
+            clienteActualizado.setApellidoPaterno(clienteActualizar.getApellidoPaterno());
+            clienteActualizado.setApellidoMaterno(clienteActualizar.getApellidoMaterno());
+            clienteActualizado.setFechaNacimiento(clienteActualizar.getFechaNacimiento());
+            clienteActualizado.setUsuario(clienteActualizar.getUsuario());
+            clienteActualizado.setContrasena(clienteActualizar.getContrasena());
+            clienteActualizado.setCalle(clienteActualizar.getCalle());
+            clienteActualizado.setNumero(clienteActualizar.getNumero());
+            clienteActualizado.setColonia(clienteActualizar.getColonia());
+            clienteActualizado.setCodigoPostal(clienteActualizar.getCodigoPostal());
+            clienteActualizado.setCiudad(clienteActualizar.getCiudad());
 
-            return cliente;
+            return clienteActualizado;
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, "Error al actualizar el cliente", ex);
             throw new PersistenciaException("No se pudo actualizar el cliente");
@@ -237,6 +253,7 @@ public class ClientesDAO implements IClientesDAO {
 
     /**
      * Regresa un valor booleano si existe un usuario
+     *
      * @param nombreUsuario El nombre del usuario
      * @return regresa si existe el usuario
      * @throws PersistenciaException lanza una exception si existe un error
@@ -259,6 +276,7 @@ public class ClientesDAO implements IClientesDAO {
                 int total = cantidadUsuario.getInt("total");
                 return total > 0; // Retorna true si se encontró al menos un usuario con ese nombre
             }
+
             return false; // Si no se encontraron resultados, retorna false
         } catch (SQLException e) {
             throw new PersistenciaException("Error al verificar la existencia del usuario", e);

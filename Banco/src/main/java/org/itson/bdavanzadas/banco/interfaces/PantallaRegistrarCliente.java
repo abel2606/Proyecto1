@@ -60,7 +60,8 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
         String codigoPostal = txtCodigoPostal.getText();
         String ciudad = txtCiudad.getText();
         String usuario = txtUsuario.getText();
-        String contrasena = pswContrasena.getText();
+        String contrasena = pswContrasena.getText().trim();
+        String contrasenaConfirmar = pswConfirmarContrasena.getText().trim();
 
         ClienteNuevoDTO clienteNuevo = new ClienteNuevoDTO();
         clienteNuevo.setNombre(nombre);
@@ -76,11 +77,15 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
         clienteNuevo.setContrasena(contrasena);
 
         try {
-            clienteNuevo.isValid();
-            clientesDAO.agregar(clienteNuevo);
-            JOptionPane.showMessageDialog(this, "Se registró correctamente el cliente.", 
-                    "Información", JOptionPane.INFORMATION_MESSAGE);
-            dispose();
+            if (clienteNuevo.isValid()) {
+                if(contrasena.equals(contrasenaConfirmar)){
+                clientesDAO.agregar(clienteNuevo);
+                }
+                else{
+                     JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden",
+                    "Error de contraseñas", JOptionPane.ERROR_MESSAGE);
+                }   
+            }
         } catch (PersistenciaException ex) {
             JOptionPane.showMessageDialog(this, "No fue posible agregar el cliente.",
                     "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);

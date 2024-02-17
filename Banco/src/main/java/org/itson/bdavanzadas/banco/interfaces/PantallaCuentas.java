@@ -32,10 +32,10 @@ public class PantallaCuentas extends javax.swing.JDialog {
         this.conexion = conexion;
         cuentasDAO = new CuentasDAO(conexion);
         this.cliente = cliente;
-//        String[] nombresCliente = cliente.getNombre().split(" ");
-//        lblNombreCliente.setText(nombresCliente[0]);
+        String[] nombresCliente = cliente.getNombre().split(" ");
+        lblNombreCliente.setText(nombresCliente[0]);
         cuentasDAO = new CuentasDAO(conexion);
-//        llenarTabla();
+        llenarTabla();
     }
 
     /**
