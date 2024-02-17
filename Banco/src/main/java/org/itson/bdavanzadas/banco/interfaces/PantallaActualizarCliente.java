@@ -3,6 +3,7 @@ package org.itson.bdavanzadas.banco.interfaces;
 import java.awt.Dimension;
 import java.awt.Point;
 import javax.swing.JOptionPane;
+import org.itson.bdavanzadas.banco.Encriptar;
 import org.itson.bdavanzadas.bancodominio.Cliente;
 import org.itson.bdavanzadas.bancodominio.Fecha;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
@@ -74,8 +75,8 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
         String contrasenaAntigua = "";
         String contrasenaNueva = "";
         if (!pswAntiguaContrasena.getText().isBlank() || !pswNuevaContrasena.getText().isBlank()) {
-            contrasenaAntigua = pswAntiguaContrasena.getText().trim();
-            contrasenaNueva = pswNuevaContrasena.getText().trim();
+            contrasenaAntigua = Encriptar.encriptar(pswAntiguaContrasena.getText().trim());
+            contrasenaNueva = Encriptar.encriptar(pswNuevaContrasena.getText().trim());
         } else {
             contrasenaAntigua = cliente.getContrasena();
             contrasenaNueva = cliente.getContrasena();
@@ -379,7 +380,6 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(lblCodigoPostal)
                         .addGap(33, 33, 33)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblCiudad)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -440,7 +440,7 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
                                         .addComponent(lblUsuario)
                                         .addComponent(lblCuenta))
                                     .addGap(331, 331, 331))))
-                        .addGap(0, 16, Short.MAX_VALUE))))
+                        .addGap(0, 14, Short.MAX_VALUE))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

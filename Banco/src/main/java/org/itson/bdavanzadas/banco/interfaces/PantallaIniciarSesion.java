@@ -5,6 +5,7 @@ import java.awt.Frame;
 import java.awt.Point;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import org.itson.bdavanzadas.banco.Encriptar;
 import org.itson.bdavanzadas.bancodominio.Cliente;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.daos.ClientesDAO;
@@ -51,7 +52,7 @@ public class PantallaIniciarSesion extends javax.swing.JDialog {
      */
     public void inciarSesion() {
         String usuario = txtUsuario.getText();
-        String contrasena = jPasswordField1.getText();
+        String contrasena = Encriptar.encriptar(jPasswordField1.getText());
 
         try {
             if (clientesDAO.existeUsuario(usuario)) {
