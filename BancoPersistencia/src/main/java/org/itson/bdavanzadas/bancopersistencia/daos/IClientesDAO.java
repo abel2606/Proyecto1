@@ -2,6 +2,7 @@ package org.itson.bdavanzadas.bancopersistencia.daos;
 
 import java.util.List;
 import org.itson.bdavanzadas.bancodominio.Cliente;
+import org.itson.bdavanzadas.bancopersistencia.dtos.ClienteActualizadoDTO;
 import org.itson.bdavanzadas.bancopersistencia.dtos.ClienteNuevoDTO;
 import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
@@ -42,7 +43,7 @@ public interface IClientesDAO {
      * @return El cliente actualizado
      * @throws PersistenciaException Si no se puede actualizar el cliente
      */
-    Cliente actualizar(Cliente cliente) throws PersistenciaException;
+    Cliente actualizar(ClienteActualizadoDTO clienteActualizar) throws PersistenciaException;
 
     /**
      * Verifica que exista un nombre de usuario en la base de datos
