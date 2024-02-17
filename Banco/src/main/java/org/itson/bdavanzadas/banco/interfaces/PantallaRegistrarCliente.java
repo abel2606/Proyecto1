@@ -3,6 +3,7 @@ package org.itson.bdavanzadas.banco.interfaces;
 import java.awt.Dimension;
 import java.awt.Point;
 import javax.swing.JOptionPane;
+import org.itson.bdavanzadas.bancodominio.Fecha;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.daos.ClientesDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.IClientesDAO;
@@ -66,7 +67,7 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
         clienteNuevo.setNombre(nombre);
         clienteNuevo.setApellidoPaterno(apellidoPaterno);
         clienteNuevo.setApellidoMaterno(apellidoMaterno);
-//        clienteNuevo.setFechaNacimiento();
+        clienteNuevo.setFechaNacimiento(new Fecha(fechaNacimiento));
         clienteNuevo.setCalle(calle);
         clienteNuevo.setNumero(numero);
         clienteNuevo.setColonia(colonia);

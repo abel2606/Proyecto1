@@ -1,10 +1,15 @@
 package org.itson.bdavanzadas.banco.interfaces;
 
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Point;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import org.itson.bdavanzadas.bancodominio.Cliente;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.daos.ClientesDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.IClientesDAO;
+import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
 public class PantallaIniciarSesion extends javax.swing.JDialog {
 
@@ -39,6 +44,32 @@ public class PantallaIniciarSesion extends javax.swing.JDialog {
         Dimension dlgSize = getPreferredSize();
         // Centra el cuadro de diálogo sobre la ventana padre
         setLocation((frameSize.width - dlgSize.width) / 2 + loc.x, (frameSize.height - dlgSize.height) / 2 + loc.y);
+    }
+
+    public void inciarSesion() {
+        String usuario = txtUsuario.getText();
+        String contrasena = jPasswordField1.getText();
+        
+        try {
+
+            Cliente clienteEncontrado = clientesDAO.iniciarSesion(usuario, contrasena);
+            //Este código es para poder obtener la clase padre del jdialog
+
+            
+            if (clienteEncontrado != null) {
+                Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(this);
+
+                PantallaCuentas pantallaCuentas = new PantallaCuentas(parentFrame, true, conexion, clienteEncontrado);
+                pantallaCuentas.setVisible(true);
+                dispose();
+            }
+            else{
+                JOptionPane.showMessageDialog(this, "Usuario no encontrado","Iniciar sesión",JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (PersistenciaException e) {
+            JOptionPane.showMessageDialog(this, "No se ha encontrado el usuario", "Usurio no encontrado", JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 
     /**
@@ -231,7 +262,7 @@ public class PantallaIniciarSesion extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-
+        inciarSesion();
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
