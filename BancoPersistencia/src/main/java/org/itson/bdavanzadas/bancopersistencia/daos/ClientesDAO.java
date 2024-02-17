@@ -167,7 +167,7 @@ public class ClientesDAO implements IClientesDAO {
                     String codigoPostal = resultado.getString("codigoPostal");
                     String ciudad = resultado.getString("ciudad");
                     Cliente cliente = new Cliente(idCliente, nombre, apellidoPaterno, apellidoMaterno, new Fecha(fechaNacimiento), usuario, contrasena,
-                            calle, numero, colonia, codigoPostal, ciudad);
+                            calle, colonia, numero, codigoPostal, ciudad);
                     return cliente;
                 }
             }

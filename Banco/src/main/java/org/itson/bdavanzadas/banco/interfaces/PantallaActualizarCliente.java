@@ -33,13 +33,12 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
         this.txtApellidoPaterno.setText(cliente.getApellidoPaterno());
         this.txtApellidoMaterno.setText(cliente.getApellidoMaterno());
         this.txtFechaNacimiento.setText(cliente.getFechaNacimiento().toString());
-
         this.txtCalle.setText(cliente.getCalle());
         this.txtNumero.setText(cliente.getNumero());
         this.txtColonia.setText(cliente.getColonia());
         this.txtCodigoPostal.setText(cliente.getCodigoPostal());
         this.txtCiudad.setText(cliente.getCiudad());
-        this.txtUsuario.setText(cliente.getUsuario());
+        this.txtUsuario.setText(cliente.getUsuario());      
     }
 
     /**
@@ -58,7 +57,10 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
         setLocation((frameSize.width - dlgSize.width) / 2 + loc.x, (frameSize.height - dlgSize.height) / 2 + loc.y);
     }
 
-    public void guardar() {
+    /**
+     * Permite actualizar un usuario
+     */
+    public void actualizar() {
         String nombre = txtNombre.getText();
         String apellidoPaterno = txtApellidoMaterno.getText();
         String apellidoMaterno = txtApellidoPaterno.getText();
@@ -69,8 +71,15 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
         String codigoPostal = txtCodigoPostal.getText();
         String ciudad = txtCiudad.getText();
         String usuario = txtUsuario.getText();
-        String contrasena = pswAntiguaContrasena.getText().trim();
-        String contrasenaConfirmar = pswNuevaContrasena.getText().trim();
+        String contrasenaAntigua = "";
+        String contrasenaNueva = "";
+        if (!pswAntiguaContrasena.getText().isBlank() || !pswNuevaContrasena.getText().isBlank()) {
+            contrasenaAntigua = pswAntiguaContrasena.getText().trim();
+            contrasenaNueva = pswNuevaContrasena.getText().trim();
+        } else {
+            contrasenaAntigua = cliente.getContrasena();
+            contrasenaNueva = cliente.getContrasena();
+        }
 
         ClienteActualizadoDTO clienteActualizar = new ClienteActualizadoDTO();
         clienteActualizar.setId(cliente.getId());
@@ -84,14 +93,27 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
         clienteActualizar.setCodigoPostal(codigoPostal);
         clienteActualizar.setCiudad(ciudad);
         clienteActualizar.setUsuario(usuario);
-        clienteActualizar.setContrasena(contrasena);
+        clienteActualizar.setContrasena(contrasenaNueva);
 
         try {
             if (clienteActualizar.isValid()) {
-
-                this.clientesDAO.actualizar(clienteActualizar);
-                JOptionPane.showMessageDialog(this, "Cliente actualizado",
-                        "Actualizar cliente", JOptionPane.INFORMATION_MESSAGE);
+                if (contrasenaAntigua.isBlank() && contrasenaNueva.isBlank()) {
+                    this.clientesDAO.actualizar(clienteActualizar);
+                    JOptionPane.showMessageDialog(this, "Cliente actualizado",
+                            "Actualizar cliente", JOptionPane.INFORMATION_MESSAGE);
+                } else if (!contrasenaAntigua.isBlank() && contrasenaNueva.isBlank()) {
+                    JOptionPane.showMessageDialog(this, "Teclee una nueva contraseña si desea cambiarla", "Error contraseña", JOptionPane.ERROR_MESSAGE);
+                } else if (contrasenaAntigua.isBlank() && !contrasenaNueva.isBlank()) {
+                    JOptionPane.showMessageDialog(this, "Teclee la contraseña antigua si desea cambiarla", "Error contraseña", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    if (clientesDAO.iniciarSesion(usuario, contrasenaAntigua) != null) {
+                        this.clientesDAO.actualizar(clienteActualizar);
+                        JOptionPane.showMessageDialog(this, "Cliente actualizado",
+                                "Actualizar cliente", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "La contraseña antigua esta mal", "Error contraseña", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
 
             }
 
@@ -510,7 +532,7 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        guardar();
+        actualizar();
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
