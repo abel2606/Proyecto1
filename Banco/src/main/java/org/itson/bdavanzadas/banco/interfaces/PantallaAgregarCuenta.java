@@ -1,29 +1,53 @@
 package org.itson.bdavanzadas.banco.interfaces;
 
+import java.awt.Dimension;
+import java.awt.Point;
 import javax.swing.JOptionPane;
 import org.itson.bdavanzadas.bancodominio.Cliente;
 import org.itson.bdavanzadas.bancodominio.Cuenta;
 import org.itson.bdavanzadas.bancodominio.Fecha;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.daos.CuentasDAO;
+import org.itson.bdavanzadas.bancopersistencia.daos.ICuentasDAO;
 import org.itson.bdavanzadas.bancopersistencia.dtos.CuentaNuevaDTO;
 import org.itson.bdavanzadas.bancopersistencia.excepciones.CuentaNoValidaException;
 import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
-public class PantallaAgregarCuenta extends javax.swing.JFrame {
+public class PantallaAgregarCuenta extends javax.swing.JDialog {
 
     /**
-     * Creates new form PantallaAgregarCuenta.
+     * Creates new form PantallaAgregarCuentaD
      *
-     * @param conexion La conexión a la base de datos
+     * @param parent
+     * @param modal
+     * @param conexion
      * @param cliente
      */
-    public PantallaAgregarCuenta(IConexion conexion, Cliente cliente) {
+    public PantallaAgregarCuenta(java.awt.Frame parent, boolean modal, IConexion conexion, Cliente cliente) {
+        super(parent, modal);
         initComponents();
-        setTitle("Agregar Cuenta");
+        centraCuadroDialogo(parent);
+        this.conexion = conexion;
         cuentasDAO = new CuentasDAO(conexion);
         this.cliente = cliente;
         txtPropietario.setText(cliente.getNombre() + " " + cliente.getApellidoPaterno() + " " + cliente.getApellidoMaterno());
+    }
+    
+    /**
+     * Este método centra el cuadro de dialogo sobre la ventana de la
+     * aplicación.
+     *
+     * @param parent Ventana sobre la que aparecerá el cuadro de diálogo
+     */
+    private void centraCuadroDialogo(java.awt.Frame parent) {
+        // Obtiene el tamaño y posición de la ventana de la aplicación
+        Dimension frameSize = parent.getSize();
+        Point loc = parent.getLocation();
+        // Obtiene el tamaño del cuadro de diálogo
+        Dimension dlgSize = getPreferredSize();
+        // Centra el cuadro de diálogo sobre la ventana padre
+        setLocation((frameSize.width - dlgSize.width) / 2 + loc.x, (frameSize.height - dlgSize.height) / 2 + loc.y);
+        
     }
 
     /**
@@ -77,8 +101,7 @@ public class PantallaAgregarCuenta extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
         btnAceptar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setResizable(false);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(189, 255, 188));
         jPanel1.setPreferredSize(new java.awt.Dimension(1100, 450));
@@ -178,7 +201,7 @@ public class PantallaAgregarCuenta extends javax.swing.JFrame {
                         .addComponent(lblPropietario)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(txtPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(149, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -211,7 +234,6 @@ public class PantallaAgregarCuenta extends javax.swing.JFrame {
         );
 
         pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -236,6 +258,7 @@ public class PantallaAgregarCuenta extends javax.swing.JFrame {
     private javax.swing.JTextField txtAliasCuenta;
     private javax.swing.JTextField txtPropietario;
     // End of variables declaration//GEN-END:variables
-    private CuentasDAO cuentasDAO;
+    private IConexion conexion;
+    private ICuentasDAO cuentasDAO;
     private Cliente cliente;
 }

@@ -1,31 +1,56 @@
 package org.itson.bdavanzadas.banco.interfaces;
 
+import java.awt.Dimension;
 import java.util.List;
+import java.awt.Frame;
+import java.awt.Point;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.itson.bdavanzadas.bancodominio.Cliente;
 import org.itson.bdavanzadas.bancodominio.Cuenta;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.daos.CuentasDAO;
+import org.itson.bdavanzadas.bancopersistencia.daos.ICuentasDAO;
 import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
-public class PantallaCuentas extends javax.swing.JFrame {
+public class PantallaCuentas extends javax.swing.JDialog {
 
     /**
-     * Creates new form PantallaCuentas.
-     *
-     * @param conexion La conexión a la base de datos
+     * Creates new form PantallaCuentasD
+     * @param parent
+     * @param modal
+     * @param conexion
      * @param cliente
      */
-    public PantallaCuentas(IConexion conexion, Cliente cliente) {
+    public PantallaCuentas(java.awt.Frame parent, boolean modal, IConexion conexion, Cliente cliente) {
+        super(parent, modal);
         initComponents();
-        setTitle("Cuentas");
+        centraCuadroDialogo(parent);
+        this.parent = parent;
         this.conexion = conexion;
+        cuentasDAO = new CuentasDAO(conexion);
         this.cliente = cliente;
         String[] nombresCliente = cliente.getNombre().split(" ");
         lblNombreCliente.setText(nombresCliente[0]);
         cuentasDAO = new CuentasDAO(conexion);
         llenarTabla();
+    }
+    
+    /**
+     * Este método centra el cuadro de dialogo sobre la ventana de la
+     * aplicación.
+     *
+     * @param parent Ventana sobre la que aparecerá el cuadro de diálogo
+     */
+    private void centraCuadroDialogo(java.awt.Frame parent) {
+        // Obtiene el tamaño y posición de la ventana de la aplicación
+        Dimension frameSize = parent.getSize();
+        Point loc = parent.getLocation();
+        // Obtiene el tamaño del cuadro de diálogo
+        Dimension dlgSize = getPreferredSize();
+        // Centra el cuadro de diálogo sobre la ventana padre
+        setLocation((frameSize.width - dlgSize.width) / 2 + loc.x, (frameSize.height - dlgSize.height) / 2 + loc.y);
+        
     }
     
     private void llenarTabla() {
@@ -81,8 +106,7 @@ public class PantallaCuentas extends javax.swing.JFrame {
         btnActualizarTabla = new javax.swing.JButton();
         lblNombreCliente = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setResizable(false);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(189, 255, 188));
         jPanel1.setPreferredSize(new java.awt.Dimension(1100, 450));
@@ -186,7 +210,7 @@ public class PantallaCuentas extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnActualizarTabla)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 946, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(77, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -201,7 +225,7 @@ public class PantallaCuentas extends javax.swing.JFrame {
                             .addComponent(btnAgregarCuenta))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblNombreCliente)
                         .addGap(31, 31, 31)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -222,11 +246,10 @@ public class PantallaCuentas extends javax.swing.JFrame {
         );
 
         pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCuentaActionPerformed
-        PantallaAgregarCuenta pantallaAgregarCuenta = new PantallaAgregarCuenta(conexion, cliente);
+        PantallaAgregarCuenta pantallaAgregarCuenta = new PantallaAgregarCuenta(parent, true, conexion, cliente);
         pantallaAgregarCuenta.setVisible(true);
     }//GEN-LAST:event_btnAgregarCuentaActionPerformed
 
@@ -248,7 +271,8 @@ public class PantallaCuentas extends javax.swing.JFrame {
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JTable tblCuentas;
     // End of variables declaration//GEN-END:variables
-    private CuentasDAO cuentasDAO;
     private IConexion conexion;
+    private ICuentasDAO cuentasDAO;
     private Cliente cliente;
+    private Frame parent;
 }
