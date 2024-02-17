@@ -46,6 +46,7 @@ public interface IClientesDAO {
 
     /**
      * Verifica que exista un nombre de usuario en la base de datos
+     *
      * @param nombreUsuario El nomber de usuari
      * @return regresa si existe o no el nombre de usuario
      * @throws PersistenciaException Si no existe el nombre de usuario

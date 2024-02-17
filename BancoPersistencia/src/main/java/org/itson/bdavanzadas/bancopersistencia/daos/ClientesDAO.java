@@ -39,13 +39,15 @@ public class ClientesDAO implements IClientesDAO {
     public List<Cliente> consultar() throws PersistenciaException {
         String sentenciaSQL = """
         SELECT identificador, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, usuario, contrasena,
-        calle, numero, colonia,codigoPostal,ciudad
+        calle, numero, colonia, codigoPostal, ciudad
         FROM clientes c
         INNER JOIN domicilios d ON c.identificador = d.identificadorCliente;
         """;
         List<Cliente> listaCliente = new LinkedList<>();
         try (
-                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
+            Connection conexion = this.conexionBD.obtenerConexion(); 
+            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
+        ) {
             ResultSet resultados = comando.executeQuery();
             while (resultados.next()) {
                 Long id = resultados.getLong("identificador");
@@ -91,9 +93,10 @@ public class ClientesDAO implements IClientesDAO {
         VALUES (?, ?, ?, ?, ?, ?)
         """;
         try (
-                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comandoCliente = conexion.prepareStatement(sentenciaClienteSQL, Statement.RETURN_GENERATED_KEYS); PreparedStatement comandoDomicilio = conexion.prepareStatement(sentenciaDomicilioSQL);) {
-            conexion.setAutoCommit(false);
-
+            Connection conexion = this.conexionBD.obtenerConexion(); 
+            PreparedStatement comandoCliente = conexion.prepareStatement(sentenciaClienteSQL, Statement.RETURN_GENERATED_KEYS); 
+            PreparedStatement comandoDomicilio = conexion.prepareStatement(sentenciaDomicilioSQL);
+        ) {
             comandoCliente.setString(1, clienteNuevo.getNombre());
             comandoCliente.setString(2, clienteNuevo.getApellidoPaterno());
             comandoCliente.setString(3, clienteNuevo.getApellidoMaterno());
@@ -109,6 +112,7 @@ public class ClientesDAO implements IClientesDAO {
             if (idsGenerados.next()) {
                 idClienteGenerado = idsGenerados.getLong(1);
             }
+            
             comandoDomicilio.setString(1, clienteNuevo.getCalle());
             comandoDomicilio.setString(2, clienteNuevo.getNumero());
             comandoDomicilio.setString(3, clienteNuevo.getColonia());
@@ -118,8 +122,6 @@ public class ClientesDAO implements IClientesDAO {
 
             int numRegistrosInsertadosDomicilio = comandoDomicilio.executeUpdate();
             logger.log(Level.INFO, "Se agregaron {0} domicilios", numRegistrosInsertadosDomicilio);
-
-            conexion.commit();
 
             Cliente cliente = new Cliente(idClienteGenerado, clienteNuevo.getNombre(), clienteNuevo.getApellidoPaterno(),
                     clienteNuevo.getApellidoMaterno(), clienteNuevo.getFechaNacimiento(), clienteNuevo.getUsuario(),
@@ -149,7 +151,9 @@ public class ClientesDAO implements IClientesDAO {
         WHERE c.usuario = ? AND c.contrasena = ?;
         """;
         try (
-                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement consulta = conexion.prepareStatement(consultaSQL);) {
+            Connection conexion = this.conexionBD.obtenerConexion(); 
+            PreparedStatement consulta = conexion.prepareStatement(consultaSQL);
+        ) {
             consulta.setString(1, usuario);
             consulta.setString(2, contrasena);
             try (
@@ -197,9 +201,10 @@ public class ClientesDAO implements IClientesDAO {
                                 WHERE identificadorCliente=?
                                 """;
         try (
-                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comandoCliente = conexion.prepareStatement(sentenciaSQL); PreparedStatement comandoDomicilio = conexion.prepareStatement(sentenciaDomicilioSQL);) {
-            conexion.setAutoCommit(false);
-
+            Connection conexion = this.conexionBD.obtenerConexion();
+            PreparedStatement comandoCliente = conexion.prepareStatement(sentenciaSQL); 
+            PreparedStatement comandoDomicilio = conexion.prepareStatement(sentenciaDomicilioSQL);
+        ) {
             // Actualizar datos del cliente
             comandoCliente.setString(1, cliente.getNombre());
             comandoCliente.setString(2, cliente.getApellidoPaterno());
@@ -223,8 +228,6 @@ public class ClientesDAO implements IClientesDAO {
             int numRegistrosActualizadosDomicilio = comandoDomicilio.executeUpdate();
             logger.log(Level.INFO, "Se actualizaron {0} registros en la tabla domicilios", numRegistrosActualizadosDomicilio);
 
-            conexion.commit();
-
             return cliente;
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, "Error al actualizar el cliente", ex);
@@ -238,16 +241,19 @@ public class ClientesDAO implements IClientesDAO {
      * @return regresa si existe el usuario
      * @throws PersistenciaException lanza una exception si existe un error
      */
+    @Override
     public boolean existeUsuario(String nombreUsuario) throws PersistenciaException {
-
-        String sentenciaSQL = "SELECT COUNT(*) AS total FROM clientes WHERE usuario = ?";
+        String sentenciaSQL = """
+                              SELECT COUNT(*) AS total 
+                              FROM clientes 
+                              WHERE usuario = ?
+                              """;
         try (
-                Connection conexion = this.conexionBD.obtenerConexion();
-                PreparedStatement consulta = conexion.prepareStatement(sentenciaSQL);) {
-
+            Connection conexion = this.conexionBD.obtenerConexion(); 
+            PreparedStatement consulta = conexion.prepareStatement(sentenciaSQL);
+        ) {
             consulta.setString(1, nombreUsuario);
             ResultSet cantidadUsuario = consulta.executeQuery();
-
             // Verificar si se encontró algún resultado
             if (cantidadUsuario.next()) {
                 int total = cantidadUsuario.getInt("total");
@@ -256,8 +262,7 @@ public class ClientesDAO implements IClientesDAO {
             return false; // Si no se encontraron resultados, retorna false
         } catch (SQLException e) {
             throw new PersistenciaException("Error al verificar la existencia del usuario", e);
-        } 
-
+        }
     }
 
 }
