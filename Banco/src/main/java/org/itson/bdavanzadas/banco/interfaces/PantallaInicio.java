@@ -1,7 +1,5 @@
 package org.itson.bdavanzadas.banco.interfaces;
 
-import java.awt.Dimension;
-import java.awt.Point;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 
 public class PantallaInicio extends javax.swing.JFrame {
@@ -15,7 +13,6 @@ public class PantallaInicio extends javax.swing.JFrame {
         initComponents();
         setTitle("Inicio");
         this.conexion = conexion;
-        
     }
     
     /**
