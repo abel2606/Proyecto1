@@ -35,6 +35,13 @@ public interface IClientesDAO {
      */
     Cliente iniciarSesion(String usuario, String contrasena) throws PersistenciaException;
 
+    /**
+     * Permite actualizar la información de un cliente en la base de datos.
+     *
+     * @param cliente El cliente a actulizar
+     * @return El cliente actualizado
+     * @throws PersistenciaException Si no se puede actualizar el cliente
+     */
     Cliente actualizar(Cliente cliente) throws PersistenciaException;
-    
+
 }

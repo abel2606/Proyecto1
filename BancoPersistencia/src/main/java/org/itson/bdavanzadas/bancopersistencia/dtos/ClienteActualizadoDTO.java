@@ -1,11 +1,10 @@
 package org.itson.bdavanzadas.bancopersistencia.dtos;
 
 import org.itson.bdavanzadas.bancodominio.Fecha;
-import org.itson.bdavanzadas.bancopersistencia.excepciones.ClienteNoValidoException;
-import org.itson.bdavanzadas.bancopersistencia.validadores.Validadores;
 
-public class ClienteNuevoDTO {
+public class ClienteActualizadoDTO {
 
+    private Long id;
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
@@ -17,6 +16,24 @@ public class ClienteNuevoDTO {
     private String colonia;
     private String codigoPostal;
     private String ciudad;
+
+    /**
+     * Permite obtener el id del cliente.
+     *
+     * @return El id del cliente
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * Permite establecer el id del cliente.
+     *
+     * @param id El id del cliente
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     /**
      * Permite obtener el nombre del cliente.
@@ -215,40 +232,4 @@ public class ClienteNuevoDTO {
     public void setCiudad(String ciudad) {
         this.ciudad = ciudad;
     }
-
-    /**
-     * Permite saber si el cliente es válido o no.
-     *
-     * @return True si el cliente es válido
-     * @throws ClienteNoValidoException Si el cliente no es válido
-     */
-    public boolean isValid() throws ClienteNoValidoException {
-        Validadores validador = new Validadores();
-        if (!validador.validarNombre(nombre)) {
-            throw new ClienteNoValidoException("El nombre del cliente no es válido.");
-        }
-        if (!validador.validarNombre(apellidoPaterno)) {
-            throw new ClienteNoValidoException("El apellido paterno del cliente no es válido.");
-        }
-        if (!validador.validarNombre(apellidoMaterno)) {
-            throw new ClienteNoValidoException("El apellido materno del cliente no es válido.");
-        }
-        if (!validador.validarCalle(calle)) {
-            throw new ClienteNoValidoException("El nombre de la calle no es válida.");
-        }
-        if (!validador.validarNumero(numero)) {
-            throw new ClienteNoValidoException("El número no es válida.");
-        }
-        if (colonia.isBlank()) {
-            throw new ClienteNoValidoException("La colonia no es válida.");
-        }
-        if (!validador.validarCodigoPostal(codigoPostal)) {
-            throw new ClienteNoValidoException("El código postal no es válido.");
-        }
-        if (!validador.validarNombre(ciudad)) {
-            throw new ClienteNoValidoException("La ciudad no es válida.");
-        }
-        return true;
-    }
-
 }
