@@ -184,5 +184,56 @@ public class ClientesDAO implements IClientesDAO {
         }
         return null;
     }
+    
+    public Cliente actualizar(Cliente cliente) throws PersistenciaException {
+    String sentenciaSQL = """
+                         UPDATE clientes 
+                         SET nombre=?, apellidoPaterno=?, apellidoMaterno=?, fechaNacimiento=?, usuario=?, contrasena=?
+                         WHERE identificador=?
+                         """;
+    String sentenciaDomicilioSQL = """
+                                UPDATE domicilios
+                                SET calle=?, numero=?, colonia=?, codigoPostal=?, ciudad=?
+                                WHERE identificadorCliente=?
+                                """;
+    try (
+        Connection conexion = this.conexionBD.obtenerConexion(); 
+        PreparedStatement comandoCliente = conexion.prepareStatement(sentenciaSQL);
+        PreparedStatement comandoDomicilio = conexion.prepareStatement(sentenciaDomicilioSQL);
+    ) {
+        conexion.setAutoCommit(false);
+
+        // Actualizar datos del cliente
+        comandoCliente.setString(1, cliente.getNombre());
+        comandoCliente.setString(2, cliente.getApellidoPaterno());
+        comandoCliente.setString(3, cliente.getApellidoMaterno());
+        comandoCliente.setString(4, cliente.getFechaNacimiento().toString());
+        comandoCliente.setString(5, cliente.getUsuario());
+        comandoCliente.setString(6, cliente.getContrasena());
+        comandoCliente.setLong(7, cliente.getId());
+
+        int numRegistrosActualizadosCliente = comandoCliente.executeUpdate();
+        logger.log(Level.INFO, "Se actualizaron {0} registros en la tabla clientes", numRegistrosActualizadosCliente);
+
+        // Actualizar datos del domicilio
+        comandoDomicilio.setString(1, cliente.getCalle());
+        comandoDomicilio.setString(2, cliente.getNumero());
+        comandoDomicilio.setString(3, cliente.getColonia());
+        comandoDomicilio.setString(4, cliente.getCodigoPostal());
+        comandoDomicilio.setString(5, cliente.getCiudad());
+        comandoDomicilio.setLong(6, cliente.getId());
+
+        int numRegistrosActualizadosDomicilio = comandoDomicilio.executeUpdate();
+        logger.log(Level.INFO, "Se actualizaron {0} registros en la tabla domicilios", numRegistrosActualizadosDomicilio);
+
+        conexion.commit();
+
+        return cliente;
+    } catch (SQLException ex) {
+        logger.log(Level.SEVERE, "Error al actualizar el cliente", ex);
+        throw new PersistenciaException("No se pudo actualizar el cliente");
+    }
+}
+
 
 }
