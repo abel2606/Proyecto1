@@ -1,19 +1,15 @@
 package org.itson.bdavanzadas.banco;
 
-import java.util.logging.Level;
 import org.itson.bdavanzadas.bancopersistencia.conexion.Conexion;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import java.util.logging.Logger;
-import org.itson.bdavanzadas.bancodominio.Fecha;
+import org.itson.bdavanzadas.banco.interfaces.PantallaInicio;
 import org.itson.bdavanzadas.bancopersistencia.daos.ClientesDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.CuentasDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.IClientesDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.ICuentasDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.ITransaccionesDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.TransaccionesDAO;
-import org.itson.bdavanzadas.bancopersistencia.dtos.TransaccionNuevaDTO;
-import org.itson.bdavanzadas.bancopersistencia.dtos.TransferenciaNuevaDTO;
-import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
 public class Banco {
 
@@ -29,22 +25,64 @@ public class Banco {
         IClientesDAO clientesDAO = new ClientesDAO(conexion);
         ITransaccionesDAO transaccionesDAO = new TransaccionesDAO(conexion);
         
-        TransaccionNuevaDTO transaccionNueva = new TransaccionNuevaDTO();
-        transaccionNueva.setMonto(100.0f);
-        transaccionNueva.setFechaRealizacion(new Fecha());
-        transaccionNueva.setNumeroCuentaOrigen(Long.valueOf("1"));
+        PantallaInicio pantallaInicio = new PantallaInicio(conexion);
+        pantallaInicio.setVisible(true);
         
-        TransferenciaNuevaDTO transferenciaNueva = new TransferenciaNuevaDTO();
-        transferenciaNueva.setNumeroCuentaDestino(Long.valueOf("2"));
+//        //Prueba actualizar estado cuenta
+//        CuentaActualizadaDTO cuentaActualizada = new CuentaActualizadaDTO();
+//        cuentaActualizada.setNumero(Long.valueOf("1"));
+//        cuentaActualizada.setSaldo(500.0f);
+//        cuentaActualizada.setAlias("Ahorros Navidad");
+//        cuentaActualizada.setFechaApertura(new Fecha("2024-02-17"));
+//        cuentaActualizada.setIdCliente(Long.valueOf("1"));
+//        cuentaActualizada.setActiva(true);
+//        
+//        Cuenta cuenta = null;
+//        try {
+//            cuenta = cuentasDAO.actualizar(cuentaActualizada);
+//            logger.log(Level.INFO, cuenta.toString());
+//        } catch (PersistenciaException e) {
+//            logger.log(Level.SEVERE, null, e);
+//        }
+//        //-------------------------------
         
-        try {
-            transaccionesDAO.agregarTransferencia(transaccionNueva, transferenciaNueva);
-        } catch (PersistenciaException ex) {
-            Logger.getLogger(Banco.class.getName()).log(Level.SEVERE, null, ex);
-        }
-            
-//        PantallaInicio pantallaInicio = new PantallaInicio(conexion);
-//        pantallaInicio.setVisible(true);
+//        //Prueba agregar retiro
+//        TransaccionNuevaDTO transaccionNueva = new TransaccionNuevaDTO();
+//        transaccionNueva.setMonto(50.0f);
+//        transaccionNueva.setFechaRealizacion(new Fecha());
+//        transaccionNueva.setNumeroCuentaOrigen(Long.valueOf("1"));
+
+//        RetiroNuevoDTO retiroNuevo = new RetiroNuevoDTO();
+//        retiroNuevo.setContrasena(Long.valueOf("9182691282"));
+//        retiroNuevo.setEstado("EN ESPERA");
+        
+//        Retiro retiro = null;
+//        try {
+//            retiro = transaccionesDAO.agregarRetiro(transaccionNueva, retiroNuevo);
+//            logger.log(Level.INFO, retiro.toString());
+//        } catch (PersistenciaException e) {
+//            logger.log(Level.SEVERE, null, e);
+//        }
+//        //---------------------
+        
+//        // Prueba agregar transferencia
+//        TransaccionNuevaDTO transaccionNueva = new TransaccionNuevaDTO();
+//        transaccionNueva.setMonto(100.0f);
+//        transaccionNueva.setFechaRealizacion(new Fecha());
+//        transaccionNueva.setNumeroCuentaOrigen(Long.valueOf("1"));
+        
+//        TransferenciaNuevaDTO transferenciaNueva = new TransferenciaNuevaDTO();
+//        transferenciaNueva.setNumeroCuentaDestino(Long.valueOf("2"));
+        
+//        Transferencia transferencia = null;
+//        try {
+//            transferencia = transaccionesDAO.agregarTransferencia(transaccionNueva, transferenciaNueva);
+//            logger.log(Level.INFO, transferencia.toString());
+//        } catch (PersistenciaException e) {
+//            logger.log(Level.SEVERE, null, e);
+//        }
+//        // ----------------------------
+
 
 //        Cliente clienteBuscado = null; 
 //        try {

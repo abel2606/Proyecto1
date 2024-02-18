@@ -79,13 +79,20 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
 
         try {
             if (clienteNuevo.isValid()) {
-                if(contrasena.equals(contrasenaConfirmar)){
-                clientesDAO.agregar(clienteNuevo);
+                if (!clientesDAO.existeUsuario(usuario)) {
+                    if (contrasena.equals(contrasenaConfirmar)) {
+                        clientesDAO.agregar(clienteNuevo);
+                        dispose();
+                        JOptionPane.showMessageDialog(this, "Se agregó al cliente correctamente.",
+                                "Información", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden",
+                                "Error de contraseñas", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "El usuario ingresado ya existe.",
+                                "Error de usuario", JOptionPane.ERROR_MESSAGE);
                 }
-                else{
-                     JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden",
-                    "Error de contraseñas", JOptionPane.ERROR_MESSAGE);
-                }   
             }
         } catch (PersistenciaException ex) {
             JOptionPane.showMessageDialog(this, "No fue posible agregar el cliente.",
@@ -349,10 +356,11 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(lblCodigoPostal)
                         .addGap(33, 33, 33)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblCiudad)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(189, 255, 188));
@@ -414,7 +422,7 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
                                         .addComponent(lblUsuario)
                                         .addComponent(lblCuenta))
                                     .addGap(331, 331, 331))))
-                        .addGap(0, 14, Short.MAX_VALUE))))
+                        .addGap(0, 16, Short.MAX_VALUE))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

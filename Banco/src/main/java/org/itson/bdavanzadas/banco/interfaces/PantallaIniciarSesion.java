@@ -58,7 +58,7 @@ public class PantallaIniciarSesion extends javax.swing.JDialog {
             if (clientesDAO.existeUsuario(usuario)) {
 
                 Cliente clienteEncontrado = clientesDAO.iniciarSesion(usuario, contrasena);
-                
+
                 if (clienteEncontrado != null) {
                     //Este código es para poder obtener la clase padre del jdialog
                     dispose();
@@ -68,16 +68,16 @@ public class PantallaIniciarSesion extends javax.swing.JDialog {
                     pantallaCuentas.setVisible(true);
                     System.out.println(clienteEncontrado);
                     clienteEncontrado.toString();
-                    
+
                 } else {
                     JOptionPane.showMessageDialog(this, "contraseña incorrecta", "Iniciar sesión", JOptionPane.ERROR_MESSAGE);
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "No existe el usuario", 
+                JOptionPane.showMessageDialog(this, "No existe el usuario",
                         "Iniciar sesión", JOptionPane.ERROR_MESSAGE);
             }
         } catch (PersistenciaException e) {
-            JOptionPane.showMessageDialog(this, "No se ha encontrado el usuario", 
+            JOptionPane.showMessageDialog(this, "No se ha encontrado el usuario",
                     "Usurio no encontrado", JOptionPane.ERROR_MESSAGE);
         }
 
