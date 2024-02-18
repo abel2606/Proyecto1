@@ -63,7 +63,6 @@ public class PantallaIniciarSesion extends javax.swing.JDialog {
                     //Este código es para poder obtener la clase padre del jdialog
                     dispose();
                     Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(this);
-                    dispose();
                     PantallaCuentas pantallaCuentas = new PantallaCuentas(parentFrame, true, conexion, clienteEncontrado);
                     pantallaCuentas.setVisible(true);
                     System.out.println(clienteEncontrado);
@@ -73,12 +72,10 @@ public class PantallaIniciarSesion extends javax.swing.JDialog {
                     JOptionPane.showMessageDialog(this, "contraseña incorrecta", "Iniciar sesión", JOptionPane.ERROR_MESSAGE);
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "No existe el usuario", 
-                        "Iniciar sesión", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "No existe el usuario", "Iniciar sesión", JOptionPane.ERROR_MESSAGE);
             }
         } catch (PersistenciaException e) {
-            JOptionPane.showMessageDialog(this, "No se ha encontrado el usuario", 
-                    "Usurio no encontrado", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "No se ha encontrado el usuario", "Usurio no encontrado", JOptionPane.ERROR_MESSAGE);
         }
 
     }
