@@ -205,6 +205,7 @@ public class Cuenta {
         StringBuilder sb = new StringBuilder();
         sb.append("Cuenta{");
         sb.append("numero=").append(numero);
+        sb.append(", alias=").append(alias);
         sb.append(", saldo=").append(saldo);
         sb.append(", fechaApertura=").append(fechaApertura);
         sb.append(", idCliente=").append(idCliente);
