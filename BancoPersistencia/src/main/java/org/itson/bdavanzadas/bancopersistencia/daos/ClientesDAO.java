@@ -289,6 +289,7 @@ public class ClientesDAO implements IClientesDAO {
      * @return El cliente encontrado
      * @throws PersistenciaException Si ocurre un exvepcion al obtener el cliente
      */
+    @Override
     public Cliente obtenerUsuario(long idCliente) throws PersistenciaException {
         String sentenciaSQL = """
             SELECT identificador, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, usuario, contrasena,
