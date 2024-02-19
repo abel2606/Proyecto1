@@ -1,11 +1,16 @@
 package org.itson.bdavanzadas.banco.interfaces;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.util.List;
 import java.awt.Frame;
 import java.awt.Point;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import org.itson.bdavanzadas.bancodominio.Cliente;
 import org.itson.bdavanzadas.bancodominio.Cuenta;
@@ -63,7 +68,12 @@ public class PantallaCuentas extends javax.swing.JDialog {
         List<Cuenta> listaCuentas;
         try {
             listaCuentas = cuentasDAO.consultar(cliente.getId());
-            DefaultTableModel modelo = new DefaultTableModel();
+            DefaultTableModel modelo = new DefaultTableModel() {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return column == getColumnCount() - 1; // Solo la última columna es editable
+                }
+            };
             modelo.addColumn("ALIAS");
             modelo.addColumn("SALDO");
             modelo.addColumn("FECHA APERTURA");
@@ -80,16 +90,19 @@ public class PantallaCuentas extends javax.swing.JDialog {
                     activaString = "No";
                 }
 
-                JButton verButton = new JButton("Ver");
-                verButton.addActionListener(e -> {
-                    PantallaCuenta detallesCuenta = new PantallaCuenta(parent, true, conexion,cuenta); // Pasar el valor de la cuenta como parámetro
-                    detallesCuenta.setVisible(true);
-                });
-
-                Object[] fila = {cuenta.getAlias(), cuenta.getSaldo(), cuenta.getFechaApertura().formatearFecha(), activaString, verButton};
+                Object[] fila = {cuenta.getAlias(), cuenta.getSaldo(), cuenta.getFechaApertura().formatearFecha(), activaString, "ver"};
                 modelo.addRow(fila);
             }
             tblCuentas.setModel(modelo);
+
+            ButtonColumn buttonColumn = new ButtonColumn("Ver", (e) -> {
+                int fila = tblCuentas.convertRowIndexToModel(tblCuentas.getSelectedRow());
+                Cuenta cuenta = listaCuentas.get(fila);
+                PantallaCuenta pantallaCuenta = new PantallaCuenta(parent, true, conexion, cuenta);
+                pantallaCuenta.setVisible(true);
+            });
+            tblCuentas.getColumnModel().getColumn(tblCuentas.getColumnCount() - 1).setCellRenderer(buttonColumn);
+            tblCuentas.getColumnModel().getColumn(tblCuentas.getColumnCount() - 1).setCellEditor(buttonColumn);
         } catch (PersistenciaException e) {
             JOptionPane.showMessageDialog(this, "Error al consultar la información de los socios: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
