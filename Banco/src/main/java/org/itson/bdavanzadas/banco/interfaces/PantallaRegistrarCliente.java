@@ -75,7 +75,7 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
         clienteNuevo.setCodigoPostal(codigoPostal);
         clienteNuevo.setCiudad(ciudad);
         clienteNuevo.setUsuario(usuario);
-        clienteNuevo.setContrasena(Encriptar.encriptar(contrasena));
+        clienteNuevo.setContrasena(contrasena);
 
         try {
             if (clienteNuevo.isValid()) {
