@@ -95,7 +95,7 @@ public class Cuenta {
      *
      * @return El saldo de la cuenta
      */
-    public float getSaldo() {
+    public Float getSaldo() {
         return saldo;
     }
 
