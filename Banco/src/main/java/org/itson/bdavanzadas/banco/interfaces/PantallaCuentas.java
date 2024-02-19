@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.util.List;
 import java.awt.Frame;
 import java.awt.Point;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.itson.bdavanzadas.bancodominio.Cliente;
@@ -79,7 +80,13 @@ public class PantallaCuentas extends javax.swing.JDialog {
                     activaString = "No";
                 }
 
-                Object[] fila = {cuenta.getAlias(), cuenta.getSaldo(), cuenta.getFechaApertura().formatearFecha(), activaString, "Ver"};
+                JButton verButton = new JButton("Ver");
+                verButton.addActionListener(e -> {
+                    PantallaCuenta detallesCuenta = new PantallaCuenta(parent, true, conexion,cuenta); // Pasar el valor de la cuenta como parámetro
+                    detallesCuenta.setVisible(true);
+                });
+
+                Object[] fila = {cuenta.getAlias(), cuenta.getSaldo(), cuenta.getFechaApertura().formatearFecha(), activaString, verButton};
                 modelo.addRow(fila);
             }
             tblCuentas.setModel(modelo);
@@ -107,7 +114,6 @@ public class PantallaCuentas extends javax.swing.JDialog {
         btnCerrarSesion = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblCuentas = new javax.swing.JTable();
-        btnActualizarTabla = new javax.swing.JButton();
         lblNombreCliente = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -194,13 +200,6 @@ public class PantallaCuentas extends javax.swing.JDialog {
         ));
         jScrollPane1.setViewportView(tblCuentas);
 
-        btnActualizarTabla.setText("Actualizar Tabla");
-        btnActualizarTabla.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnActualizarTablaActionPerformed(evt);
-            }
-        });
-
         lblNombreCliente.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
         lblNombreCliente.setForeground(new java.awt.Color(41, 92, 52));
         lblNombreCliente.setText("jLabel1");
@@ -222,10 +221,8 @@ public class PantallaCuentas extends javax.swing.JDialog {
                 .addGap(12, 12, 12))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(77, 77, 77)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnActualizarTabla)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 946, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 946, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(77, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -240,13 +237,11 @@ public class PantallaCuentas extends javax.swing.JDialog {
                             .addComponent(btnAgregarCuenta))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                         .addComponent(lblNombreCliente)
                         .addGap(31, 31, 31)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
-                .addComponent(btnActualizarTabla)
-                .addGap(18, 18, 18))
+                .addGap(78, 78, 78))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -266,12 +261,9 @@ public class PantallaCuentas extends javax.swing.JDialog {
     private void btnAgregarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCuentaActionPerformed
         PantallaAgregarCuenta pantallaAgregarCuenta = new PantallaAgregarCuenta(parent, true, conexion, cliente);
         pantallaAgregarCuenta.setVisible(true);
+        llenarTabla();
     }//GEN-LAST:event_btnAgregarCuentaActionPerformed
 
- 
-    private void btnActualizarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarTablaActionPerformed
-        llenarTabla();
-    }//GEN-LAST:event_btnActualizarTablaActionPerformed
 
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
         int operacion = JOptionPane.showConfirmDialog(this, "¿Seguro que deseas cerrar sesión?", "Cerrar Sesión", JOptionPane.OK_CANCEL_OPTION);
@@ -284,15 +276,15 @@ public class PantallaCuentas extends javax.swing.JDialog {
         PantallaActualizarCliente pantallaActualizarCliente = new PantallaActualizarCliente(parent, true, conexion, cliente);
         pantallaActualizarCliente.setVisible(true);
         try {
-           this.cliente=clientesDAO.obtenerUsuario(cliente.getId()); 
+            this.cliente = clientesDAO.obtenerUsuario(cliente.getId());
         } catch (PersistenciaException e) {
-            
+
         }
+        llenarTabla();
     }//GEN-LAST:event_btnActualizarClienteActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizarCliente;
-    private javax.swing.JButton btnActualizarTabla;
     private javax.swing.JButton btnAgregarCuenta;
     private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JPanel jPanel1;
