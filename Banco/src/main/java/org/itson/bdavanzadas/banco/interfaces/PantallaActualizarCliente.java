@@ -3,7 +3,7 @@ package org.itson.bdavanzadas.banco.interfaces;
 import java.awt.Dimension;
 import java.awt.Point;
 import javax.swing.JOptionPane;
-import org.itson.bdavanzadas.banco.Encriptar;
+import org.itson.bdavanzadas.banco.Encriptador;
 import org.itson.bdavanzadas.bancodominio.Cliente;
 import org.itson.bdavanzadas.bancodominio.Fecha;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
@@ -74,9 +74,10 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
         String usuario = txtUsuario.getText();
         String contrasenaAntigua = "";
         String contrasenaNueva = "";
+        
         if (!pswAntiguaContrasena.getText().isBlank() || !pswNuevaContrasena.getText().isBlank()) {
-            contrasenaAntigua = Encriptar.encriptar(pswAntiguaContrasena.getText().trim());
-            contrasenaNueva = Encriptar.encriptar(pswNuevaContrasena.getText().trim());
+            contrasenaAntigua = Encriptador.encriptar(pswAntiguaContrasena.getText().trim());
+            contrasenaNueva = Encriptador.encriptar(pswNuevaContrasena.getText().trim());
         } else {
             contrasenaAntigua = cliente.getContrasena();
             contrasenaNueva = cliente.getContrasena();
@@ -100,7 +101,8 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
             if (clienteActualizar.isValid()) {
                 if (contrasenaAntigua.isBlank() && contrasenaNueva.isBlank()) {
                     this.clientesDAO.actualizar(clienteActualizar);
-                   
+                    
+                    dispose();
                     JOptionPane.showMessageDialog(this, "Cliente actualizado",
                             "Actualizar cliente", JOptionPane.INFORMATION_MESSAGE);
                 } else if (!contrasenaAntigua.isBlank() && contrasenaNueva.isBlank()) {
@@ -110,15 +112,16 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
                 } else {
                     if (clientesDAO.iniciarSesion(usuario, contrasenaAntigua) != null) {
                         this.clientesDAO.actualizar(clienteActualizar);
+                        
+                        dispose();
                         JOptionPane.showMessageDialog(this, "Cliente actualizado",
                                 "Actualizar cliente", JOptionPane.INFORMATION_MESSAGE);
                     } else {
-                        JOptionPane.showMessageDialog(this, "La contraseña antigua esta mal", "Error contraseña", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "La contraseña antigua esta mal", 
+                                "Error contraseña", JOptionPane.ERROR_MESSAGE);
                     }
                 }
-
             }
-
         } catch (PersistenciaException ex) {
             JOptionPane.showMessageDialog(this, "No fue posible agregar el cliente.",
                     "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
@@ -126,7 +129,6 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, ex.getMessage(),
                     "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
         }
-
     }
 
     /**

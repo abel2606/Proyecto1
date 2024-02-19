@@ -9,8 +9,8 @@ import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException
 
 public interface ITransaccionesDAO {
 
-    Transferencia agregarTransferencia(TransaccionNuevaDTO transaccionNueva, TransferenciaNuevaDTO transferenciaNueva) throws PersistenciaException;
+    Transferencia hacerTransferencia(TransaccionNuevaDTO transaccionNueva, TransferenciaNuevaDTO transferenciaNueva) throws PersistenciaException;
 
-    Retiro agregarRetiro(TransaccionNuevaDTO transaccionNueva, RetiroNuevoDTO retiroNuevo) throws PersistenciaException;
+    Retiro generarRetiro(TransaccionNuevaDTO transaccionNueva, RetiroNuevoDTO retiroNuevo) throws PersistenciaException;
 
 }

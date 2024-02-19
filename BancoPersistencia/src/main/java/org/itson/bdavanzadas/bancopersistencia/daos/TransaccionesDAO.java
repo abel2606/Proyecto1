@@ -30,40 +30,29 @@ public class TransaccionesDAO implements ITransaccionesDAO {
     }
 
     @Override
-    public Transferencia agregarTransferencia(TransaccionNuevaDTO transaccionNueva, TransferenciaNuevaDTO transferenciaNueva) throws PersistenciaException {
-        String sentenciaTransaccionSQL = """
-                                         INSERT INTO transacciones(monto, fechaRealizacion, numeroCuentaOrigen)
-                                         VALUES(?, ?, ?)
-                                         """;
-        String sentenciaTransferenciaSQL = """
-                                           INSERT INTO transferencias(folio, numeroCuentaDestino)
-                                           VALUES(?, ?);
-                                           """;
+    public Transferencia hacerTransferencia(TransaccionNuevaDTO transaccionNueva, TransferenciaNuevaDTO transferenciaNueva) throws PersistenciaException {
+        String sentenciaSQL = """
+                              CALL HacerTransferencia(?, ?, ?, ?);
+                              """;
         try (
             Connection conexion = this.conexionBD.obtenerConexion(); 
-            PreparedStatement comandoTransaccion = conexion.prepareStatement(sentenciaTransaccionSQL, Statement.RETURN_GENERATED_KEYS); 
-            PreparedStatement comandoTransferencia = conexion.prepareStatement(sentenciaTransferenciaSQL);
+            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);
         ) {
-            comandoTransaccion.setFloat(1, transaccionNueva.getMonto());
-            comandoTransaccion.setString(2, transaccionNueva.getFechaRealizacion().toString());
-            comandoTransaccion.setLong(3, transaccionNueva.getNumeroCuentaOrigen());
+            comando.setFloat(1, transaccionNueva.getMonto());
+            comando.setString(2, transaccionNueva.getFechaRealizacion().toString());
+            comando.setLong(3, transaccionNueva.getNumeroCuentaOrigen());
+            comando.setLong(4, transferenciaNueva.getNumeroCuentaDestino());
 
-            int numRegistrosInsertadosTransaccion = comandoTransaccion.executeUpdate();
-            logger.log(Level.INFO, "Se agregaron {0} transacciones", numRegistrosInsertadosTransaccion);
-
-            ResultSet idsGenerados = comandoTransaccion.getGeneratedKeys();
-            long idTransaccionGenerado = 0;
+            int numRegistrosInsertadosTransaccion = comando.executeUpdate();
+            logger.log(Level.INFO, "Se agregaron {0} transferencias", numRegistrosInsertadosTransaccion);
+            
+            ResultSet idsGenerados = comando.getGeneratedKeys();
+            long idGenerado = 0;
             if (idsGenerados.next()) {
-                idTransaccionGenerado = idsGenerados.getLong(1);
+                idGenerado = idsGenerados.getLong(1);
             }
 
-            comandoTransferencia.setLong(1, idTransaccionGenerado);
-            comandoTransferencia.setLong(2, transferenciaNueva.getNumeroCuentaDestino());
-
-            int numRegistrosInsertadosTransferencia = comandoTransferencia.executeUpdate();
-            logger.log(Level.INFO, "Se agregaron {0} transferencias", numRegistrosInsertadosTransferencia);
-
-            Transferencia transferencia = new Transferencia(idTransaccionGenerado, transaccionNueva.getMonto(),
+            Transferencia transferencia = new Transferencia(idGenerado, transaccionNueva.getMonto(),
                     transaccionNueva.getFechaRealizacion(), transaccionNueva.getNumeroCuentaOrigen(),
                     transferenciaNueva.getNumeroCuentaDestino());
 
@@ -75,41 +64,30 @@ public class TransaccionesDAO implements ITransaccionesDAO {
     }
 
     @Override
-    public Retiro agregarRetiro(TransaccionNuevaDTO transaccionNueva, RetiroNuevoDTO retiroNuevo) throws PersistenciaException {
-        String sentenciaTransaccionSQL = """
-                                         INSERT INTO transacciones(monto, fechaRealizacion, numeroCuentaOrigen)
-                                         VALUES(?, ?, ?)
-                                         """;
-        String sentenciaRetiroSQL = """
-                                    INSERT INTO retiros(folio, contrasena, estado)
-                                    VALUES(?, ?, ?);
-                                    """;
+    public Retiro generarRetiro(TransaccionNuevaDTO transaccionNueva, RetiroNuevoDTO retiroNuevo) throws PersistenciaException {
+        String sentenciaSQL = """
+                              CALL GenerarRetiro(?, ?, ?, ?, ?);
+                              """;
         try (
             Connection conexion = this.conexionBD.obtenerConexion();
-            PreparedStatement comandoTransaccion = conexion.prepareStatement(sentenciaTransaccionSQL, Statement.RETURN_GENERATED_KEYS);
-            PreparedStatement comandoRetiro = conexion.prepareStatement(sentenciaRetiroSQL);
+            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);
         ) {
-            comandoTransaccion.setFloat(1, transaccionNueva.getMonto());
-            comandoTransaccion.setString(2, transaccionNueva.getFechaRealizacion().toString());
-            comandoTransaccion.setLong(3, transaccionNueva.getNumeroCuentaOrigen());
+            comando.setFloat(1, transaccionNueva.getMonto());
+            comando.setString(2, transaccionNueva.getFechaRealizacion().toString());
+            comando.setLong(3, transaccionNueva.getNumeroCuentaOrigen());
+            comando.setLong(4, retiroNuevo.getContrasena());
+            comando.setString(5, retiroNuevo.getEstado());
 
-            int numRegistrosInsertadosTransaccion = comandoTransaccion.executeUpdate();
+            int numRegistrosInsertadosTransaccion = comando.executeUpdate();
             logger.log(Level.INFO, "Se agregaron {0} transacciones", numRegistrosInsertadosTransaccion);
 
-            ResultSet idsGenerados = comandoTransaccion.getGeneratedKeys();
-            long idTransaccionGenerado = 0;
+            ResultSet idsGenerados = comando.getGeneratedKeys();
+            long idGenerado = 0;
             if (idsGenerados.next()) {
-                idTransaccionGenerado = idsGenerados.getLong(1);
+                idGenerado = idsGenerados.getLong(1);
             }
-
-            comandoRetiro.setLong(1, idTransaccionGenerado);
-            comandoRetiro.setLong(2, retiroNuevo.getContrasena());
-            comandoRetiro.setString(3, retiroNuevo.getEstado());
-
-            int numRegistrosInsertadosTransferencia = comandoRetiro.executeUpdate();
-            logger.log(Level.INFO, "Se agregaron {0} retiros", numRegistrosInsertadosTransferencia);
-
-            Retiro retiro = new Retiro(idTransaccionGenerado, transaccionNueva.getMonto(),
+                
+            Retiro retiro = new Retiro(idGenerado, transaccionNueva.getMonto(),
                     transaccionNueva.getFechaRealizacion(), transaccionNueva.getNumeroCuentaOrigen(),
                     retiroNuevo.getContrasena(), retiroNuevo.getEstado());
 
