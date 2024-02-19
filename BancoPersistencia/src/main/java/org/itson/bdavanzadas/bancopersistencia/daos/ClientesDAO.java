@@ -148,7 +148,7 @@ public class ClientesDAO implements IClientesDAO {
         String consultaSQL = """
         SELECT c.*, d.calle, d.numero, d.colonia, d.codigoPostal, d.ciudad
         FROM clientes c
-        JOIN domicilios d ON c.identificador = d.identificadorCliente
+        INNER JOIN domicilios d ON c.identificador = d.identificadorCliente
         WHERE c.usuario = ? AND c.contrasena = ?;
         """;
         try (
@@ -158,7 +158,7 @@ public class ClientesDAO implements IClientesDAO {
             consulta.setString(1, usuario);
             consulta.setString(2, contrasena);
             try (
-                    ResultSet resultado = consulta.executeQuery()) {
+                ResultSet resultado = consulta.executeQuery()) {
                 if (resultado.next()) {
                     long idCliente = resultado.getLong("identificador");
                     String nombre = resultado.getString("nombre");
@@ -185,12 +185,12 @@ public class ClientesDAO implements IClientesDAO {
     /**
      * Permite actualizar la información de un cliente en la base de datos.
      *
-     * @param cliente El cliente a actulizar
+     * @param clienteActualizado El cliente con la información actualizada
      * @return El cliente actualizado
      * @throws PersistenciaException Si no se puede actualizar el cliente
      */
     @Override
-    public Cliente actualizar(ClienteActualizadoDTO clienteActualizar) throws PersistenciaException {
+    public Cliente actualizar(ClienteActualizadoDTO clienteActualizado) throws PersistenciaException {
         String sentenciaSQL = """
                          UPDATE clientes 
                          SET nombre=?, apellidoPaterno=?, apellidoMaterno=?, fechaNacimiento=?, usuario=?, contrasena=?
@@ -207,44 +207,43 @@ public class ClientesDAO implements IClientesDAO {
             PreparedStatement comandoDomicilio = conexion.prepareStatement(sentenciaDomicilioSQL);
         ) {
             // Actualizar datos del cliente
-            comandoCliente.setString(1, clienteActualizar.getNombre());
-            comandoCliente.setString(2, clienteActualizar.getApellidoPaterno());
-            comandoCliente.setString(3, clienteActualizar.getApellidoMaterno());
-            comandoCliente.setString(4, clienteActualizar.getFechaNacimiento().toString());
-            comandoCliente.setString(5, clienteActualizar.getUsuario());
-            comandoCliente.setString(6, clienteActualizar.getContrasena());
-            comandoCliente.setLong(7, clienteActualizar.getId());
+            comandoCliente.setString(1, clienteActualizado.getNombre());
+            comandoCliente.setString(2, clienteActualizado.getApellidoPaterno());
+            comandoCliente.setString(3, clienteActualizado.getApellidoMaterno());
+            comandoCliente.setString(4, clienteActualizado.getFechaNacimiento().toString());
+            comandoCliente.setString(5, clienteActualizado.getUsuario());
+            comandoCliente.setString(6, clienteActualizado.getContrasena());
+            comandoCliente.setLong(7, clienteActualizado.getId());
 
             int numRegistrosActualizadosCliente = comandoCliente.executeUpdate();
             logger.log(Level.INFO, "Se actualizaron {0} registros en la tabla clientes", numRegistrosActualizadosCliente);
 
             // Actualizar datos del domicilio
-            comandoDomicilio.setString(1, clienteActualizar.getCalle());
-            comandoDomicilio.setString(2, clienteActualizar.getNumero());
-            comandoDomicilio.setString(3, clienteActualizar.getColonia());
-            comandoDomicilio.setString(4, clienteActualizar.getCodigoPostal());
-            comandoDomicilio.setString(5, clienteActualizar.getCiudad());
-            comandoDomicilio.setLong(6, clienteActualizar.getId());
+            comandoDomicilio.setString(1, clienteActualizado.getCalle());
+            comandoDomicilio.setString(2, clienteActualizado.getNumero());
+            comandoDomicilio.setString(3, clienteActualizado.getColonia());
+            comandoDomicilio.setString(4, clienteActualizado.getCodigoPostal());
+            comandoDomicilio.setString(5, clienteActualizado.getCiudad());
+            comandoDomicilio.setLong(6, clienteActualizado.getId());
 
             int numRegistrosActualizadosDomicilio = comandoDomicilio.executeUpdate();
             logger.log(Level.INFO, "Se actualizaron {0} registros en la tabla domicilios", numRegistrosActualizadosDomicilio);
             
-            conexion.commit();
-            Cliente clienteActualizado = new Cliente();
-            clienteActualizado.setId(clienteActualizar.getId());
-            clienteActualizado.setNombre(clienteActualizar.getNombre());
-            clienteActualizado.setApellidoPaterno(clienteActualizar.getApellidoPaterno());
-            clienteActualizado.setApellidoMaterno(clienteActualizar.getApellidoMaterno());
-            clienteActualizado.setFechaNacimiento(clienteActualizar.getFechaNacimiento());
-            clienteActualizado.setUsuario(clienteActualizar.getUsuario());
-            clienteActualizado.setContrasena(clienteActualizar.getContrasena());
-            clienteActualizado.setCalle(clienteActualizar.getCalle());
-            clienteActualizado.setNumero(clienteActualizar.getNumero());
-            clienteActualizado.setColonia(clienteActualizar.getColonia());
-            clienteActualizado.setCodigoPostal(clienteActualizar.getCodigoPostal());
-            clienteActualizado.setCiudad(clienteActualizar.getCiudad());
+            Cliente cliente = new Cliente();
+            cliente.setId(cliente.getId());
+            cliente.setNombre(cliente.getNombre());
+            cliente.setApellidoPaterno(cliente.getApellidoPaterno());
+            cliente.setApellidoMaterno(cliente.getApellidoMaterno());
+            cliente.setFechaNacimiento(cliente.getFechaNacimiento());
+            cliente.setUsuario(cliente.getUsuario());
+            cliente.setContrasena(cliente.getContrasena());
+            cliente.setCalle(cliente.getCalle());
+            cliente.setNumero(cliente.getNumero());
+            cliente.setColonia(cliente.getColonia());
+            cliente.setCodigoPostal(cliente.getCodigoPostal());
+            cliente.setCiudad(cliente.getCiudad());
 
-            return clienteActualizado;
+            return cliente;
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, "Error al actualizar el cliente", ex);
             throw new PersistenciaException("No se pudo actualizar el cliente");
@@ -280,6 +279,50 @@ public class ClientesDAO implements IClientesDAO {
             return false; // Si no se encontraron resultados, retorna false
         } catch (SQLException e) {
             throw new PersistenciaException("Error al verificar la existencia del usuario", e);
+        }
+    }
+    
+    /**
+     * Permite obtener un cliente por su ID.
+     *
+     * @param idCliente El ID del cliente 
+     * @return El cliente encontrado
+     * @throws PersistenciaException Si ocurre un exvepcion al obtener el cliente
+     */
+    public Cliente obtenerUsuario(long idCliente) throws PersistenciaException {
+        String sentenciaSQL = """
+            SELECT identificador, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, usuario, contrasena,
+            calle, numero, colonia, codigoPostal, ciudad
+            FROM clientes c
+            INNER JOIN domicilios d ON c.identificador = d.identificadorCliente
+            WHERE c.identificador = ?
+        """;
+        try (
+            Connection conexion = this.conexionBD.obtenerConexion(); 
+            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
+        ) {
+            comando.setLong(1, idCliente);
+            ResultSet resultados = comando.executeQuery();
+            if (resultados.next()) {
+                String nombre = resultados.getString("nombre");
+                String apellidoPaterno = resultados.getString("apellidoPaterno");
+                String apellidoMaterno = resultados.getString("apellidoMaterno");
+                Fecha fechaNacimiento = new Fecha(resultados.getString("fechaNacimiento"));
+                String usuario = resultados.getString("usuario");
+                String contrasena = resultados.getString("contrasena");
+                String calle = resultados.getString("calle");
+                String numero = resultados.getString("numero");
+                String colonia = resultados.getString("colonia");
+                String codigoPostal = resultados.getString("codigoPostal");
+                String ciudad = resultados.getString("ciudad");
+                Cliente cliente = new Cliente(idCliente, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, usuario, contrasena, calle, colonia, numero, codigoPostal, ciudad);
+                return cliente;
+            } else {
+                return null; // No se encontró ningún cliente con el ID especificado
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error al obtener el cliente.", e);
+            throw new PersistenciaException("Error al obtener el cliente.", e);
         }
     }
 

@@ -33,7 +33,7 @@ public class PantallaAgregarCuenta extends javax.swing.JDialog {
         this.cliente = cliente;
         txtPropietario.setText(cliente.getNombre() + " " + cliente.getApellidoPaterno() + " " + cliente.getApellidoMaterno());
     }
-    
+
     /**
      * Este método centra el cuadro de dialogo sobre la ventana de la
      * aplicación.
@@ -58,25 +58,32 @@ public class PantallaAgregarCuenta extends javax.swing.JDialog {
         String nombrePropietario = txtPropietario.getText();
         String alias = txtAliasCuenta.getText();
 
-        CuentaNuevaDTO cuentaNueva = new CuentaNuevaDTO();
-        cuentaNueva.setAlias(alias);
-        cuentaNueva.setNombrePropietario(nombrePropietario);
-        cuentaNueva.setFechaApertura(new Fecha());
-        cuentaNueva.setSaldo(0.0f);
-        cuentaNueva.setActiva(true);
-        cuentaNueva.setIdCliente(cliente.getId());
-
         try {
-            cuentaNueva.isValid();
-            Cuenta cuentaAgregada = cuentasDAO.agregar(cuentaNueva);
-            JOptionPane.showMessageDialog(this, "Se registró la cuenta con el número " + cuentaAgregada.getNumero(),
-                    "Notificación.", JOptionPane.INFORMATION_MESSAGE);
-        } catch (PersistenciaException ex) {
-            JOptionPane.showMessageDialog(this, "No fue posible agregar la cuenta.",
-                    "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
-        } catch (CuentaNoValidaException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(),
-                    "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
+            Float saldoInicial = Float.valueOf(txtSaldoInicial.getText());
+
+            CuentaNuevaDTO cuentaNueva = new CuentaNuevaDTO();
+            cuentaNueva.setAlias(alias);
+            cuentaNueva.setNombrePropietario(nombrePropietario);
+            cuentaNueva.setFechaApertura(new Fecha());
+            cuentaNueva.setSaldo(saldoInicial);
+            cuentaNueva.setActiva(true);
+            cuentaNueva.setIdCliente(cliente.getId());
+
+            try {
+                cuentaNueva.isValid();
+                Cuenta cuentaAgregada = cuentasDAO.agregar(cuentaNueva);
+                JOptionPane.showMessageDialog(this, "Se registró la cuenta con el número " + cuentaAgregada.getNumero(),
+                        "Notificación.", JOptionPane.INFORMATION_MESSAGE);
+            } catch (PersistenciaException ex) {
+                JOptionPane.showMessageDialog(this, "No fue posible agregar la cuenta.",
+                        "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
+            } catch (CuentaNoValidaException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(),
+                        "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Saldo inicial no válido",
+                    "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -100,6 +107,8 @@ public class PantallaAgregarCuenta extends javax.swing.JDialog {
         lblAliasCuenta = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         btnAceptar = new javax.swing.JButton();
+        lblSaldoInicial = new javax.swing.JLabel();
+        txtSaldoInicial = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -182,6 +191,15 @@ public class PantallaAgregarCuenta extends javax.swing.JDialog {
             }
         });
 
+        lblSaldoInicial.setBackground(new java.awt.Color(255, 255, 255));
+        lblSaldoInicial.setFont(new java.awt.Font("Arial", 1, 34)); // NOI18N
+        lblSaldoInicial.setForeground(new java.awt.Color(41, 92, 52));
+        lblSaldoInicial.setText("Saldo Inicial");
+
+        txtSaldoInicial.setFont(new java.awt.Font("Arial", 1, 30)); // NOI18N
+        txtSaldoInicial.setForeground(new java.awt.Color(99, 134, 107));
+        txtSaldoInicial.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 117), 2, true));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -190,6 +208,10 @@ public class PantallaAgregarCuenta extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(149, 149, 149)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblSaldoInicial)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtSaldoInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnCancelar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -202,13 +224,13 @@ public class PantallaAgregarCuenta extends javax.swing.JDialog {
                         .addComponent(lblPropietario)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(txtPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(149, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(61, 61, 61)
+                .addGap(60, 60, 60)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPropietario)
                     .addComponent(txtPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -216,11 +238,15 @@ public class PantallaAgregarCuenta extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblAliasCuenta)
                     .addComponent(txtAliasCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(81, 81, 81)
+                .addGap(50, 50, 50)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblSaldoInicial)
+                    .addComponent(txtSaldoInicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
                     .addComponent(btnAceptar))
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addGap(60, 60, 60))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -231,7 +257,7 @@ public class PantallaAgregarCuenta extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
         );
 
         pack();
@@ -255,9 +281,11 @@ public class PantallaAgregarCuenta extends javax.swing.JDialog {
     private javax.swing.JLabel lblPokebolaDer;
     private javax.swing.JLabel lblPokebolaIzq;
     private javax.swing.JLabel lblPropietario;
+    private javax.swing.JLabel lblSaldoInicial;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JTextField txtAliasCuenta;
     private javax.swing.JTextField txtPropietario;
+    private javax.swing.JTextField txtSaldoInicial;
     // End of variables declaration//GEN-END:variables
     private IConexion conexion;
     private ICuentasDAO cuentasDAO;

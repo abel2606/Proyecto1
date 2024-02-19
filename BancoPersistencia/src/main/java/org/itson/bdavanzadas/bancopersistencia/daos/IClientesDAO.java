@@ -39,18 +39,26 @@ public interface IClientesDAO {
     /**
      * Permite actualizar la información de un cliente en la base de datos.
      *
-     * @param cliente El cliente a actulizar
+     * @param clienteActualizado El cliente con la información actualizada
      * @return El cliente actualizado
      * @throws PersistenciaException Si no se puede actualizar el cliente
      */
-    Cliente actualizar(ClienteActualizadoDTO clienteActualizar) throws PersistenciaException;
+    Cliente actualizar(ClienteActualizadoDTO clienteActualizado) throws PersistenciaException;
 
     /**
      * Verifica que exista un nombre de usuario en la base de datos
      *
-     * @param nombreUsuario El nomber de usuari
+     * @param nombreUsuario El nombro de usuario
      * @return regresa si existe o no el nombre de usuario
      * @throws PersistenciaException Si no existe el nombre de usuario
      */
     boolean existeUsuario(String nombreUsuario) throws PersistenciaException;
+    
+    /**
+     * Permite obtener un usuario mediante un id
+     * @param idCliente Id del cliente
+     * @return regresa el cliente encontrado
+     * @throws PersistenciaException Si no existe el id 
+     */
+    Cliente obtenerUsuario(long idCliente) throws PersistenciaException ;
 }

@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import org.itson.bdavanzadas.bancodominio.Cuenta;
 import org.itson.bdavanzadas.bancodominio.Fecha;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
+import org.itson.bdavanzadas.bancopersistencia.dtos.CuentaActualizadaDTO;
 import org.itson.bdavanzadas.bancopersistencia.dtos.CuentaNuevaDTO;
 import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
@@ -107,6 +108,41 @@ public class CuentasDAO implements ICuentasDAO {
             throw new PersistenciaException("No se pudo guardar la cuenta");
         }
     }
-  
-   
+
+    /**
+     * Permite cambiar el saldo y el estado de la cuenta a activa o desactivada.
+     *
+     * @param cuentaActualizada La cuenta con el estado actualizado
+     * @return La cuenta con el estado actualizado
+     * @throws PersistenciaException Si no se puede actualizar la cuenta
+     */
+    @Override
+    public Cuenta actualizar(CuentaActualizadaDTO cuentaActualizada) throws PersistenciaException {
+        String sentenciaSQL = """
+                              UPDATE cuentas
+                              SET saldo = ?, activa = ? 
+                              WHERE numero = ?
+                              """;
+        try (
+            Connection conexion = this.conexionBD.obtenerConexion();
+            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
+        ){
+            comando.setFloat(1, cuentaActualizada.getSaldo());
+            comando.setBoolean(2, cuentaActualizada.isActiva());
+            comando.setLong(3, cuentaActualizada.getNumero());
+            
+            int numeroRegistrosActualizados = comando.executeUpdate();
+            logger.log(Level.INFO, "Se actualizaron {0} registros en la tabla cuentas", numeroRegistrosActualizados);
+
+            Cuenta cuenta = new Cuenta(cuentaActualizada.getNumero(), cuentaActualizada.getAlias(),
+                    cuentaActualizada.getSaldo(), cuentaActualizada.getFechaApertura(),
+                    cuentaActualizada.isActiva(), cuentaActualizada.getIdCliente());
+
+            return cuenta;
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "No se pudo actualizar la cuenta", ex);
+            throw new PersistenciaException("No se pudo actualizar la cuenta");
+        }
+    }
+    
 }

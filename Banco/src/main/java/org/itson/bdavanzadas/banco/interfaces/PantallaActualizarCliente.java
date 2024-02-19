@@ -100,6 +100,7 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
             if (clienteActualizar.isValid()) {
                 if (contrasenaAntigua.isBlank() && contrasenaNueva.isBlank()) {
                     this.clientesDAO.actualizar(clienteActualizar);
+                   
                     JOptionPane.showMessageDialog(this, "Cliente actualizado",
                             "Actualizar cliente", JOptionPane.INFORMATION_MESSAGE);
                 } else if (!contrasenaAntigua.isBlank() && contrasenaNueva.isBlank()) {
@@ -531,6 +532,7 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         actualizar();
     }//GEN-LAST:event_btnAceptarActionPerformed

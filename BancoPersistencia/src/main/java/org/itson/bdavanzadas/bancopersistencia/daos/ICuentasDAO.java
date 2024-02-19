@@ -2,6 +2,7 @@ package org.itson.bdavanzadas.bancopersistencia.daos;
 
 import java.util.List;
 import org.itson.bdavanzadas.bancodominio.Cuenta;
+import org.itson.bdavanzadas.bancopersistencia.dtos.CuentaActualizadaDTO;
 import org.itson.bdavanzadas.bancopersistencia.dtos.CuentaNuevaDTO;
 import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
@@ -28,4 +29,13 @@ public interface ICuentasDAO {
      * de datos
      */
     Cuenta agregar(CuentaNuevaDTO cuentaNueva) throws PersistenciaException;
+
+    /**
+     * Permite cambiar el saldo y el estado de la cuenta a activa o desactivada.
+     *
+     * @param cuentaActualizada La cuenta con el estado actualizado
+     * @return La cuenta con el estado actualizado
+     * @throws PersistenciaException Si no se puede actualizar la cuenta
+     */
+    Cuenta actualizar(CuentaActualizadaDTO cuentaActualizada) throws PersistenciaException;
 }

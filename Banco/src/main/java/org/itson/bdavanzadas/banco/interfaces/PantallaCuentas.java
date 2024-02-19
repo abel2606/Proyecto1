@@ -9,7 +9,9 @@ import javax.swing.table.DefaultTableModel;
 import org.itson.bdavanzadas.bancodominio.Cliente;
 import org.itson.bdavanzadas.bancodominio.Cuenta;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
+import org.itson.bdavanzadas.bancopersistencia.daos.ClientesDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.CuentasDAO;
+import org.itson.bdavanzadas.bancopersistencia.daos.IClientesDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.ICuentasDAO;
 import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
@@ -35,6 +37,7 @@ public class PantallaCuentas extends javax.swing.JDialog {
         String[] nombresCliente = cliente.getNombre().split(" ");
         lblNombreCliente.setText(nombresCliente[0]);
         cuentasDAO = new CuentasDAO(conexion);
+        clientesDAO = new ClientesDAO(conexion);
         llenarTabla();
     }
 
@@ -265,6 +268,7 @@ public class PantallaCuentas extends javax.swing.JDialog {
         pantallaAgregarCuenta.setVisible(true);
     }//GEN-LAST:event_btnAgregarCuentaActionPerformed
 
+ 
     private void btnActualizarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarTablaActionPerformed
         llenarTabla();
     }//GEN-LAST:event_btnActualizarTablaActionPerformed
@@ -279,6 +283,11 @@ public class PantallaCuentas extends javax.swing.JDialog {
     private void btnActualizarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarClienteActionPerformed
         PantallaActualizarCliente pantallaActualizarCliente = new PantallaActualizarCliente(parent, true, conexion, cliente);
         pantallaActualizarCliente.setVisible(true);
+        try {
+           this.cliente=clientesDAO.obtenerUsuario(cliente.getId()); 
+        } catch (PersistenciaException e) {
+            
+        }
     }//GEN-LAST:event_btnActualizarClienteActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -296,6 +305,7 @@ public class PantallaCuentas extends javax.swing.JDialog {
     private javax.swing.JTable tblCuentas;
     // End of variables declaration//GEN-END:variables
     private IConexion conexion;
+    private IClientesDAO clientesDAO;
     private ICuentasDAO cuentasDAO;
     private Cliente cliente;
     private Frame parent;
