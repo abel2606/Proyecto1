@@ -53,4 +53,12 @@ public interface IClientesDAO {
      * @throws PersistenciaException Si no existe el nombre de usuario
      */
     boolean existeUsuario(String nombreUsuario) throws PersistenciaException;
+    
+    /**
+     * Permite obtener un usuario mediante un id
+     * @param idCliente Id del cliente
+     * @return regresa el cliente encontrado
+     * @throws PersistenciaException Si no existe el id 
+     */
+    Cliente obtenerUsuario(long idCliente) throws PersistenciaException ;
 }

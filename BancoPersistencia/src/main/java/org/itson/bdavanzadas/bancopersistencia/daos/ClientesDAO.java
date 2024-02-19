@@ -281,5 +281,49 @@ public class ClientesDAO implements IClientesDAO {
             throw new PersistenciaException("Error al verificar la existencia del usuario", e);
         }
     }
+    
+    /**
+     * Permite obtener un cliente por su ID.
+     *
+     * @param idCliente El ID del cliente 
+     * @return El cliente encontrado
+     * @throws PersistenciaException Si ocurre un exvepcion al obtener el cliente
+     */
+    public Cliente obtenerUsuario(long idCliente) throws PersistenciaException {
+        String sentenciaSQL = """
+            SELECT identificador, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, usuario, contrasena,
+            calle, numero, colonia, codigoPostal, ciudad
+            FROM clientes c
+            INNER JOIN domicilios d ON c.identificador = d.identificadorCliente
+            WHERE c.identificador = ?
+        """;
+        try (
+            Connection conexion = this.conexionBD.obtenerConexion(); 
+            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
+        ) {
+            comando.setLong(1, idCliente);
+            ResultSet resultados = comando.executeQuery();
+            if (resultados.next()) {
+                String nombre = resultados.getString("nombre");
+                String apellidoPaterno = resultados.getString("apellidoPaterno");
+                String apellidoMaterno = resultados.getString("apellidoMaterno");
+                Fecha fechaNacimiento = new Fecha(resultados.getString("fechaNacimiento"));
+                String usuario = resultados.getString("usuario");
+                String contrasena = resultados.getString("contrasena");
+                String calle = resultados.getString("calle");
+                String numero = resultados.getString("numero");
+                String colonia = resultados.getString("colonia");
+                String codigoPostal = resultados.getString("codigoPostal");
+                String ciudad = resultados.getString("ciudad");
+                Cliente cliente = new Cliente(idCliente, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, usuario, contrasena, calle, colonia, numero, codigoPostal, ciudad);
+                return cliente;
+            } else {
+                return null; // No se encontró ningún cliente con el ID especificado
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error al obtener el cliente.", e);
+            throw new PersistenciaException("Error al obtener el cliente.", e);
+        }
+    }
 
 }
