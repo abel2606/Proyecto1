@@ -55,6 +55,12 @@ public class PantallaHacerRetiro extends javax.swing.JDialog {
         lblPokebolaIzq = new javax.swing.JLabel();
         lblPokebolaDer = new javax.swing.JLabel();
         btnAtras = new javax.swing.JButton();
+        lblFolio = new javax.swing.JLabel();
+        txtFolio = new javax.swing.JTextField();
+        lblContrasena = new javax.swing.JLabel();
+        btnAceptar = new javax.swing.JButton();
+        lblInstrucciones = new javax.swing.JLabel();
+        pswContrasena = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -107,6 +113,38 @@ public class PantallaHacerRetiro extends javax.swing.JDialog {
             }
         });
 
+        lblFolio.setBackground(new java.awt.Color(255, 255, 255));
+        lblFolio.setFont(new java.awt.Font("Arial", 1, 34)); // NOI18N
+        lblFolio.setForeground(new java.awt.Color(41, 92, 52));
+        lblFolio.setText("Folio del Retiro");
+
+        txtFolio.setFont(new java.awt.Font("Arial", 1, 30)); // NOI18N
+        txtFolio.setForeground(new java.awt.Color(99, 134, 107));
+        txtFolio.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 117), 2, true));
+
+        lblContrasena.setBackground(new java.awt.Color(255, 255, 255));
+        lblContrasena.setFont(new java.awt.Font("Arial", 1, 34)); // NOI18N
+        lblContrasena.setForeground(new java.awt.Color(41, 92, 52));
+        lblContrasena.setText("Contraseña");
+
+        btnAceptar.setBackground(new java.awt.Color(0, 255, 117));
+        btnAceptar.setFont(new java.awt.Font("Arial", 1, 34)); // NOI18N
+        btnAceptar.setForeground(new java.awt.Color(255, 255, 255));
+        btnAceptar.setText("ACEPTAR");
+        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarActionPerformed(evt);
+            }
+        });
+
+        lblInstrucciones.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
+        lblInstrucciones.setForeground(new java.awt.Color(41, 92, 52));
+        lblInstrucciones.setText("INGRESE LOS DATOS SOLICITADOS");
+
+        pswContrasena.setFont(new java.awt.Font("Arial", 1, 30)); // NOI18N
+        pswContrasena.setForeground(new java.awt.Color(99, 134, 107));
+        pswContrasena.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 117), 2, true));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -115,6 +153,24 @@ public class PantallaHacerRetiro extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(btnAtras)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(149, 149, 149)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblFolio)
+                    .addComponent(lblContrasena))
+                .addGap(65, 65, 65)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pswContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(440, 440, 440))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblInstrucciones)
+                .addGap(233, 233, 233))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -122,7 +178,19 @@ public class PantallaHacerRetiro extends javax.swing.JDialog {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAtras)
-                .addContainerGap(458, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(lblInstrucciones)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblFolio)
+                    .addComponent(txtFolio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(50, 50, 50)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblContrasena)
+                    .addComponent(pswContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(86, 86, 86)
+                .addComponent(btnAceptar)
+                .addGap(48, 48, 48))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -143,13 +211,23 @@ public class PantallaHacerRetiro extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_btnAtrasActionPerformed
 
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        
+    }//GEN-LAST:event_btnAceptarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnAtras;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lblContrasena;
+    private javax.swing.JLabel lblFolio;
+    private javax.swing.JLabel lblInstrucciones;
     private javax.swing.JLabel lblPokebolaDer;
     private javax.swing.JLabel lblPokebolaIzq;
     private javax.swing.JLabel lblTitulo;
+    private javax.swing.JPasswordField pswContrasena;
+    private javax.swing.JTextField txtFolio;
     // End of variables declaration//GEN-END:variables
     private IConexion conexion;
     private ICuentasDAO cuentasDAO;

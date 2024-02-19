@@ -31,7 +31,7 @@ public class PantallaInicio extends javax.swing.JFrame {
         btnRegistrarCliente = new javax.swing.JButton();
         btnIniciarSesion = new javax.swing.JButton();
         btnRetiroSinCuenta = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        lblInstrucciones = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -98,9 +98,9 @@ public class PantallaInicio extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(41, 92, 52));
-        jLabel1.setText("SELECCIONE UNA OPCIÓN");
+        lblInstrucciones.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
+        lblInstrucciones.setForeground(new java.awt.Color(41, 92, 52));
+        lblInstrucciones.setText("SELECCIONE UNA OPCIÓN");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -117,7 +117,7 @@ public class PantallaInicio extends javax.swing.JFrame {
                             .addComponent(btnRetiroSinCuenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(74, 74, 74)
-                        .addComponent(jLabel1)))
+                        .addComponent(lblInstrucciones)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblPokebola)
                 .addGap(77, 77, 77))
@@ -129,7 +129,7 @@ public class PantallaInicio extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(lblInstrucciones)
                         .addGap(38, 38, 38)
                         .addComponent(btnRegistrarCliente)
                         .addGap(36, 36, 36)
@@ -174,9 +174,9 @@ public class PantallaInicio extends javax.swing.JFrame {
     private javax.swing.JButton btnIniciarSesion;
     private javax.swing.JButton btnRegistrarCliente;
     private javax.swing.JButton btnRetiroSinCuenta;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lblInstrucciones;
     private javax.swing.JLabel lblPokebola;
     private javax.swing.JLabel lblTitulo;
     // End of variables declaration//GEN-END:variables
