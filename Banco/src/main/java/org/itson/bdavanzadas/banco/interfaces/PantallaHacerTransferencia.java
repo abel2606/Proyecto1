@@ -1,19 +1,13 @@
 package org.itson.bdavanzadas.banco.interfaces;
 
 import java.awt.Dimension;
-import java.util.List;
-import java.awt.Frame;
 import java.awt.Point;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-import org.itson.bdavanzadas.bancodominio.Cliente;
 import org.itson.bdavanzadas.bancodominio.Cuenta;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.daos.CuentasDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.ICuentasDAO;
-import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
-public class PantallaTransferencia extends javax.swing.JDialog {
+public class PantallaHacerTransferencia extends javax.swing.JDialog {
 
     /**
      * Creates new form PantallaCuentas.
@@ -21,13 +15,15 @@ public class PantallaTransferencia extends javax.swing.JDialog {
      * @param parent
      * @param modal
      * @param conexion
+     * @param cuenta
      */
-    public PantallaTransferencia(java.awt.Frame parent, boolean modal, IConexion conexion) {
+    public PantallaHacerTransferencia(java.awt.Frame parent, boolean modal, IConexion conexion, Cuenta cuenta) {
         super(parent, modal);
         initComponents();
         centraCuadroDialogo(parent);
-        setTitle("Retiro Sin Cuenta");
+        setTitle("Hacer Transferencia");
         this.conexion = conexion;
+        this.cuenta = cuenta;
         cuentasDAO = new CuentasDAO(conexion);
     }
 
@@ -73,7 +69,7 @@ public class PantallaTransferencia extends javax.swing.JDialog {
 
         lblTitulo.setFont(new java.awt.Font("Arial", 1, 48)); // NOI18N
         lblTitulo.setForeground(new java.awt.Color(255, 255, 255));
-        lblTitulo.setText("Transferencia");
+        lblTitulo.setText("HACER TRANSFERENCIA");
 
         lblPokebolaIzq.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PokeBolaBlancaVerde.png"))); // NOI18N
 
@@ -86,9 +82,9 @@ public class PantallaTransferencia extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addComponent(lblPokebolaIzq)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 398, Short.MAX_VALUE)
+                .addGap(174, 174, 174)
                 .addComponent(lblTitulo)
-                .addGap(226, 226, 226)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 175, Short.MAX_VALUE)
                 .addComponent(lblPokebolaDer)
                 .addGap(19, 19, 19))
         );
@@ -139,4 +135,5 @@ public class PantallaTransferencia extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
     private IConexion conexion;
     private ICuentasDAO cuentasDAO;
+    private Cuenta cuenta;
 }

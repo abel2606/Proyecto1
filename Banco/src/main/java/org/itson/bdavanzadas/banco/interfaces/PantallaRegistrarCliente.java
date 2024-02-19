@@ -3,7 +3,7 @@ package org.itson.bdavanzadas.banco.interfaces;
 import java.awt.Dimension;
 import java.awt.Point;
 import javax.swing.JOptionPane;
-import org.itson.bdavanzadas.banco.Encriptar;
+import org.itson.bdavanzadas.banco.Encriptador;
 import org.itson.bdavanzadas.bancodominio.Fecha;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.daos.ClientesDAO;
@@ -61,8 +61,8 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
         String codigoPostal = txtCodigoPostal.getText();
         String ciudad = txtCiudad.getText();
         String usuario = txtUsuario.getText();
-        String contrasena = Encriptar.encriptar(pswContrasena.getText().trim());
-        String contrasenaConfirmar = Encriptar.encriptar(pswConfirmarContrasena.getText().trim());
+        String contrasena = Encriptador.encriptar(pswContrasena.getText().trim());
+        String contrasenaConfirmar = Encriptador.encriptar(pswConfirmarContrasena.getText().trim());
 
         ClienteNuevoDTO clienteNuevo = new ClienteNuevoDTO();
         clienteNuevo.setNombre(nombre);
