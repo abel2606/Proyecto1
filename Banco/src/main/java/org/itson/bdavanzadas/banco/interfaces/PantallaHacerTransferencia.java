@@ -2,10 +2,15 @@ package org.itson.bdavanzadas.banco.interfaces;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import javax.swing.JOptionPane;
 import org.itson.bdavanzadas.bancodominio.Cuenta;
+import org.itson.bdavanzadas.bancodominio.Fecha;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
-import org.itson.bdavanzadas.bancopersistencia.daos.CuentasDAO;
-import org.itson.bdavanzadas.bancopersistencia.daos.ICuentasDAO;
+import org.itson.bdavanzadas.bancopersistencia.daos.ITransaccionesDAO;
+import org.itson.bdavanzadas.bancopersistencia.daos.TransaccionesDAO;
+import org.itson.bdavanzadas.bancopersistencia.dtos.TransaccionNuevaDTO;
+import org.itson.bdavanzadas.bancopersistencia.dtos.TransferenciaNuevaDTO;
+import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
 public class PantallaHacerTransferencia extends javax.swing.JDialog {
 
@@ -24,8 +29,8 @@ public class PantallaHacerTransferencia extends javax.swing.JDialog {
         setTitle("Hacer Transferencia");
         this.conexion = conexion;
         this.cuenta = cuenta;
-        cuentasDAO = new CuentasDAO(conexion);
-        
+        transaccionesDAO = new TransaccionesDAO(conexion);
+
         txtAliasCuenta.setText(cuenta.getAlias());
         txtNumeroCuenta.setText(cuenta.getNumero().toString());
         txtSaldo.setText(cuenta.getSaldo().toString());
@@ -46,7 +51,34 @@ public class PantallaHacerTransferencia extends javax.swing.JDialog {
         // Centra el cuadro de diálogo sobre la ventana padre
         setLocation((frameSize.width - dlgSize.width) / 2 + loc.x, (frameSize.height - dlgSize.height) / 2 + loc.y);
     }
-    
+
+    private void hacerTransferencia() {
+        if (cuenta.getSaldo() >= Float.valueOf(txtMonto.getText())) {
+            if (!cuenta.getNumero().toString().equals(txtNumeroCuentaDestino.getText())) {
+                TransaccionNuevaDTO transaccionNueva = new TransaccionNuevaDTO();
+                transaccionNueva.setMonto(Float.valueOf(txtMonto.getText()));
+                transaccionNueva.setFechaRealizacion(new Fecha());
+                transaccionNueva.setNumeroCuentaOrigen(cuenta.getNumero());
+                
+                TransferenciaNuevaDTO transferenciaNueva = new TransferenciaNuevaDTO();
+                transferenciaNueva.setNumeroCuentaDestino(Long.valueOf(txtNumeroCuentaDestino.getText()));
+                
+                try {
+                    transaccionesDAO.hacerTransferencia(transaccionNueva, transferenciaNueva);
+                } catch (PersistenciaException ex) {
+                    JOptionPane.showMessageDialog(this, "No se pudo realizar la transferencia.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "No puedes realizar una transferencia a la misma cuenta.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "El saldo de la cuenta no es suficiente para realizar la transferencia.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -61,7 +93,7 @@ public class PantallaHacerTransferencia extends javax.swing.JDialog {
         lblTitulo = new javax.swing.JLabel();
         lblPokebolaIzq = new javax.swing.JLabel();
         lblPokebolaDer = new javax.swing.JLabel();
-        txtFolio = new javax.swing.JTextField();
+        txtNumeroCuentaDestino = new javax.swing.JTextField();
         lblFolio = new javax.swing.JLabel();
         lblContrasena = new javax.swing.JLabel();
         txtAliasCuenta = new javax.swing.JTextField();
@@ -117,9 +149,9 @@ public class PantallaHacerTransferencia extends javax.swing.JDialog {
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
-        txtFolio.setFont(new java.awt.Font("Arial", 1, 30)); // NOI18N
-        txtFolio.setForeground(new java.awt.Color(99, 134, 107));
-        txtFolio.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 117), 2, true));
+        txtNumeroCuentaDestino.setFont(new java.awt.Font("Arial", 1, 30)); // NOI18N
+        txtNumeroCuentaDestino.setForeground(new java.awt.Color(99, 134, 107));
+        txtNumeroCuentaDestino.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 117), 2, true));
 
         lblFolio.setBackground(new java.awt.Color(255, 255, 255));
         lblFolio.setFont(new java.awt.Font("Arial", 1, 30)); // NOI18N
@@ -212,7 +244,7 @@ public class PantallaHacerTransferencia extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtMonto)
-                            .addComponent(txtFolio)))
+                            .addComponent(txtNumeroCuentaDestino)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(lblCuenta)
                         .addGap(18, 18, 18)
@@ -260,7 +292,7 @@ public class PantallaHacerTransferencia extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblFolio)
-                    .addComponent(txtFolio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNumeroCuentaDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblContrasena)
@@ -291,7 +323,7 @@ public class PantallaHacerTransferencia extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferirActionPerformed
-        
+        hacerTransferencia();
     }//GEN-LAST:event_btnTransferirActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -310,12 +342,12 @@ public class PantallaHacerTransferencia extends javax.swing.JDialog {
     private javax.swing.JLabel lblSaldo;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JTextField txtAliasCuenta;
-    private javax.swing.JTextField txtFolio;
     private javax.swing.JTextField txtMonto;
     private javax.swing.JTextField txtNumeroCuenta;
+    private javax.swing.JTextField txtNumeroCuentaDestino;
     private javax.swing.JTextField txtSaldo;
     // End of variables declaration//GEN-END:variables
     private IConexion conexion;
-    private ICuentasDAO cuentasDAO;
+    private ITransaccionesDAO transaccionesDAO;
     private Cuenta cuenta;
 }

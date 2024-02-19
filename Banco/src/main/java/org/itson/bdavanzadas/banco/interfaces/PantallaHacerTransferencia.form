@@ -59,7 +59,7 @@
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="txtMonto" max="32767" attributes="0"/>
-                              <Component id="txtFolio" max="32767" attributes="0"/>
+                              <Component id="txtNumeroCuentaDestino" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
@@ -119,7 +119,7 @@
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="lblFolio" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtFolio" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtNumeroCuentaDestino" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -203,7 +203,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JTextField" name="txtFolio">
+        <Component class="javax.swing.JTextField" name="txtNumeroCuentaDestino">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Arial" size="30" style="1"/>

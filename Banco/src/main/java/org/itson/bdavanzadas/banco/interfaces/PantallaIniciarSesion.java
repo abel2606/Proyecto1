@@ -28,6 +28,7 @@ public class PantallaIniciarSesion extends javax.swing.JDialog {
         setSize(1100, 600);
         setTitle("Iniciar Sesión");
         this.conexion = conexion;
+        this.parent = parent;
         clientesDAO = new ClientesDAO(conexion);
     }
 
@@ -62,13 +63,8 @@ public class PantallaIniciarSesion extends javax.swing.JDialog {
                 if (clienteEncontrado != null) {
                     //Este código es para poder obtener la clase padre del jdialog
                     dispose();
-                    Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(this);
-                    dispose();
-                    PantallaCuentas pantallaCuentas = new PantallaCuentas(parentFrame, true, conexion, clienteEncontrado);
+                    PantallaCuentas pantallaCuentas = new PantallaCuentas(parent, true, conexion, clienteEncontrado);
                     pantallaCuentas.setVisible(true);
-                    System.out.println(clienteEncontrado);
-                    clienteEncontrado.toString();
-
                 } else {
                     JOptionPane.showMessageDialog(this, "contraseña incorrecta", "Iniciar sesión", JOptionPane.ERROR_MESSAGE);
                 }
@@ -297,4 +293,5 @@ public class PantallaIniciarSesion extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
     private IConexion conexion;
     private IClientesDAO clientesDAO;
+    private Frame parent;
 }
