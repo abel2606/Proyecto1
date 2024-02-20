@@ -110,7 +110,7 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
                 } else if (contrasenaAntigua.isBlank() && !contrasenaNueva.isBlank()) {
                     JOptionPane.showMessageDialog(this, "Teclee la contraseña antigua si desea cambiarla", "Error contraseña", JOptionPane.ERROR_MESSAGE);
                 } else {
-                    if (clientesDAO.iniciarSesion(usuario, contrasenaAntigua) != null) {
+                    if (clientesDAO.iniciarSesion(cliente.getUsuario(), contrasenaAntigua) != null) {
                         this.clientesDAO.actualizar(clienteActualizar);
                         
                         dispose();
