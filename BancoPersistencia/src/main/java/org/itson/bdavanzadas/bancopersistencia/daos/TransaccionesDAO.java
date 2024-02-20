@@ -88,8 +88,7 @@ public class TransaccionesDAO implements ITransaccionesDAO {
             comando.setFloat(1, transaccionNueva.getMonto());
             comando.setString(2, transaccionNueva.getFechaRealizacion().toString());
             comando.setLong(3, transaccionNueva.getNumeroCuentaOrigen());
-            comando.setLong(4, retiroNuevo.getContrasena());
-            comando.setString(5, retiroNuevo.getEstado());
+            comando.setString(4, retiroNuevo.getEstado());
 
             int numRegistrosInsertadosTransaccion = comando.executeUpdate();
             logger.log(Level.INFO, "Se agregaron {0} transacciones", numRegistrosInsertadosTransaccion);
@@ -120,8 +119,36 @@ public class TransaccionesDAO implements ITransaccionesDAO {
      * @throws PersistenciaException lanza una excepcion si no existe el retiro
      */
     @Override
-    public boolean existeRetiro(long folio) throws PersistenciaException {
-        String sentenciaSQL = "SELECT COUNT(folio) AS total FROM retiros WHERE folio = ?";
+    public boolean existeRetiro(long folio,long contrasena) throws PersistenciaException {
+        String sentenciaSQL = "SELECT COUNT(folio) AS total FROM retiros WHERE folio = ? AND contrasena = ?";
+        try (
+                Connection conexion = this.conexionBD.obtenerConexion(); 
+                PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
+            comando.setLong(1, folio);
+            comando.setLong(2, contrasena);
+            try (ResultSet resultado = comando.executeQuery()) {
+                if (resultado.next()) {
+                    int total = resultado.getInt("total");
+                    return total > 0;
+                } else {
+                    throw new PersistenciaException("No se pudo obtener el retiro");
+                }
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Error al verificar si existe la cuenta", ex);
+            throw new PersistenciaException("Error al verificar si existe la cuenta");
+        }
+    }
+    
+    @Override
+    /**
+     * Permite saber si existe un folio para el retiro
+     * @param folio El folio del retiro
+     * @return regresa verdadero si existe el folio
+     * @throws PersistenciaException lanza un excepcion en caso de error
+     */
+    public boolean existeFolioRetiro(long folio) throws PersistenciaException {
+        String sentenciaSQL = "SELECT COUNT(*) AS total FROM retiros WHERE folio = ?";
         try (
                 Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
             comando.setLong(1, folio);
@@ -149,8 +176,8 @@ public class TransaccionesDAO implements ITransaccionesDAO {
     @Override
     public void hacerRetiro(long folio, long contrasena) throws PersistenciaException {
         try {
-            if (!existeRetiro(folio)) {
-                throw new PersistenciaException("No existe un retiro");
+            if (!existeRetiro(folio,contrasena)) {
+                throw new PersistenciaException("Folio o contraseña incorrecto");
             }
 
             String sentenciaSQL = "CALL HacerRetiro(?, ?)";
@@ -168,6 +195,32 @@ public class TransaccionesDAO implements ITransaccionesDAO {
         } catch (PersistenciaException ex) {
             logger.log(Level.SEVERE, "Error al hacer el retiro", ex);
             throw ex;
+        }
+    }
+
+    /**
+     * Obtiene una fecha de una transaccion
+     *
+     * @param folio El folio de la transaccion
+     * @return regresa el valor del folio
+     * @throws PersistenciaException lanza una excepcion en caso de error
+     */
+    public Fecha consultarFechaTransaccion(long folio) throws PersistenciaException {
+        String sentenciaSQL = "SELECT fechaRealizacion as fecha FROM transacciones WHERE folio = ?";
+        try (
+                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
+            comando.setLong(1, folio);
+            try (ResultSet resultado = comando.executeQuery()) {
+                if (resultado.next()) {
+                    Fecha fecha = new Fecha(resultado.getString("fecha"));
+                    return fecha;
+                } else {
+                    throw new PersistenciaException("No se pudo obtener la fecha");
+                }
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Error al verificar la fecha", ex);
+            throw new PersistenciaException("Error al verificar la fecha");
         }
     }
 
