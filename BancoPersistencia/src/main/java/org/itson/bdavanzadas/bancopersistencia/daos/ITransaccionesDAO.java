@@ -78,14 +78,23 @@ public interface ITransaccionesDAO {
      * @throws PersistenciaException lanza un excepcion en caso de error
      */
     Boolean existeFolioRetiro(Long folio) throws PersistenciaException;
-    
+
     /**
-     * Permite consultar todas las transacciones de la cuenta mandada en el parámetro.
-     * 
+     * Permite consultar todas las transacciones de la cuenta mandada en el
+     * parámetro.
+     *
      * @param numeroCuenta La cuenta
      * @return Una lista con todas las transacciones de la cuenta
      * @throws PersistenciaException Si no se pueden consultar las transacciones
      */
     List<TransaccionTabla> consultar(Long numeroCuenta) throws PersistenciaException;
-   
+
+    /**
+     * Permite cambiar el estado de un retiro
+     *
+     * @param folio El folio del retiro
+     * @param estado El estado del retiro
+     * @throws PersistenciaException Si no se puede actualizar el retiro
+     */
+    void actualizarEstadoRetiro(Long folio, String estado) throws PersistenciaException;
 }

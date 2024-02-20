@@ -92,8 +92,9 @@ public class TransaccionesDAO implements ITransaccionesDAO {
                               SELECT last_insert_id() AS ultimoId, contrasena FROM retiros WHERE folio = last_insert_id();
                               """;
         try (
-                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
-                PreparedStatement comando2 = conexion.prepareStatement(sentenciaUltimoidSQL);) {
+            Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
+            PreparedStatement comando2 = conexion.prepareStatement(sentenciaUltimoidSQL);
+        ) {
             comando.setFloat(1, transaccionNueva.getMonto());
             comando.setString(2, transaccionNueva.getFechaRealizacion().toStringHora());
             comando.setLong(3, transaccionNueva.getNumeroCuentaOrigen());
@@ -101,7 +102,6 @@ public class TransaccionesDAO implements ITransaccionesDAO {
 
             comando.executeQuery();
             
-
             ResultSet idsGenerados = comando2.executeQuery();
             
             long idGenerado = 0;
@@ -191,21 +191,17 @@ public class TransaccionesDAO implements ITransaccionesDAO {
             if (!existeRetiro(folio, contrasena)) {
                 throw new PersistenciaException("Folio o contraseña incorrecto");
             }
-
             String sentenciaSQL = "CALL HacerRetiro(?, ?)";
             try (
                     Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
                 comando.setLong(1, folio);
                 comando.setLong(2, contrasena);
                 comando.executeQuery();
-               
-
             } catch (SQLException ex) {
                 logger.log(Level.SEVERE, "Error al obtener el retiro", ex);
             }
         } catch (PersistenciaException ex) {
-            logger.log(Level.SEVERE, "Error al hacer el retiro", ex);
-            
+            logger.log(Level.SEVERE, "Error al hacer el retiro", ex);   
         }
     }
 
@@ -216,6 +212,7 @@ public class TransaccionesDAO implements ITransaccionesDAO {
      * @return regresa el valor del folio
      * @throws PersistenciaException lanza una excepcion en caso de error
      */
+    @Override
     public Fecha consultarFechaTransaccion(Long folio) throws PersistenciaException {
         String sentenciaSQL = "SELECT fechaRealizacion as fecha FROM transacciones WHERE folio = ?";
         try (
@@ -313,6 +310,33 @@ public class TransaccionesDAO implements ITransaccionesDAO {
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, "No se pudieron obtener las transacciones.", ex);
             throw new PersistenciaException("No se pudieron obtener las transacciones.");
+        }
+    }
+    
+    /**
+     * Permite cambiar el estado de un retiro
+     *
+     * @param folio El folio del retiro
+     * @param estado El estado del retiro
+     * @throws PersistenciaException Si no se puede actualizar el retiro
+     */
+    @Override
+    public void actualizarEstadoRetiro(Long folio, String estado) throws PersistenciaException{
+        String sentenciaSQL = """
+                              UPDATE retiros SET estado = ? WHERE folio = ?;
+                              """;
+        try (
+            Connection conexion = this.conexionBD.obtenerConexion(); 
+            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
+        ){
+            comando.setString(1, estado);
+            comando.setLong(2, folio);
+            
+            comando.executeUpdate();
+            
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "No se pudo actualizar el estado del retiro.", ex);
+            throw new PersistenciaException("No se pudo actualizar el estado del retiro.");
         }
     }
 
