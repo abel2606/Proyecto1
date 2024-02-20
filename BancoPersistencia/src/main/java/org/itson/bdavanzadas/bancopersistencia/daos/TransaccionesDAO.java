@@ -81,7 +81,7 @@ public class TransaccionesDAO implements ITransaccionesDAO {
     @Override
     public Retiro generarRetiro(TransaccionNuevaDTO transaccionNueva, RetiroNuevoDTO retiroNuevo) throws PersistenciaException {
         String sentenciaSQL = """
-                              CALL GenerarRetiro(?, ?, ?, ?, ?);
+                              CALL GenerarRetiro(?, ?, ?, ?);
                               """;
         try (
                 Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);) {
@@ -121,7 +121,7 @@ public class TransaccionesDAO implements ITransaccionesDAO {
      */
     @Override
     public boolean existeRetiro(long folio) throws PersistenciaException {
-        String sentenciaSQL = "SELECT COUNT(*) AS total FROM retiros WHERE folio = ?";
+        String sentenciaSQL = "SELECT COUNT(folio) AS total FROM retiros WHERE folio = ?";
         try (
                 Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
             comando.setLong(1, folio);
