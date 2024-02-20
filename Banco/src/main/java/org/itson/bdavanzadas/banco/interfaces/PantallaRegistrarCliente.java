@@ -11,6 +11,7 @@ import org.itson.bdavanzadas.bancopersistencia.daos.IClientesDAO;
 import org.itson.bdavanzadas.bancopersistencia.dtos.ClienteNuevoDTO;
 import org.itson.bdavanzadas.bancopersistencia.excepciones.ClienteNoValidoException;
 import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
+import org.itson.bdavanzadas.bancopersistencia.validadores.Validadores;
 
 public class PantallaRegistrarCliente extends javax.swing.JDialog {
 
@@ -51,55 +52,66 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
      * la base de datos.
      */
     public void guardar() {
-        String nombre = txtNombre.getText();
-        String apellidoPaterno = txtApellidoPaterno.getText();
-        String apellidoMaterno = txtApellidoMaterno.getText();
-        String fechaNacimiento = txtFechaNacimiento.getText();
-        String calle = txtCalle.getText();
-        String numero = txtNumero.getText();
-        String colonia = txtColonia.getText();
-        String codigoPostal = txtCodigoPostal.getText();
-        String ciudad = txtCiudad.getText();
-        String usuario = txtUsuario.getText();
-        String contrasena = Encriptador.encriptar(pswContrasena.getText().trim());
-        String contrasenaConfirmar = Encriptador.encriptar(pswConfirmarContrasena.getText().trim());
+        Validadores validador = new Validadores();
+        
+        if (validador.validarFecha(txtFechaNacimiento.getText())) {
+            String nombre = txtNombre.getText().trim();
+            String apellidoPaterno = txtApellidoPaterno.getText().trim();
+            String apellidoMaterno = txtApellidoMaterno.getText().trim();
 
-        ClienteNuevoDTO clienteNuevo = new ClienteNuevoDTO();
-        clienteNuevo.setNombre(nombre);
-        clienteNuevo.setApellidoPaterno(apellidoPaterno);
-        clienteNuevo.setApellidoMaterno(apellidoMaterno);
-        clienteNuevo.setFechaNacimiento(new Fecha(fechaNacimiento));
-        clienteNuevo.setCalle(calle);
-        clienteNuevo.setNumero(numero);
-        clienteNuevo.setColonia(colonia);
-        clienteNuevo.setCodigoPostal(codigoPostal);
-        clienteNuevo.setCiudad(ciudad);
-        clienteNuevo.setUsuario(usuario);
-        clienteNuevo.setContrasena(contrasena);
+            String[] datosFecha = txtFechaNacimiento.getText().trim().split("/");
 
-        try {
-            if (clienteNuevo.isValid()) {
-                if (!clientesDAO.existeUsuario(usuario)) {
-                    if (contrasena.equals(contrasenaConfirmar)) {
-                        clientesDAO.agregar(clienteNuevo);
-                        dispose();
-                        JOptionPane.showMessageDialog(this, "Se agregó al cliente correctamente.",
-                                "Información", JOptionPane.INFORMATION_MESSAGE);
+            String fechaNacimiento = datosFecha[2] + "-" + datosFecha[1] + "-" + datosFecha[0];
+            String calle = txtCalle.getText().trim();
+            String numero = txtNumero.getText().trim();
+            String colonia = txtColonia.getText().trim();
+            String codigoPostal = txtCodigoPostal.getText().trim();
+            String ciudad = txtCiudad.getText().trim();
+            String usuario = txtUsuario.getText().trim();
+            String contrasena = Encriptador.encriptar(pswContrasena.getText().trim());
+            String contrasenaConfirmar = Encriptador.encriptar(pswConfirmarContrasena.getText().trim());
+
+
+            ClienteNuevoDTO clienteNuevo = new ClienteNuevoDTO();
+            clienteNuevo.setNombre(nombre);
+            clienteNuevo.setApellidoPaterno(apellidoPaterno);
+            clienteNuevo.setApellidoMaterno(apellidoMaterno);
+            clienteNuevo.setFechaNacimiento(new Fecha(fechaNacimiento));
+            clienteNuevo.setCalle(calle);
+            clienteNuevo.setNumero(numero);
+            clienteNuevo.setColonia(colonia);
+            clienteNuevo.setCodigoPostal(codigoPostal);
+            clienteNuevo.setCiudad(ciudad);
+            clienteNuevo.setUsuario(usuario);
+            clienteNuevo.setContrasena(contrasena);
+
+            try {
+                if (clienteNuevo.isValid()) {
+                    if (!clientesDAO.existeUsuario(usuario)) {
+                        if (contrasena.equals(contrasenaConfirmar)) {
+                            clientesDAO.agregar(clienteNuevo);
+                            dispose();
+                            JOptionPane.showMessageDialog(this, "Se agregó al cliente correctamente.",
+                                    "Información", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden",
+                                    "Error de contraseñas", JOptionPane.ERROR_MESSAGE);
+                        }
                     } else {
-                        JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden",
-                                "Error de contraseñas", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "El usuario ingresado ya existe.",
+                                    "Error de usuario", JOptionPane.ERROR_MESSAGE);
                     }
-                } else {
-                    JOptionPane.showMessageDialog(this, "El usuario ingresado ya existe.",
-                                "Error de usuario", JOptionPane.ERROR_MESSAGE);
                 }
+            } catch (PersistenciaException ex) {
+                JOptionPane.showMessageDialog(this, "No fue posible agregar el cliente.",
+                        "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
+            } catch (ClienteNoValidoException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(),
+                        "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (PersistenciaException ex) {
-            JOptionPane.showMessageDialog(this, "No fue posible agregar el cliente.",
-                    "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
-        } catch (ClienteNoValidoException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(),
-                    "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "La fecha ingresada no cumple con el formato dd/mm/aaaa.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -138,6 +150,7 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
         lblCiudad = new javax.swing.JLabel();
         lblFechaNacimiento = new javax.swing.JLabel();
         txtFechaNacimiento = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         lblCuenta = new javax.swing.JLabel();
         lblUsuario = new javax.swing.JLabel();
@@ -274,6 +287,10 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
         txtFechaNacimiento.setForeground(new java.awt.Color(99, 134, 107));
         txtFechaNacimiento.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 117), 2, true));
 
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 235, 125));
+        jLabel1.setText("(Formato dd/mm/aaaa)");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -287,30 +304,40 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
                     .addComponent(lblColonia)
                     .addComponent(txtCalle, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblCalle)
-                    .addComponent(lblDomicilio)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(lblDatosPersonales)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createSequentialGroup()
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                    .addComponent(lblNombre)
-                                    .addGap(186, 186, 186))
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                        .addComponent(lblNombre)
+                                        .addGap(186, 186, 186))
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
+                                            .addComponent(txtApellidoMaterno, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lblApellidoMarteno, javax.swing.GroupLayout.Alignment.LEADING))
+                                        .addGap(23, 23, 23)))
                                 .addGroup(jPanel3Layout.createSequentialGroup()
-                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
-                                        .addComponent(txtApellidoMaterno, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(lblApellidoMarteno, javax.swing.GroupLayout.Alignment.LEADING))
-                                    .addGap(23, 23, 23)))
+                                    .addComponent(lblDomicilio)
+                                    .addGap(168, 168, 168)))
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(txtFechaNacimiento)
-                                .addComponent(lblApellidoPaterno)
-                                .addComponent(txtApellidoPaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lblNumero)
-                                .addComponent(txtCodigoPostal, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lblCodigoPostal)
-                                .addComponent(lblFechaNacimiento)))))
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lblApellidoPaterno)
+                                        .addComponent(txtApellidoPaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(lblNumero)
+                                        .addComponent(txtCodigoPostal, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(lblCodigoPostal)
+                                        .addComponent(lblFechaNacimiento))
+                                    .addGap(0, 0, Short.MAX_VALUE))))))
                 .addContainerGap(16, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(80, 80, 80))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -333,11 +360,13 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtApellidoMaterno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(lblDomicilio)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblDomicilio)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(lblCalle)
@@ -353,14 +382,14 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtColonia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtCodigoPostal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addComponent(lblCodigoPostal)
                         .addGap(33, 33, 33)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblCiudad)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(189, 255, 188));
@@ -386,11 +415,6 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
         pswContrasena.setFont(new java.awt.Font("Arial", 1, 19)); // NOI18N
         pswContrasena.setForeground(new java.awt.Color(99, 134, 107));
         pswContrasena.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 117), 2, true));
-        pswContrasena.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pswContrasenaActionPerformed(evt);
-            }
-        });
 
         lblConfirmarContrasena.setFont(new java.awt.Font("Arial", 1, 19)); // NOI18N
         lblConfirmarContrasena.setForeground(new java.awt.Color(0, 168, 37));
@@ -474,7 +498,7 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -521,13 +545,10 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void pswContrasenaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pswContrasenaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_pswContrasenaActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
