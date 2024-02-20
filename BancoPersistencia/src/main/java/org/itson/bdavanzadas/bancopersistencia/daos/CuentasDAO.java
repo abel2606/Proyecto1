@@ -150,9 +150,7 @@ public class CuentasDAO implements ICuentasDAO {
     public boolean existeCuenta(long numeroCuenta) throws PersistenciaException {
         String sentenciaSQL = "SELECT COUNT(numero) AS total FROM cuentas WHERE numero = ?";
         try (
-            Connection conexion = this.conexionBD.obtenerConexion();
-            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
-        ) {
+                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
             comando.setLong(1, numeroCuenta);
             try (ResultSet resultado = comando.executeQuery()) {
                 if (resultado.next()) {
@@ -176,18 +174,16 @@ public class CuentasDAO implements ICuentasDAO {
      * @throws PersistenciaException Lanza una excepcion en caso de error
      */
     @Override
-    public boolean isActiva(long numeroCuenta) throws PersistenciaException{
+    public boolean isActiva(long numeroCuenta) throws PersistenciaException {
         String sentenciaSQL = "SELECT activa FROM cuentas WHERE numero = ?";
         try (
-                Connection conexion = this.conexionBD.obtenerConexion(); 
-                PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
+                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
             comando.setLong(1, numeroCuenta);
             try (ResultSet resultado = comando.executeQuery()) {
                 if (resultado.next()) {
-                    if(resultado.getInt("activa")==1){
+                    if (resultado.getInt("activa") == 1) {
                         return true;
-                    }
-                    else{
+                    } else {
                         return false;
                     }
                 } else {
@@ -200,4 +196,32 @@ public class CuentasDAO implements ICuentasDAO {
         }
     }
 
+ 
+    @Override
+    public void desactivarCuenta(long numeroCuenta) throws PersistenciaException {
+        String sentenciaSQL = "UPDATE cuentas SET activa = 0 WHERE numero = ?";
+        try (
+                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
+            comando.setLong(1, numeroCuenta);
+            int numeroRegistrosActualizados = comando.executeUpdate();
+            logger.log(Level.INFO, "Se desactivó la cuenta con número {0}", numeroCuenta);
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Error al desactivar la cuenta", ex);
+            throw new PersistenciaException("Error al desactivar la cuenta");
+        }
+    }
+    
+    @Override
+    public void activarCuenta(long numeroCuenta) throws PersistenciaException {
+        String sentenciaSQL = "UPDATE cuentas SET activa =  WHERE numero = ?";
+        try (
+                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
+            comando.setLong(1, numeroCuenta);
+            int numeroRegistrosActualizados = comando.executeUpdate();
+            logger.log(Level.INFO, "Se desactivó la cuenta con número {0}", numeroCuenta);
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Error al desactivar la cuenta", ex);
+            throw new PersistenciaException("Error al desactivar la cuenta");
+        }
+    }
 }

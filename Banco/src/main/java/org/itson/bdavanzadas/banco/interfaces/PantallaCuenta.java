@@ -11,6 +11,8 @@ import org.itson.bdavanzadas.bancodominio.Fecha;
 import org.itson.bdavanzadas.bancodominio.Periodo;
 import org.itson.bdavanzadas.bancodominio.TransaccionTabla;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
+import org.itson.bdavanzadas.bancopersistencia.daos.CuentasDAO;
+import org.itson.bdavanzadas.bancopersistencia.daos.ICuentasDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.ITransaccionesDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.TransaccionesDAO;
 import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
@@ -35,6 +37,7 @@ public class PantallaCuenta extends javax.swing.JDialog {
         this.conexion = conexion;
         this.cuenta = cuenta;
         transaccionesDAO = new TransaccionesDAO(conexion);
+        cuentasDAO = new CuentasDAO(conexion);
 
         txtAlias.setText(cuenta.getAlias());
         txtNumero.setText(cuenta.getNumero().toString());
@@ -155,6 +158,7 @@ public class PantallaCuenta extends javax.swing.JDialog {
         lblDesde = new javax.swing.JLabel();
         lblHasta = new javax.swing.JLabel();
         txtHasta = new javax.swing.JTextField();
+        btnActivarCuenta = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -321,6 +325,17 @@ public class PantallaCuenta extends javax.swing.JDialog {
         txtHasta.setForeground(new java.awt.Color(99, 134, 107));
         txtHasta.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 117), 2, true));
 
+        btnActivarCuenta.setBackground(new java.awt.Color(0, 255, 117));
+        btnActivarCuenta.setFont(new java.awt.Font("Arial", 1, 26)); // NOI18N
+        btnActivarCuenta.setForeground(new java.awt.Color(255, 255, 255));
+        btnActivarCuenta.setText("Desactivar cuenta");
+        btnActivarCuenta.setPreferredSize(new java.awt.Dimension(200, 47));
+        btnActivarCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActivarCuentaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -332,9 +347,12 @@ public class PantallaCuenta extends javax.swing.JDialog {
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(770, 770, 770)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnTransferir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnRetirar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(btnRetirar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(472, 472, 472)
+                        .addComponent(btnActivarCuenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(38, 38, 38)
+                        .addComponent(btnTransferir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -391,7 +409,8 @@ public class PantallaCuenta extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblNumero)
-                            .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnActivarCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(12, 12, 12)
                 .addComponent(btnRetirar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -451,17 +470,21 @@ public class PantallaCuenta extends javax.swing.JDialog {
         if (validarFechas()) {
             String[] datosFechaDesde = txtDesde.getText().split("/");
             String[] datosFechaHasta = txtHasta.getText().split("/");
-            
+
             String fechaDesde = datosFechaDesde[2] + "-" + datosFechaDesde[1] + "-" + datosFechaDesde[0];
             String fechaHasta = datosFechaHasta[2] + "-" + datosFechaHasta[1] + "-" + datosFechaHasta[0];
-            
+
             periodo = new Periodo(new Fecha(fechaDesde), new Fecha(fechaHasta));
-            
+
             llenarTabla("periodo");
         } else if (!txtDesde.getText().isBlank() && !txtHasta.getText().isBlank()) {
             JOptionPane.showMessageDialog(this, "Las fechas ingresadas no cuentan con el formato dd/mm/aaaa");
         }
     }//GEN-LAST:event_rdbPeriodoActionPerformed
+
+    private void btnActivarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActivarCuentaActionPerformed
+        desactivarCuenta();
+    }//GEN-LAST:event_btnActivarCuentaActionPerformed
 
     private boolean validarFechas() {
         Validadores validador = new Validadores();
@@ -470,9 +493,39 @@ public class PantallaCuenta extends javax.swing.JDialog {
         }
         return false;
     }
-    
-    
+
+    public void desactivarCuenta() {
+        if (btnActivarCuenta.getText().equalsIgnoreCase("Desactivar cuenta")) {
+            int operacion = JOptionPane.showConfirmDialog(this, "¿Deseas " + btnActivarCuenta.getText(),
+                    "Confirmación", JOptionPane.OK_CANCEL_OPTION);
+            if (operacion == JOptionPane.OK_OPTION) {
+                try {
+                    cuentasDAO.desactivarCuenta(cuenta.getNumero());
+                } catch (PersistenciaException e) {
+                }
+
+                JOptionPane.showMessageDialog(this, "Se desactivo la cuenta correctamente",
+                        "Información", JOptionPane.INFORMATION_MESSAGE);
+                btnActivarCuenta.setText("Activar Cuenta");
+            }
+        } else {
+            int operacion = JOptionPane.showConfirmDialog(this, "¿Deseas " + btnActivarCuenta.getText(),
+                    "Confirmación", JOptionPane.OK_CANCEL_OPTION);
+            if (operacion == JOptionPane.OK_OPTION) {
+                try {
+                    cuentasDAO.activarCuenta(cuenta.getNumero());
+                } catch (PersistenciaException e) {
+                }
+
+                JOptionPane.showMessageDialog(this, "Se desactivo la cuenta correctamente",
+                        "Información", JOptionPane.INFORMATION_MESSAGE);
+                btnActivarCuenta.setText("Activar Cuenta");
+            }
+        }
+
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActivarCuenta;
     private javax.swing.JButton btnAtras;
     private javax.swing.JButton btnRetirar;
     private javax.swing.JButton btnTransferir;
@@ -500,6 +553,7 @@ public class PantallaCuenta extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
     private IConexion conexion;
     private ITransaccionesDAO transaccionesDAO;
+    private ICuentasDAO cuentasDAO;
     private Cuenta cuenta;
     private Frame parent;
     private Periodo periodo;
