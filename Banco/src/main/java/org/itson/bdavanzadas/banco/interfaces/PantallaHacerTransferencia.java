@@ -2,6 +2,7 @@ package org.itson.bdavanzadas.banco.interfaces;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import org.itson.bdavanzadas.bancodominio.Cuenta;
 import org.itson.bdavanzadas.bancodominio.Fecha;
@@ -65,6 +66,10 @@ public class PantallaHacerTransferencia extends javax.swing.JDialog {
                 
                 try {
                     transaccionesDAO.hacerTransferencia(transaccionNueva, transferenciaNueva);
+                    
+                    dispose();
+                    JOptionPane.showMessageDialog(this, "Se realizó la transferencia correctamente.",
+                    "Información", JOptionPane.INFORMATION_MESSAGE);
                 } catch (PersistenciaException ex) {
                     JOptionPane.showMessageDialog(this, "No se pudo realizar la transferencia.",
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -78,7 +83,7 @@ public class PantallaHacerTransferencia extends javax.swing.JDialog {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
