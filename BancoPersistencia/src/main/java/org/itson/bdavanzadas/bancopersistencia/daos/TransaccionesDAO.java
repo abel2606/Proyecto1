@@ -30,6 +30,14 @@ public class TransaccionesDAO implements ITransaccionesDAO {
         this.conexionBD = conexionBD;
     }
 
+    /**
+     * Hace una transferencia de una cuenta a otra cuenta
+     *
+     * @param transaccionNueva La transaccion nueva
+     * @param transferenciaNueva La transferencia nueva
+     * @return regrea la transferencia
+     * @throws PersistenciaException Si ocurre una exepcion
+     */
     @Override
     public Transferencia hacerTransferencia(TransaccionNuevaDTO transaccionNueva, TransferenciaNuevaDTO transferenciaNueva) throws PersistenciaException {
         String sentenciaSQL = """
@@ -62,6 +70,14 @@ public class TransaccionesDAO implements ITransaccionesDAO {
         }
     }
 
+    /**
+     * Genera un retiro
+     *
+     * @param transaccionNueva La nueva transaccion
+     * @param retiroNuevo El retiro nuveo
+     * @return Regresa el valor del retiro recien creado
+     * @throws PersistenciaException Lanza una excepcion si no existe
+     */
     @Override
     public Retiro generarRetiro(TransaccionNuevaDTO transaccionNueva, RetiroNuevoDTO retiroNuevo) throws PersistenciaException {
         String sentenciaSQL = """
@@ -96,6 +112,13 @@ public class TransaccionesDAO implements ITransaccionesDAO {
 
     }
 
+    /**
+     * Permite saber si existe un retiro
+     *
+     * @param folio El folio
+     * @return regresa el valor del folio
+     * @throws PersistenciaException lanza una excepcion si no existe el retiro
+     */
     @Override
     public boolean existeRetiro(long folio) throws PersistenciaException {
         String sentenciaSQL = "SELECT COUNT(*) AS total FROM retiros WHERE folio = ?";
@@ -116,6 +139,13 @@ public class TransaccionesDAO implements ITransaccionesDAO {
         }
     }
 
+    /**
+     * Permite hacer un retiro
+     *
+     * @param folio El folio del retiro
+     * @param contrasena La contraseña del retiro
+     * @throws PersistenciaException lanza una excepcion si no existe el retiro
+     */
     @Override
     public void hacerRetiro(long folio, long contrasena) throws PersistenciaException {
         try {
@@ -134,11 +164,36 @@ public class TransaccionesDAO implements ITransaccionesDAO {
 
             } catch (SQLException ex) {
                 logger.log(Level.SEVERE, "Error al obtener el retiro", ex);
-                throw new PersistenciaException("Error al obtener el retiro.");
             }
         } catch (PersistenciaException ex) {
             logger.log(Level.SEVERE, "Error al hacer el retiro", ex);
             throw ex;
+        }
+    }
+
+    /**
+     * Permite saber el estado de un retiro
+     *
+     * @param folio valor del folio
+     * @throws PersistenciaException lanza una excepcion si no puede acceder al
+     * retiro
+     */
+    @Override
+    public String estadoRetiro(long folio) throws PersistenciaException {
+        String sentenciaSQL = "SELECT estado FROM retiros WHERE folio = ?";
+        try (
+                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
+            comando.setLong(1, folio);
+            try (ResultSet resultado = comando.executeQuery()) {
+                if (resultado.next()) {
+                    return resultado.getString("estado");
+                } else {
+                    throw new PersistenciaException("No se encontró un retiro con el folio");
+                }
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Error al obtener el estado del retiro", ex);
+            throw new PersistenciaException("Error al obtener el estado del retiro");
         }
     }
 

@@ -270,13 +270,12 @@ public class ClientesDAO implements IClientesDAO {
         ) {
             consulta.setString(1, nombreUsuario);
             ResultSet cantidadUsuario = consulta.executeQuery();
-            // Verificar si se encontró algún resultado
             if (cantidadUsuario.next()) {
                 int total = cantidadUsuario.getInt("total");
-                return total > 0; // Retorna true si se encontró al menos un usuario con ese nombre
+                return total > 0; 
             }
 
-            return false; // Si no se encontraron resultados, retorna false
+            return false; 
         } catch (SQLException e) {
             throw new PersistenciaException("Error al verificar la existencia del usuario", e);
         }

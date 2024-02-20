@@ -2,6 +2,7 @@ package org.itson.bdavanzadas.banco.interfaces;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.daos.CuentasDAO;
@@ -216,9 +217,23 @@ public class PantallaHacerRetiro extends javax.swing.JDialog {
         String folio = txtFolio.getText();
         String contrasena = pswContrasena.getText();
         try {
-            transaccionesDAO.hacerRetiro(Long.parseLong(folio), Long.parseLong(contrasena));
+            if (transaccionesDAO.estadoRetiro(Long.parseLong(folio)).equalsIgnoreCase("EN ESPERA")) {
+                transaccionesDAO.hacerRetiro(Long.parseLong(folio), Long.parseLong(contrasena));
+            }
+            else if(transaccionesDAO.estadoRetiro(Long.parseLong(folio)).equalsIgnoreCase("COBRADO")){
+                JOptionPane.showMessageDialog(this, "El retiro ya ha sido cobrado",
+                    "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
+            }
+              
+            else if(transaccionesDAO.estadoRetiro(Long.parseLong(folio)).equalsIgnoreCase("NO COBRADO")){
+                JOptionPane.showMessageDialog(this, "El retiro ya no es valido pasados 10 minutos",
+                    "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
+            }
         } catch (PersistenciaException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
+        } catch(NumberFormatException ex){
+            JOptionPane.showMessageDialog(this, "Solo se pueden introducir valores numericos",
                     "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
         }
     }

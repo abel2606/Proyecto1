@@ -139,10 +139,10 @@ public class CuentasDAO implements ICuentasDAO {
         }
     }
 
-     /**
+    /**
      * Permite saber si exite una ceuenta con el numero de la cuenta
      *
-     * @param numeroCuenta El numero de la cuenta
+     * @param numeroCuentaDestino El numero de la cuenta
      * @return Regersa verdadero si xiste cuenta
      * @throws PersistenciaException Lanza excepcion en caso de un error
      */
@@ -165,6 +165,37 @@ public class CuentasDAO implements ICuentasDAO {
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, "Error al verificar la existencia de la cuenta", ex);
             throw new PersistenciaException("Error al verificar Si existe la cuenta");
+        }
+    }
+
+    /**
+     * Permite saber el estado de una cuenta
+     *
+     * @param numeroCuenta El numero de la cuenta a buscar
+     * @return Regresa verdadero si la cuenta es activa
+     * @throws PersistenciaException Lanza una excepcion en caso de error
+     */
+    public boolean esActiva(long numeroCuenta) throws PersistenciaException{
+        String sentenciaSQL = "SELECT activa FROM cuentas WHERE numero = ?";
+        try (
+                Connection conexion = this.conexionBD.obtenerConexion(); 
+                PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
+            comando.setLong(1, numeroCuenta);
+            try (ResultSet resultado = comando.executeQuery()) {
+                if (resultado.next()) {
+                    if(resultado.getInt("activa")==1){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                } else {
+                    throw new PersistenciaException("No se encontró la cuenta");
+                }
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Error al obtener la cuenta", ex);
+            throw new PersistenciaException("Error al obtener la cuenta");
         }
     }
 
