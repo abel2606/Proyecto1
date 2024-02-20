@@ -21,22 +21,31 @@ public class Fecha extends GregorianCalendar {
      */
     public Fecha(String s) {
         super();
-        
-        String fechaTexto[] = s.split("-");
-        
-        int dia, mes, anio;
-        
-        anio = Integer.parseInt(fechaTexto[0]);
-        mes = Integer.parseInt(fechaTexto[1]);
-        dia = Integer.parseInt(fechaTexto[2]);
-        
+        String[] fechaTiempo = s.split(" ");
+
+        String[] fechaTexto = fechaTiempo[0].split("-");
+        int anio = Integer.parseInt(fechaTexto[0]);
+        int mes = Integer.parseInt(fechaTexto[1]) - 1;
+        int dia = Integer.parseInt(fechaTexto[2]);
+
         set(Calendar.YEAR, anio);
-        set(Calendar.MONTH, mes - 1);
+        set(Calendar.MONTH, mes);
         set(Calendar.DATE, dia);
-        set(Calendar.HOUR, 0);
-        set(Calendar.MINUTE, 0);
-        set(Calendar.SECOND, 0);
-        set(Calendar.MILLISECOND, 0);
+
+        if (fechaTiempo.length > 1) {
+            String[] tiempo = fechaTiempo[1].split(":");
+            int hora = Integer.parseInt(tiempo[0]);
+            int minuto = Integer.parseInt(tiempo[1]);
+            int segundo = tiempo.length > 2 ? Integer.parseInt(tiempo[2]) : 0;
+
+            set(Calendar.HOUR_OF_DAY, hora);
+            set(Calendar.MINUTE, minuto);
+            set(Calendar.SECOND, segundo);
+        } else {
+            set(Calendar.HOUR_OF_DAY, 0);
+            set(Calendar.MINUTE, 0);
+            set(Calendar.SECOND, 0);
+        }
     }
 
     /**
@@ -114,18 +123,30 @@ public class Fecha extends GregorianCalendar {
     public String formatearFecha() {
         String mes = "";
         switch (MONTH - 1) {
-            case 0 -> mes = "Enero";
-            case 1 -> mes = "Febrero";
-            case 2 -> mes = "Marzo";
-            case 3 -> mes = "Abril";
-            case 4 -> mes = "Mayo";
-            case 5 -> mes = "Junio";
-            case 6 -> mes = "Julio";
-            case 7 -> mes = "Agosto";
-            case 8 -> mes = "Septiembre";
-            case 9 -> mes = "Octubre";
-            case 10 -> mes = "Noviembre";
-            case 11 -> mes = "Diciembre";
+            case 0 ->
+                mes = "Enero";
+            case 1 ->
+                mes = "Febrero";
+            case 2 ->
+                mes = "Marzo";
+            case 3 ->
+                mes = "Abril";
+            case 4 ->
+                mes = "Mayo";
+            case 5 ->
+                mes = "Junio";
+            case 6 ->
+                mes = "Julio";
+            case 7 ->
+                mes = "Agosto";
+            case 8 ->
+                mes = "Septiembre";
+            case 9 ->
+                mes = "Octubre";
+            case 10 ->
+                mes = "Noviembre";
+            case 11 ->
+                mes = "Diciembre";
         }
         return getDia() + " de " + mes + " de " + getAnio();
     }
@@ -137,7 +158,13 @@ public class Fecha extends GregorianCalendar {
      */
     @Override
     public String toString() {
-        return getAnio() + "-" + getMes() + "-" + getDia() + " " + get(HOUR) + ":" + get(MINUTE) + ":" + get(SECOND);
+        String texto = getAnio() + "-" + getMes() + "-" + getDia();
+        return texto;
+    }
+
+    public String toStringHora() {
+        String texto = getAnio() + "-" + getMes() + "-" + getDia() + " " + get(HOUR) + ":" + get(MINUTE) + ":" + get(SECOND);
+        return texto;
     }
 
 }
