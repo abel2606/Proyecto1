@@ -2,8 +2,6 @@ package org.itson.bdavanzadas.banco.interfaces;
 
 import java.awt.Dimension;
 import java.awt.Point;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import org.itson.bdavanzadas.bancodominio.Cuenta;
 import org.itson.bdavanzadas.bancodominio.Fecha;
@@ -57,28 +55,40 @@ public class PantallaHacerTransferencia extends javax.swing.JDialog {
         setLocation((frameSize.width - dlgSize.width) / 2 + loc.x, (frameSize.height - dlgSize.height) / 2 + loc.y);
     }
 
+    /**
+     * Permite capturar los datos para hacer una transferencia.
+     */
     private void hacerTransferencia() {
         if (cuenta.getSaldo() >= Float.valueOf(txtMonto.getText())) {
             if (!cuenta.getNumero().toString().equals(txtNumeroCuentaDestino.getText())) {
                 try {
                     if (cuentasDAO.existeCuenta(Long.parseLong(txtNumeroCuentaDestino.getText()))) {
-                        TransaccionNuevaDTO transaccionNueva = new TransaccionNuevaDTO();
-                        transaccionNueva.setMonto(Float.valueOf(txtMonto.getText()));
-                        transaccionNueva.setFechaRealizacion(new Fecha());
-                        transaccionNueva.setNumeroCuentaOrigen(cuenta.getNumero());
-                        
-                        TransferenciaNuevaDTO transferenciaNueva = new TransferenciaNuevaDTO();
-                        transferenciaNueva.setNumeroCuentaDestino(Long.valueOf(txtNumeroCuentaDestino.getText()));
-                        
-                        try {
-                            transaccionesDAO.hacerTransferencia(transaccionNueva, transferenciaNueva);
-                            
-                            dispose();
-                            JOptionPane.showMessageDialog(this, "Se realizó la transferencia correctamente.",
-                                    "Información", JOptionPane.INFORMATION_MESSAGE);
-                        } catch (PersistenciaException ex) {
-                            JOptionPane.showMessageDialog(this, "No se pudo realizar la transferencia.",
-                                    "Error", JOptionPane.ERROR_MESSAGE);
+                        if (cuentasDAO.isActiva(Long.parseLong(txtNumeroCuentaDestino.getText()))) {
+                            TransaccionNuevaDTO transaccionNueva = new TransaccionNuevaDTO();
+                            transaccionNueva.setMonto(Float.valueOf(txtMonto.getText()));
+                            transaccionNueva.setFechaRealizacion(new Fecha());
+                            transaccionNueva.setNumeroCuentaOrigen(cuenta.getNumero());
+
+                            TransferenciaNuevaDTO transferenciaNueva = new TransferenciaNuevaDTO();
+                            transferenciaNueva.setNumeroCuentaDestino(Long.valueOf(txtNumeroCuentaDestino.getText()));
+
+                            try {
+                                int operacion = JOptionPane.showConfirmDialog(this, "¿Deseas confirmar la transferencia?",
+                                        "Confirmación", JOptionPane.OK_CANCEL_OPTION);
+                                if (operacion == JOptionPane.OK_OPTION) {
+                                    transaccionesDAO.hacerTransferencia(transaccionNueva, transferenciaNueva);
+
+                                    dispose();
+                                    JOptionPane.showMessageDialog(this, "Se realizó la transferencia correctamente.",
+                                            "Información", JOptionPane.INFORMATION_MESSAGE);
+                                }
+                            } catch (PersistenciaException ex) {
+                                JOptionPane.showMessageDialog(this, "No se pudo realizar la transferencia.",
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(this, "La cuenta destino está desactivada.",
+                                "Error", JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
                         JOptionPane.showMessageDialog(this, "La cuenta destino no existe.",
@@ -86,18 +96,18 @@ public class PantallaHacerTransferencia extends javax.swing.JDialog {
                     }
                 } catch (PersistenciaException ex) {
                     JOptionPane.showMessageDialog(this, "No se pudo realizar la transferencia.",
-                                    "Error", JOptionPane.ERROR_MESSAGE);
+                            "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "No puedes realizar una transferencia a la misma cuenta.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
             JOptionPane.showMessageDialog(this, "El saldo de la cuenta no es suficiente para realizar la transferencia.",
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

@@ -3,14 +3,12 @@ package org.itson.bdavanzadas.banco;
 import org.itson.bdavanzadas.bancopersistencia.conexion.Conexion;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import java.util.logging.Logger;
-import org.itson.bdavanzadas.banco.interfaces.PantallaInicio;
 import org.itson.bdavanzadas.bancopersistencia.daos.ClientesDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.CuentasDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.IClientesDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.ICuentasDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.ITransaccionesDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.TransaccionesDAO;
-import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
 public class Banco {
 

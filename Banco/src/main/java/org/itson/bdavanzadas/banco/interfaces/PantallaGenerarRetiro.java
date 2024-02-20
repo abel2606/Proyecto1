@@ -5,11 +5,12 @@ import java.awt.Point;
 import javax.swing.JOptionPane;
 import org.itson.bdavanzadas.bancodominio.Cuenta;
 import org.itson.bdavanzadas.bancodominio.Fecha;
+import org.itson.bdavanzadas.bancodominio.Retiro;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.daos.ITransaccionesDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.TransaccionesDAO;
+import org.itson.bdavanzadas.bancopersistencia.dtos.RetiroNuevoDTO;
 import org.itson.bdavanzadas.bancopersistencia.dtos.TransaccionNuevaDTO;
-import org.itson.bdavanzadas.bancopersistencia.dtos.TransferenciaNuevaDTO;
 import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
 public class PantallaGenerarRetiro extends javax.swing.JDialog {
@@ -54,7 +55,31 @@ public class PantallaGenerarRetiro extends javax.swing.JDialog {
 
     private void generarRetiro() {
         if (cuenta.getSaldo() >= Float.valueOf(txtMonto.getText())) {
-            
+            TransaccionNuevaDTO transaccionNueva = new TransaccionNuevaDTO();
+            transaccionNueva.setMonto(Float.valueOf(txtMonto.getText()));
+            transaccionNueva.setFechaRealizacion(new Fecha());
+            transaccionNueva.setNumeroCuentaOrigen(cuenta.getNumero());
+
+            RetiroNuevoDTO retiroNuevo = new RetiroNuevoDTO();
+            retiroNuevo.setEstado("EN ESPERA");
+
+            try {
+                int operacion = JOptionPane.showConfirmDialog(this, "¿Deseas confirmar la transferencia?",
+                        "Confirmación", JOptionPane.OK_CANCEL_OPTION);
+                if (operacion == JOptionPane.OK_OPTION) {
+                    Retiro retiro = transaccionesDAO.generarRetiro(transaccionNueva, retiroNuevo);
+
+                    dispose();
+                    JOptionPane.showMessageDialog(this, "Se generó el retiro correctamente.\n"
+                            + "Utiliza los siguientes datos para realizarlo:\n"
+                            + "Folio: " 
+                            + "Contraseña: ",
+                            "Información", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (PersistenciaException ex) {
+                JOptionPane.showMessageDialog(this, "No se pudo generar el retiro.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
         } else {
             JOptionPane.showMessageDialog(this, "El saldo de la cuenta no es suficiente para generar el retiro.",
                     "Error", JOptionPane.ERROR_MESSAGE);
