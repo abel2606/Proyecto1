@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.itson.bdavanzadas.bancodominio.Fecha;
 import org.itson.bdavanzadas.bancodominio.Retiro;
 import org.itson.bdavanzadas.bancodominio.Transferencia;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
@@ -35,9 +36,7 @@ public class TransaccionesDAO implements ITransaccionesDAO {
                               CALL HacerTransferencia(?, ?, ?, ?);
                               """;
         try (
-            Connection conexion = this.conexionBD.obtenerConexion(); 
-            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);
-        ) {
+                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);) {
             comando.setFloat(1, transaccionNueva.getMonto());
             comando.setString(2, transaccionNueva.getFechaRealizacion().toString());
             comando.setLong(3, transaccionNueva.getNumeroCuentaOrigen());
@@ -45,7 +44,7 @@ public class TransaccionesDAO implements ITransaccionesDAO {
 
             int numRegistrosInsertadosTransaccion = comando.executeUpdate();
             logger.log(Level.INFO, "Se agregaron {0} transferencias", numRegistrosInsertadosTransaccion);
-            
+
             ResultSet idsGenerados = comando.getGeneratedKeys();
             long idGenerado = 0;
             if (idsGenerados.next()) {
@@ -69,9 +68,7 @@ public class TransaccionesDAO implements ITransaccionesDAO {
                               CALL GenerarRetiro(?, ?, ?, ?, ?);
                               """;
         try (
-            Connection conexion = this.conexionBD.obtenerConexion();
-            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);
-        ) {
+                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);) {
             comando.setFloat(1, transaccionNueva.getMonto());
             comando.setString(2, transaccionNueva.getFechaRealizacion().toString());
             comando.setLong(3, transaccionNueva.getNumeroCuentaOrigen());
@@ -86,7 +83,7 @@ public class TransaccionesDAO implements ITransaccionesDAO {
             if (idsGenerados.next()) {
                 idGenerado = idsGenerados.getLong(1);
             }
-                
+
             Retiro retiro = new Retiro(idGenerado, transaccionNueva.getMonto(),
                     transaccionNueva.getFechaRealizacion(), transaccionNueva.getNumeroCuentaOrigen(),
                     retiroNuevo.getContrasena(), retiroNuevo.getEstado());
@@ -95,6 +92,53 @@ public class TransaccionesDAO implements ITransaccionesDAO {
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, "Error al agregar el retiro.", ex);
             throw new PersistenciaException("Error al agregar el retiro.");
+        }
+
+    }
+
+    @Override
+    public boolean existeRetiro(long folio) throws PersistenciaException {
+        String sentenciaSQL = "SELECT COUNT(*) AS total FROM retiros WHERE folio = ?";
+        try (
+                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
+            comando.setLong(1, folio);
+            try (ResultSet resultado = comando.executeQuery()) {
+                if (resultado.next()) {
+                    int total = resultado.getInt("total");
+                    return total > 0;
+                } else {
+                    throw new PersistenciaException("No se pudo obtener el resultado de la consulta.");
+                }
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Error al verificar la existencia del retiro", ex);
+            throw new PersistenciaException("Error al verificar la existencia del retiro.");
+        }
+    }
+
+    @Override
+    public void hacerRetiro(long folio, long contrasena) throws PersistenciaException {
+        try {
+            if (!existeRetiro(folio)) {
+                throw new PersistenciaException("No existe un retiro");
+            }
+
+            String sentenciaSQL = "CALL HacerRetiro(?, ?)";
+            try (
+                    Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
+                comando.setLong(1, folio);
+                comando.setLong(2, contrasena);
+                comando.executeQuery();
+                int numeroRetiros = comando.executeUpdate();
+                logger.log(Level.INFO, "Se realizaron {0} retiros", numeroRetiros);
+
+            } catch (SQLException ex) {
+                logger.log(Level.SEVERE, "Error al obtener el retiro", ex);
+                throw new PersistenciaException("Error al obtener el retiro.");
+            }
+        } catch (PersistenciaException ex) {
+            logger.log(Level.SEVERE, "Error al hacer el retiro", ex);
+            throw ex;
         }
     }
 
