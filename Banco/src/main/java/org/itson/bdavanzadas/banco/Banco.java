@@ -3,6 +3,7 @@ package org.itson.bdavanzadas.banco;
 import org.itson.bdavanzadas.bancopersistencia.conexion.Conexion;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import java.util.logging.Logger;
+import org.itson.bdavanzadas.banco.interfaces.PantallaInicio;
 import org.itson.bdavanzadas.bancopersistencia.daos.ClientesDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.CuentasDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.IClientesDAO;
@@ -24,8 +25,9 @@ public class Banco {
         IClientesDAO clientesDAO = new ClientesDAO(conexion);
         ITransaccionesDAO transaccionesDAO = new TransaccionesDAO(conexion);
 
-//        PantallaInicio pantallaInicio = new PantallaInicio(conexion);
-//        pantallaInicio.setVisible(true);
+        PantallaInicio pantallaInicio = new PantallaInicio(conexion);
+        pantallaInicio.setVisible(true);
+        
 //        try {
 //            if (cuentasDAO.existeCuentaDestino(6)) {
 //                System.out.println("Si");

@@ -1,6 +1,8 @@
 package org.itson.bdavanzadas.bancopersistencia.daos;
 
+import java.util.List;
 import org.itson.bdavanzadas.bancodominio.Retiro;
+import org.itson.bdavanzadas.bancodominio.Transaccion;
 import org.itson.bdavanzadas.bancodominio.Transferencia;
 import org.itson.bdavanzadas.bancopersistencia.dtos.RetiroNuevoDTO;
 import org.itson.bdavanzadas.bancopersistencia.dtos.TransaccionNuevaDTO;
@@ -36,7 +38,7 @@ public interface ITransaccionesDAO {
      * @param contrasena La contraseña del retiro
      * @throws PersistenciaException lanza una excepcion si no existe el retiro
      */
-    void hacerRetiro(long folio, long contrasena) throws PersistenciaException;
+    void hacerRetiro(Long folio, Long contrasena) throws PersistenciaException;
 
     /**
      * Permite saber si existe un retiro
@@ -45,15 +47,34 @@ public interface ITransaccionesDAO {
      * @return regresa el valor del folio
      * @throws PersistenciaException lanza una excepcion si no existe el retiro
      */
-    boolean existeRetiro(long folio) throws PersistenciaException;
+    Boolean existeRetiro(Long folio) throws PersistenciaException;
 
     /**
      * Permite saber el estado de un retiro
      *
      * @param folio valor del folio
+     * @return El estado del retiro
      * @throws PersistenciaException lanza una excepcion si no puede acceder al
      * retiro
      */
-    String estadoRetiro(long folio) throws PersistenciaException;
+    String estadoRetiro(Long folio) throws PersistenciaException;
+
+    /**
+     * Permite obtener la contraseña de un retiro.
+     *
+     * @param folio El folio del retiro
+     * @return La contraseña del retiro
+     * @throws PersistenciaException Si no se puede consultar el retiro
+     */
+    Long obtenerContrasenaRetiro(Long folio) throws PersistenciaException;
+    
+    /**
+     * Permite consultar todas las transacciones de la cuenta mandada en el parámetro.
+     * 
+     * @param numeroCuenta La cuenta
+     * @return Una lista con todas las transacciones de la cuenta
+     * @throws PersistenciaException Si no se pueden consultar las transacciones
+     */
+    List<Transaccion> consultar(Long numeroCuenta) throws PersistenciaException;
 
 }
