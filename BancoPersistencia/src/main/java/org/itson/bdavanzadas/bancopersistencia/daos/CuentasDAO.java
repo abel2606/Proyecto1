@@ -49,14 +49,12 @@ public class CuentasDAO implements ICuentasDAO {
                               """;
         List<Cuenta> cuentas = new LinkedList<>();
         try (
-            Connection conexion = this.conexionBD.obtenerConexion(); 
-            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
-        ) {
+                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
             comando.setString(1, idCliente.toString());
             ResultSet resultado = comando.executeQuery();
 
             while (resultado.next()) {
-                Cuenta cuenta = new Cuenta(resultado.getLong("numero"), resultado.getString("alias"), 
+                Cuenta cuenta = new Cuenta(resultado.getLong("numero"), resultado.getString("alias"),
                         resultado.getFloat("saldo"), new Fecha(resultado.getString("fechaApertura")),
                         resultado.getBoolean("activa"), resultado.getLong("identificadorCliente"));
                 cuentas.add(cuenta);
@@ -83,9 +81,7 @@ public class CuentasDAO implements ICuentasDAO {
                              VALUES (?, ?, ?, ?, ?);
                              """;
         try (
-            Connection conexion = this.conexionBD.obtenerConexion(); 
-            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);
-        ) {
+                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);) {
             int esActiva = 0;
             if (cuentaNueva.isActiva()) {
                 esActiva = 1;
@@ -124,13 +120,11 @@ public class CuentasDAO implements ICuentasDAO {
                               WHERE numero = ?
                               """;
         try (
-            Connection conexion = this.conexionBD.obtenerConexion();
-            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
-        ){
+                Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
             comando.setFloat(1, cuentaActualizada.getSaldo());
             comando.setBoolean(2, cuentaActualizada.isActiva());
             comando.setLong(3, cuentaActualizada.getNumero());
-            
+
             int numeroRegistrosActualizados = comando.executeUpdate();
             logger.log(Level.INFO, "Se actualizaron {0} registros en la tabla cuentas", numeroRegistrosActualizados);
 
@@ -144,5 +138,32 @@ public class CuentasDAO implements ICuentasDAO {
             throw new PersistenciaException("No se pudo actualizar la cuenta");
         }
     }
-    
+
+     /**
+     * Permite saber si exite una ceuenta con el numero de la cuenta
+     * @param numeroCuentaDestino El numero de la cuenta
+     * @return Regersa verdadero si xiste cuenta
+     * @throws PersistenciaException Lanza excepcion en caso de un error
+     */
+    @Override
+    public boolean existeCuentaDestino(long numeroCuentaDestino) throws PersistenciaException {
+        String sentenciaSQL = "SELECT COUNT(*) AS total FROM cuentas WHERE numero = ?";
+        try (
+                Connection conexion = this.conexionBD.obtenerConexion();
+                PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
+            comando.setLong(1, numeroCuentaDestino);
+            try (ResultSet resultado = comando.executeQuery()) {
+                if (resultado.next()) {
+                    int total = resultado.getInt("total");
+                    return total > 0;
+                } else {
+                    throw new PersistenciaException("No se pudo obtener la cuenta");
+                }
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Error al verificar la existencia de la cuenta", ex);
+            throw new PersistenciaException("Error al verificar Si existe la cuenta");
+        }
+    }
+
 }
