@@ -61,6 +61,7 @@ public class PantallaCuenta extends javax.swing.JDialog {
         lblPokebolaDer = new javax.swing.JLabel();
         btnAtras = new javax.swing.JButton();
         btnTransferir = new javax.swing.JButton();
+        btnRetirar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -124,6 +125,17 @@ public class PantallaCuenta extends javax.swing.JDialog {
             }
         });
 
+        btnRetirar.setBackground(new java.awt.Color(0, 255, 117));
+        btnRetirar.setFont(new java.awt.Font("Arial", 1, 29)); // NOI18N
+        btnRetirar.setForeground(new java.awt.Color(255, 255, 255));
+        btnRetirar.setText("RETIRAR");
+        btnRetirar.setPreferredSize(new java.awt.Dimension(200, 47));
+        btnRetirar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRetirarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -134,7 +146,9 @@ public class PantallaCuenta extends javax.swing.JDialog {
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnTransferir, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnRetirar, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTransferir, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(105, 105, 105))
         );
         jPanel1Layout.setVerticalGroup(
@@ -145,7 +159,9 @@ public class PantallaCuenta extends javax.swing.JDialog {
                 .addComponent(btnAtras)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnTransferir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(405, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnRetirar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(346, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -171,8 +187,14 @@ public class PantallaCuenta extends javax.swing.JDialog {
         pantallaTransferencia.setVisible(true);
     }//GEN-LAST:event_btnTransferirActionPerformed
 
+    private void btnRetirarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetirarActionPerformed
+        PantallaGenerarRetiro pantallaGenerarRetiro = new PantallaGenerarRetiro(parent, true, conexion, cuenta);
+        pantallaGenerarRetiro.setVisible(true);
+    }//GEN-LAST:event_btnRetirarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAtras;
+    private javax.swing.JButton btnRetirar;
     private javax.swing.JButton btnTransferir;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

@@ -89,7 +89,7 @@ public class PantallaCuentas extends javax.swing.JDialog {
             }
             tblCuentas.setModel(modelo);
 
-            ButtonColumn buttonColumn = new ButtonColumn("Ver", (e) -> {
+            ButtonColumn buttonColumn = new ButtonColumn("VER", (e) -> {
                 int fila = tblCuentas.convertRowIndexToModel(tblCuentas.getSelectedRow());
                 Cuenta cuenta = listaCuentas.get(fila);
                 PantallaCuenta pantallaCuenta = new PantallaCuenta(parent, true, conexion, cuenta);

@@ -3,13 +3,11 @@ package org.itson.bdavanzadas.banco.interfaces;
 import java.awt.Dimension;
 import java.awt.Point;
 import javax.swing.JOptionPane;
-import org.itson.bdavanzadas.bancodominio.Retiro;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.daos.CuentasDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.ICuentasDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.ITransaccionesDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.TransaccionesDAO;
-import org.itson.bdavanzadas.bancopersistencia.dtos.RetiroNuevoDTO;
 import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
 public class PantallaHacerRetiro extends javax.swing.JDialog {
@@ -219,12 +217,10 @@ public class PantallaHacerRetiro extends javax.swing.JDialog {
         String contrasena = pswContrasena.getText();
         try {
             transaccionesDAO.hacerRetiro(Long.parseLong(folio), Long.parseLong(contrasena));
-                
         } catch (PersistenciaException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(),
                     "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
         }
-
     }
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
         dispose();
