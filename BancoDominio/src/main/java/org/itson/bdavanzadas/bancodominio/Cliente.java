@@ -28,7 +28,6 @@ public class Cliente {
      * fecha de nacimiento, usuario y contraseña del cliente, además de los
      * datos de dimicilio que son calle, número, colonia, código postal y ciudad
      *
-     *
      * @param id El id en la base de datos
      * @param nombre El nombre
      * @param apellidoPaterno El apellido paterno
