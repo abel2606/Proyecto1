@@ -10,6 +10,7 @@ import org.itson.bdavanzadas.bancopersistencia.daos.IClientesDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.ICuentasDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.ITransaccionesDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.TransaccionesDAO;
+import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
 public class Banco {
 
@@ -24,10 +25,28 @@ public class Banco {
         ICuentasDAO cuentasDAO = new CuentasDAO(conexion);
         IClientesDAO clientesDAO = new ClientesDAO(conexion);
         ITransaccionesDAO transaccionesDAO = new TransaccionesDAO(conexion);
-        
-        PantallaInicio pantallaInicio = new PantallaInicio(conexion);
-        pantallaInicio.setVisible(true);
-        
+
+//        PantallaInicio pantallaInicio = new PantallaInicio(conexion);
+//        pantallaInicio.setVisible(true);
+//        try {
+//            if (cuentasDAO.existeCuentaDestino(6)) {
+//                System.out.println("Si");
+//            } else {
+//                System.out.println("No");
+//            }
+//        } catch (PersistenciaException ex) {
+//
+//        try {
+//            if (cuentasDAO.esActiva(4)) {
+//                System.out.println("si");
+//            }
+//            else{
+//                System.out.println("no");
+//            }
+//        } catch (PersistenciaException e) {
+//        }
+//        }
+
 //        //Prueba actualizar estado cuenta
 //        CuentaActualizadaDTO cuentaActualizada = new CuentaActualizadaDTO();
 //        cuentaActualizada.setNumero(Long.valueOf("1"));
@@ -45,17 +64,14 @@ public class Banco {
 //            logger.log(Level.SEVERE, null, e);
 //        }
 //        //-------------------------------
-        
 //        //Prueba agregar retiro
 //        TransaccionNuevaDTO transaccionNueva = new TransaccionNuevaDTO();
 //        transaccionNueva.setMonto(50.0f);
 //        transaccionNueva.setFechaRealizacion(new Fecha());
 //        transaccionNueva.setNumeroCuentaOrigen(Long.valueOf("1"));
-
 //        RetiroNuevoDTO retiroNuevo = new RetiroNuevoDTO();
 //        retiroNuevo.setContrasena(Long.valueOf("9182691282"));
 //        retiroNuevo.setEstado("EN ESPERA");
-        
 //        Retiro retiro = null;
 //        try {
 //            retiro = transaccionesDAO.agregarRetiro(transaccionNueva, retiroNuevo);
@@ -64,16 +80,13 @@ public class Banco {
 //            logger.log(Level.SEVERE, null, e);
 //        }
 //        //---------------------
-        
 //        // Prueba agregar transferencia
 //        TransaccionNuevaDTO transaccionNueva = new TransaccionNuevaDTO();
 //        transaccionNueva.setMonto(100.0f);
 //        transaccionNueva.setFechaRealizacion(new Fecha());
 //        transaccionNueva.setNumeroCuentaOrigen(Long.valueOf("1"));
-        
 //        TransferenciaNuevaDTO transferenciaNueva = new TransferenciaNuevaDTO();
 //        transferenciaNueva.setNumeroCuentaDestino(Long.valueOf("2"));
-        
 //        Transferencia transferencia = null;
 //        try {
 //            transferencia = transaccionesDAO.agregarTransferencia(transaccionNueva, transferenciaNueva);
@@ -82,8 +95,6 @@ public class Banco {
 //            logger.log(Level.SEVERE, null, e);
 //        }
 //        // ----------------------------
-
-
 //        Cliente clienteBuscado = null; 
 //        try {
 //            clienteBuscado = clientesDAO.iniciarSesion("abel123", "Password");;
@@ -129,7 +140,6 @@ public class Banco {
 //        } catch (PersistenciaException e) {
 //            logger.log(Level.SEVERE, null, e);
 //        }
-        
 //        List<Cliente> listaClientes = null;
 //        try {
 //            listaClientes = clientesDAO.consultar();
@@ -138,13 +148,10 @@ public class Banco {
 //            logger.log(Level.SEVERE, null, ex);
 //        }
 //        Cliente cliente = listaClientes.get(0);
-        
 //        PantallaInicio pantallaInicio = new PantallaInicio(conexion);
 //        pantallaInicio.setVisible(true);
-        
 //        PantallaCuentas pc = new PantallaCuentas(conexion, cliente);
 //        pc.setVisible(true);
-
 //        List<Cliente> listaClientes = null;
 //        try {
 //            listaClientes = clientesDAO.consultar();

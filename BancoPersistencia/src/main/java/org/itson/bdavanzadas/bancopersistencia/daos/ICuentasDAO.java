@@ -46,4 +46,13 @@ public interface ICuentasDAO {
      * @throws PersistenciaException Lanza excepcion en caso de un error
      */
     public boolean existeCuentaDestino(long numeroCuentaDestino) throws PersistenciaException;
+    
+    /**
+     * Permite saber el estado de una cuenta
+     * @param numeroCuenta El numero de la cuenta a buscar
+     * @return Regresa verdadero si la cuenta es activa
+     * @throws PersistenciaException Lanza una excepcion en caso de error
+     */
+    public boolean esActiva(long numeroCuenta)throws PersistenciaException;
+    
 }
