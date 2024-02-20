@@ -146,7 +146,8 @@ public class ClientesDAO implements IClientesDAO {
     @Override
     public Cliente iniciarSesion(String usuario, String contrasena) throws PersistenciaException {
         String consultaSQL = """
-        SELECT c.*, d.calle, d.numero, d.colonia, d.codigoPostal, d.ciudad
+        SELECT c.identificador,c.nombre,apellidoPaterno,c.apellidoMaterno,c.fechaNacimiento
+        ,c.usuario,c.contrasena, d.calle, d.numero, d.colonia, d.codigoPostal, d.ciudad
         FROM clientes c
         INNER JOIN domicilios d ON c.identificador = d.identificadorCliente
         WHERE c.usuario = ? AND c.contrasena = ?;
@@ -260,7 +261,7 @@ public class ClientesDAO implements IClientesDAO {
     @Override
     public boolean existeUsuario(String nombreUsuario) throws PersistenciaException {
         String sentenciaSQL = """
-                              SELECT COUNT(*) AS total 
+                              SELECT COUNT(identificador) AS total 
                               FROM clientes 
                               WHERE usuario = ?
                               """;
