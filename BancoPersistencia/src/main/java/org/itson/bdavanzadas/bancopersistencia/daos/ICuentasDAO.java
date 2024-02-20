@@ -54,5 +54,19 @@ import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException
      * @throws PersistenciaException Lanza una excepcion en caso de error
      */
     public boolean isActiva(long numeroCuenta) throws PersistenciaException;
+    
+    /**
+     * Cambia el estado de una cuenta a inactiva
+     * @param numeroCuenta numero de la cuenta
+     * @throws PersistenciaException  lanza persistencia
+     */
+    public void desactivarCuenta(long numeroCuenta) throws PersistenciaException;
+    
+    /**
+     * Cambia el estado de una cuenta a activa
+     * @param numeroCuenta numero de la cuenta
+     * @throws PersistenciaException  lanza persistencia
+     */
+    public void activarCuenta(long numeroCuenta) throws PersistenciaException;
 
 }
