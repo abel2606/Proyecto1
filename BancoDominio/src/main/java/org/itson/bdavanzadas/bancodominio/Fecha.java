@@ -158,13 +158,14 @@ public class Fecha extends GregorianCalendar {
      */
     @Override
     public String toString() {
-        String texto = getAnio() + "-" + getMes() + "-" + getDia();
+        String texto =getAnio() + "-" + getMes() + "-" + getDia();
         return texto;
     }
-
+    
     public String toStringHora() {
-        String texto = getAnio() + "-" + getMes() + "-" + getDia() + " " + get(HOUR) + ":" + get(MINUTE) + ":" + get(SECOND);
+        String texto =getAnio() + "-" + getMes() + "-" + getDia()+" " + get(HOUR) + ":" + get(MINUTE) + ":" + get(SECOND);
         return texto;
     }
+    
 
 }
