@@ -1,7 +1,9 @@
 package org.itson.bdavanzadas.bancopersistencia.daos;
 
+import java.util.List;
 import org.itson.bdavanzadas.bancodominio.Fecha;
 import org.itson.bdavanzadas.bancodominio.Retiro;
+import org.itson.bdavanzadas.bancodominio.TransaccionTabla;
 import org.itson.bdavanzadas.bancodominio.Transferencia;
 import org.itson.bdavanzadas.bancopersistencia.dtos.RetiroNuevoDTO;
 import org.itson.bdavanzadas.bancopersistencia.dtos.TransaccionNuevaDTO;
@@ -37,7 +39,7 @@ public interface ITransaccionesDAO {
      * @param contrasena La contraseña del retiro
      * @throws PersistenciaException lanza una excepcion si no existe el retiro
      */
-    void hacerRetiro(long folio, long contrasena) throws PersistenciaException;
+    void hacerRetiro(Long folio, Long contrasena) throws PersistenciaException;
 
     /**
      * Permite saber si existe un retiro
@@ -46,29 +48,44 @@ public interface ITransaccionesDAO {
      * @return regresa el valor del folio
      * @throws PersistenciaException lanza una excepcion si no existe el retiro
      */
-    boolean existeRetiro(long folio, long contrasena) throws PersistenciaException;
+    Boolean existeRetiro(Long folio, Long contrasena) throws PersistenciaException;
 
     /**
      * Permite saber el estado de un retiro
      *
      * @param folio valor del folio
+     * @return El estado del retiro
      * @throws PersistenciaException lanza una excepcion si no puede acceder al
      * retiro
      */
-    String estadoRetiro(long folio) throws PersistenciaException;
+    String estadoRetiro(Long folio) throws PersistenciaException;
 
     /**
      * Obtiene una fecha de una transaccion
+     *
      * @param folio El folio de la transaccion
      * @return regresa el valor del folio
      * @throws PersistenciaException lanza una excepcion en caso de error
      */
-    Fecha consultarFechaTransaccion(long folio) throws PersistenciaException;
+
+    Fecha consultarFechaTransaccion(Long folio) throws PersistenciaException;
+
     /**
      * Permite saber si existe un folio para el retiro
+     *
      * @param folio El folio del retiro
      * @return regresa verdadero si existe el folio
      * @throws PersistenciaException lanza un excepcion en caso de error
      */
-    public boolean existeFolioRetiro(long folio) throws PersistenciaException;
+    Boolean existeFolioRetiro(Long folio) throws PersistenciaException;
+    
+    /**
+     * Permite consultar todas las transacciones de la cuenta mandada en el parámetro.
+     * 
+     * @param numeroCuenta La cuenta
+     * @return Una lista con todas las transacciones de la cuenta
+     * @throws PersistenciaException Si no se pueden consultar las transacciones
+     */
+    List<TransaccionTabla> consultar(Long numeroCuenta) throws PersistenciaException;
+   
 }

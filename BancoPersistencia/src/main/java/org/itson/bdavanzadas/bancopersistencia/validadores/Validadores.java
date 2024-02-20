@@ -46,7 +46,7 @@ public class Validadores {
         Matcher matcher = pattern.matcher(numero);
         return matcher.matches();
     }
-    
+
     /**
      * Permite validar que la cadena de texto enviada en el parámetro represente
      * un código postal.
@@ -54,20 +54,20 @@ public class Validadores {
      * @param codigoPostal Cadena de texto que representa un código postal
      * @return True si el código postal es válido, false en caso contrario
      */
-    public boolean validarCodigoPostal(String codigoPostal){
+    public boolean validarCodigoPostal(String codigoPostal) {
         String patron = "^[0-9]{5}$";
         Pattern pattern = Pattern.compile(patron);
         Matcher matcher = pattern.matcher(codigoPostal);
         return matcher.matches();
     }
-    
+
     public boolean validarCiudad(String ciudad) {
         String patron = "^(?!.*\\s{2})[a-zA-ZáéíóúÁÉÍÓÚüÜ\\s]{1,50}$";
         Pattern pattern = Pattern.compile(patron);
         Matcher matcher = pattern.matcher(ciudad);
         return matcher.matches();
     }
-    
+
     /**
      * Permite validar que la cadena de texto enviada en el parámetro represente
      * un nombre de usuario.
@@ -81,7 +81,15 @@ public class Validadores {
         Matcher matcher = pattern.matcher(usuario);
         return matcher.matches();
     }
-    
+
+    /**
+     * Permite validar que la cadena de texto enviada en el parámetro represente
+     * una fecha con formato dd/mm/aaaa.
+     *
+     * @param fecha Cadena de texto que representa una fecha con formato
+     * dd/mm/aaaa
+     * @return True si la fecha es válida, false en caso contrario
+     */
     public boolean validarFecha(String fecha) {
         String patron = "^([1-9]|[0-2][0-9]|3[0-1])(\\/)([1-9]|0[1-9]|1[0-2])\\2(\\d{4})$";
         Pattern pattern = Pattern.compile(patron);

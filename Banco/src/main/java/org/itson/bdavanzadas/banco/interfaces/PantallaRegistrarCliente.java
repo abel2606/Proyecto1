@@ -52,8 +52,8 @@ public class PantallaRegistrarCliente extends javax.swing.JDialog {
      */
     public void guardar() {
         String nombre = txtNombre.getText();
-        String apellidoPaterno = txtApellidoMaterno.getText();
-        String apellidoMaterno = txtApellidoPaterno.getText();
+        String apellidoPaterno = txtApellidoPaterno.getText();
+        String apellidoMaterno = txtApellidoMaterno.getText();
         String fechaNacimiento = txtFechaNacimiento.getText();
         String calle = txtCalle.getText();
         String numero = txtNumero.getText();

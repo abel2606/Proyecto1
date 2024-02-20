@@ -5,10 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.itson.bdavanzadas.bancodominio.Fecha;
 import org.itson.bdavanzadas.bancodominio.Retiro;
+import org.itson.bdavanzadas.bancodominio.TransaccionTabla;
 import org.itson.bdavanzadas.bancodominio.Transferencia;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.dtos.RetiroNuevoDTO;
@@ -128,7 +131,7 @@ public class TransaccionesDAO implements ITransaccionesDAO {
      * @throws PersistenciaException lanza una excepcion si no existe el retiro
      */
     @Override
-    public boolean existeRetiro(long folio, long contrasena) throws PersistenciaException {
+    public Boolean existeRetiro(Long folio, Long contrasena) throws PersistenciaException {
         String sentenciaSQL = "SELECT COUNT(folio) AS total FROM retiros WHERE folio = ? AND contrasena = ?";
         try (
                 Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
@@ -148,7 +151,6 @@ public class TransaccionesDAO implements ITransaccionesDAO {
         }
     }
 
-    @Override
     /**
      * Permite saber si existe un folio para el retiro
      *
@@ -156,7 +158,8 @@ public class TransaccionesDAO implements ITransaccionesDAO {
      * @return regresa verdadero si existe el folio
      * @throws PersistenciaException lanza un excepcion en caso de error
      */
-    public boolean existeFolioRetiro(long folio) throws PersistenciaException {
+    @Override
+    public Boolean existeFolioRetiro(Long folio) throws PersistenciaException {
         String sentenciaSQL = "SELECT COUNT(*) AS total FROM retiros WHERE folio = ?";
         try (
                 Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
@@ -183,7 +186,7 @@ public class TransaccionesDAO implements ITransaccionesDAO {
      * @throws PersistenciaException lanza una excepcion si no existe el retiro
      */
     @Override
-    public void hacerRetiro(long folio, long contrasena) throws PersistenciaException {
+    public void hacerRetiro(Long folio, Long contrasena) throws PersistenciaException {
         try {
             if (!existeRetiro(folio, contrasena)) {
                 throw new PersistenciaException("Folio o contraseña incorrecto");
@@ -213,7 +216,7 @@ public class TransaccionesDAO implements ITransaccionesDAO {
      * @return regresa el valor del folio
      * @throws PersistenciaException lanza una excepcion en caso de error
      */
-    public Fecha consultarFechaTransaccion(long folio) throws PersistenciaException {
+    public Fecha consultarFechaTransaccion(Long folio) throws PersistenciaException {
         String sentenciaSQL = "SELECT fechaRealizacion as fecha FROM transacciones WHERE folio = ?";
         try (
                 Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
@@ -240,7 +243,7 @@ public class TransaccionesDAO implements ITransaccionesDAO {
      * retiro
      */
     @Override
-    public String estadoRetiro(long folio) throws PersistenciaException {
+    public String estadoRetiro(Long folio) throws PersistenciaException {
         String sentenciaSQL = "SELECT estado FROM retiros WHERE folio = ?";
         try (
                 Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
@@ -255,6 +258,61 @@ public class TransaccionesDAO implements ITransaccionesDAO {
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, "Error al obtener el estado del retiro", ex);
             throw new PersistenciaException("Error al obtener el estado del retiro");
+        }
+    }
+
+    /**
+     * Permite consultar todas las transacciones de la cuenta mandada en el parámetro.
+     * 
+     * @param numeroCuenta La cuenta
+     * @return Una lista con todas las transacciones de la cuenta
+     * @throws PersistenciaException Si no se pueden consultar las transacciones
+     */
+    @Override
+    public List<TransaccionTabla> consultar(Long numeroCuenta) throws PersistenciaException {
+        String sentenciaSQL = """
+                              SELECT tr.monto, tr.fechaRealizacion, 
+                              CASE
+                              	WHEN r.folio IS NOT NULL THEN 'RETIRO'
+                                WHEN ta.folio IS NOT NULL THEN 'TRANSFERENCIA'
+                              END AS 'tipo',
+                              CASE 
+                              	WHEN r.folio IS NOT NULL THEN r.estado
+                                WHEN ta.folio IS NOT NULL THEN 'REALIZADA'
+                              END AS 'estado'
+                              FROM transacciones AS tr
+                              LEFT JOIN transferencias AS ta
+                              ON tr.folio = ta.folio
+                              LEFT JOIN retiros AS r
+                              ON tr.folio = r.folio
+                              INNER JOIN cuentas as c
+                              ON tr.numeroCuentaOrigen = c.numero
+                              WHERE tr.numeroCuentaOrigen = ?
+                              ORDER BY tr.fechaRealizacion;
+                              """;
+        List<TransaccionTabla> transacciones = new LinkedList<>(); 
+        try (
+            Connection conexion = this.conexionBD.obtenerConexion(); 
+            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
+        ){
+            
+          comando.setLong(1, numeroCuenta);
+            
+          ResultSet resultados = comando.executeQuery();
+            while (resultados.next()) {
+                Float monto = resultados.getFloat("tr.monto");
+                String fechaRealizacion = resultados.getString("tr.fechaRealizacion");
+                String tipo = resultados.getString("tipo");
+                String estado = resultados.getString("estado");
+                TransaccionTabla transaccion = new TransaccionTabla(monto, new Fecha(fechaRealizacion), tipo, estado);
+                transacciones.add(transaccion);
+            }  
+            
+            return transacciones;
+            
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "No se pudieron obtener las transacciones.", ex);
+            throw new PersistenciaException("No se pudieron obtener las transacciones.");
         }
     }
 

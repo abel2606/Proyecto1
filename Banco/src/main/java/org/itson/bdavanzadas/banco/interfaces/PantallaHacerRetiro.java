@@ -278,6 +278,7 @@ public class PantallaHacerRetiro extends javax.swing.JDialog {
                 && fecha1.get(Calendar.MONTH) == fecha2.get(Calendar.MONTH)
                 && fecha1.get(Calendar.DATE) == fecha2.get(Calendar.DATE);
     }
+    
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
         dispose();
     }//GEN-LAST:event_btnAtrasActionPerformed
