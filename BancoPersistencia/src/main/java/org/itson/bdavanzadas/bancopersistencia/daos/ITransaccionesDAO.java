@@ -13,4 +13,7 @@ public interface ITransaccionesDAO {
 
     Retiro generarRetiro(TransaccionNuevaDTO transaccionNueva, RetiroNuevoDTO retiroNuevo) throws PersistenciaException;
 
+    public void hacerRetiro(long folio, long contrasena) throws PersistenciaException;
+
+    public boolean existeRetiro(long folio) throws PersistenciaException;
 }

@@ -2,9 +2,15 @@ package org.itson.bdavanzadas.banco.interfaces;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import javax.swing.JOptionPane;
+import org.itson.bdavanzadas.bancodominio.Retiro;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.daos.CuentasDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.ICuentasDAO;
+import org.itson.bdavanzadas.bancopersistencia.daos.ITransaccionesDAO;
+import org.itson.bdavanzadas.bancopersistencia.daos.TransaccionesDAO;
+import org.itson.bdavanzadas.bancopersistencia.dtos.RetiroNuevoDTO;
+import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
 
 public class PantallaHacerRetiro extends javax.swing.JDialog {
 
@@ -22,6 +28,7 @@ public class PantallaHacerRetiro extends javax.swing.JDialog {
         setTitle("Retiro Sin Cuenta");
         this.conexion = conexion;
         cuentasDAO = new CuentasDAO(conexion);
+        transaccionesDAO = new TransaccionesDAO(conexion);
     }
 
     /**
@@ -39,7 +46,7 @@ public class PantallaHacerRetiro extends javax.swing.JDialog {
         // Centra el cuadro de diálogo sobre la ventana padre
         setLocation((frameSize.width - dlgSize.width) / 2 + loc.x, (frameSize.height - dlgSize.height) / 2 + loc.y);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -207,12 +214,24 @@ public class PantallaHacerRetiro extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void hacerRetiro() {
+        String folio = txtFolio.getText();
+        String contrasena = pswContrasena.getText();
+        try {
+            transaccionesDAO.hacerRetiro(Long.parseLong(folio), Long.parseLong(contrasena));
+                
+        } catch (PersistenciaException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
         dispose();
     }//GEN-LAST:event_btnAtrasActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        
+        hacerRetiro();
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -230,5 +249,6 @@ public class PantallaHacerRetiro extends javax.swing.JDialog {
     private javax.swing.JTextField txtFolio;
     // End of variables declaration//GEN-END:variables
     private IConexion conexion;
+    private ITransaccionesDAO transaccionesDAO;
     private ICuentasDAO cuentasDAO;
 }
