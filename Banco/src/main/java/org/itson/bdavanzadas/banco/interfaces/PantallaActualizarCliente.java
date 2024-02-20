@@ -33,13 +33,13 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
         this.txtNombre.setText(cliente.getNombre());
         this.txtApellidoPaterno.setText(cliente.getApellidoPaterno());
         this.txtApellidoMaterno.setText(cliente.getApellidoMaterno());
-        this.txtFechaNacimiento.setText(cliente.getFechaNacimiento().toString());
+        this.txtFechaNacimiento.setText(cliente.getFechaNacimiento().toString().substring(0, 10).trim());
         this.txtCalle.setText(cliente.getCalle());
         this.txtNumero.setText(cliente.getNumero());
         this.txtColonia.setText(cliente.getColonia());
         this.txtCodigoPostal.setText(cliente.getCodigoPostal());
         this.txtCiudad.setText(cliente.getCiudad());
-        this.txtUsuario.setText(cliente.getUsuario());      
+        this.txtUsuario.setText(cliente.getUsuario());
     }
 
     /**
@@ -63,8 +63,8 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
      */
     public void actualizar() {
         String nombre = txtNombre.getText();
-        String apellidoPaterno = txtApellidoMaterno.getText();
-        String apellidoMaterno = txtApellidoPaterno.getText();
+        String apellidoPaterno = txtApellidoPaterno.getText();
+        String apellidoMaterno = txtApellidoMaterno.getText();
         String fechaNacimiento = txtFechaNacimiento.getText();
         String calle = txtCalle.getText();
         String numero = txtNumero.getText();

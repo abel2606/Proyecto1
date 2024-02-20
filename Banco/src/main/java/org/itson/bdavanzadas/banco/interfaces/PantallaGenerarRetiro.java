@@ -72,8 +72,8 @@ public class PantallaGenerarRetiro extends javax.swing.JDialog {
                     dispose();
                     JOptionPane.showMessageDialog(this, "Se generó el retiro correctamente.\n"
                             + "Utiliza los siguientes datos para realizarlo:\n"
-                            + "Folio: " 
-                            + "Contraseña: ",
+                            + "Folio: " + retiro.getFolio() + "\n"
+                            + "Contraseña: " + retiro.getContrasena(), 
                             "Información", JOptionPane.INFORMATION_MESSAGE);
                 }
             } catch (PersistenciaException ex) {
