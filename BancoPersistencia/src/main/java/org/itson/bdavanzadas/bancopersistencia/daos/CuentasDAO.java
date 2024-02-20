@@ -213,7 +213,7 @@ public class CuentasDAO implements ICuentasDAO {
     
     @Override
     public void activarCuenta(long numeroCuenta) throws PersistenciaException {
-        String sentenciaSQL = "UPDATE cuentas SET activa =  WHERE numero = ?";
+        String sentenciaSQL = "UPDATE cuentas SET activa = 1 WHERE numero = ?";
         try (
                 Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
             comando.setLong(1, numeroCuenta);
