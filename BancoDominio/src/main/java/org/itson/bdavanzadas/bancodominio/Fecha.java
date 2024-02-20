@@ -137,7 +137,7 @@ public class Fecha extends GregorianCalendar {
      */
     @Override
     public String toString() {
-        return (getAnio() + "-" + getMes() + "-" + getDia() + " " + get(HOUR) + ":" + get(SECOND) + ":" + get(MILLISECOND)).substring(0, 17);
+        return getAnio() + "-" + getMes() + "-" + getDia() + " " + get(HOUR) + ":" + get(MINUTE) + ":" + get(SECOND);
     }
 
 }
