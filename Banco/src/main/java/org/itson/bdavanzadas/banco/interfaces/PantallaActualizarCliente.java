@@ -12,6 +12,7 @@ import org.itson.bdavanzadas.bancopersistencia.daos.IClientesDAO;
 import org.itson.bdavanzadas.bancopersistencia.dtos.ClienteActualizadoDTO;
 import org.itson.bdavanzadas.bancopersistencia.excepciones.ClienteNoValidoException;
 import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
+import org.itson.bdavanzadas.bancopersistencia.validadores.Validadores;
 
 public class PantallaActualizarCliente extends javax.swing.JDialog {
 
@@ -33,7 +34,10 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
         this.txtNombre.setText(cliente.getNombre());
         this.txtApellidoPaterno.setText(cliente.getApellidoPaterno());
         this.txtApellidoMaterno.setText(cliente.getApellidoMaterno());
-        this.txtFechaNacimiento.setText(cliente.getFechaNacimiento().toString().substring(0, 10).trim());
+        
+        String[] datosFecha = cliente.getFechaNacimiento().toString().split("-");
+        
+        this.txtFechaNacimiento.setText(datosFecha[2] + "/" + datosFecha[1] + "/" + datosFecha[0]);
         this.txtCalle.setText(cliente.getCalle());
         this.txtNumero.setText(cliente.getNumero());
         this.txtColonia.setText(cliente.getColonia());
@@ -62,72 +66,81 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
      * Permite actualizar un usuario
      */
     public void actualizar() {
-        String nombre = txtNombre.getText();
-        String apellidoPaterno = txtApellidoPaterno.getText();
-        String apellidoMaterno = txtApellidoMaterno.getText();
-        String fechaNacimiento = txtFechaNacimiento.getText();
-        String calle = txtCalle.getText();
-        String numero = txtNumero.getText();
-        String colonia = txtColonia.getText();
-        String codigoPostal = txtCodigoPostal.getText();
-        String ciudad = txtCiudad.getText();
-        String usuario = txtUsuario.getText();
-        String contrasenaAntigua = "";
-        String contrasenaNueva = "";
-        
-        if (!pswAntiguaContrasena.getText().isBlank() || !pswNuevaContrasena.getText().isBlank()) {
-            contrasenaAntigua = Encriptador.encriptar(pswAntiguaContrasena.getText().trim());
-            contrasenaNueva = Encriptador.encriptar(pswNuevaContrasena.getText().trim());
-        } else {
-            contrasenaAntigua = cliente.getContrasena();
-            contrasenaNueva = cliente.getContrasena();
-        }
+        Validadores validador = new Validadores();
+        if (validador.validarFecha(txtFechaNacimiento.getText())) {
+            String nombre = txtNombre.getText();
+            String apellidoPaterno = txtApellidoPaterno.getText();
+            String apellidoMaterno = txtApellidoMaterno.getText();
+            
+            String[] datosFecha = txtFechaNacimiento.getText().trim().split("/");
+            String fechaNacimiento = datosFecha[2] + "-" + datosFecha[1] + "-" + datosFecha[0];
+            
+            String calle = txtCalle.getText();
+            String numero = txtNumero.getText();
+            String colonia = txtColonia.getText();
+            String codigoPostal = txtCodigoPostal.getText();
+            String ciudad = txtCiudad.getText();
+            String usuario = txtUsuario.getText();
+            String contrasenaAntigua = "";
+            String contrasenaNueva = "";
 
-        ClienteActualizadoDTO clienteActualizar = new ClienteActualizadoDTO();
-        clienteActualizar.setId(cliente.getId());
-        clienteActualizar.setNombre(nombre);
-        clienteActualizar.setApellidoPaterno(apellidoPaterno);
-        clienteActualizar.setApellidoMaterno(apellidoMaterno);
-        clienteActualizar.setFechaNacimiento(new Fecha(fechaNacimiento));
-        clienteActualizar.setCalle(calle);
-        clienteActualizar.setNumero(numero);
-        clienteActualizar.setColonia(colonia);
-        clienteActualizar.setCodigoPostal(codigoPostal);
-        clienteActualizar.setCiudad(ciudad);
-        clienteActualizar.setUsuario(usuario);
-        clienteActualizar.setContrasena(contrasenaNueva);
+            if (!pswAntiguaContrasena.getText().isBlank() || !pswNuevaContrasena.getText().isBlank()) {
+                contrasenaAntigua = Encriptador.encriptar(pswAntiguaContrasena.getText().trim());
+                contrasenaNueva = Encriptador.encriptar(pswNuevaContrasena.getText().trim());
+            } else {
+                contrasenaAntigua = cliente.getContrasena();
+                contrasenaNueva = cliente.getContrasena();
+            }
 
-        try {
-            if (clienteActualizar.isValid()) {
-                if (contrasenaAntigua.isBlank() && contrasenaNueva.isBlank()) {
-                    this.clientesDAO.actualizar(clienteActualizar);
-                    
-                    dispose();
-                    JOptionPane.showMessageDialog(this, "Cliente actualizado",
-                            "Actualizar cliente", JOptionPane.INFORMATION_MESSAGE);
-                } else if (!contrasenaAntigua.isBlank() && contrasenaNueva.isBlank()) {
-                    JOptionPane.showMessageDialog(this, "Teclee una nueva contraseña si desea cambiarla", "Error contraseña", JOptionPane.ERROR_MESSAGE);
-                } else if (contrasenaAntigua.isBlank() && !contrasenaNueva.isBlank()) {
-                    JOptionPane.showMessageDialog(this, "Teclee la contraseña antigua si desea cambiarla", "Error contraseña", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    if (clientesDAO.iniciarSesion(cliente.getUsuario(), contrasenaAntigua) != null) {
+            ClienteActualizadoDTO clienteActualizar = new ClienteActualizadoDTO();
+            clienteActualizar.setId(cliente.getId());
+            clienteActualizar.setNombre(nombre);
+            clienteActualizar.setApellidoPaterno(apellidoPaterno);
+            clienteActualizar.setApellidoMaterno(apellidoMaterno);
+            clienteActualizar.setFechaNacimiento(new Fecha(fechaNacimiento));
+            clienteActualizar.setCalle(calle);
+            clienteActualizar.setNumero(numero);
+            clienteActualizar.setColonia(colonia);
+            clienteActualizar.setCodigoPostal(codigoPostal);
+            clienteActualizar.setCiudad(ciudad);
+            clienteActualizar.setUsuario(usuario);
+            clienteActualizar.setContrasena(contrasenaNueva);
+
+            try {
+                if (clienteActualizar.isValid()) {
+                    if (contrasenaAntigua.isBlank() && contrasenaNueva.isBlank()) {
                         this.clientesDAO.actualizar(clienteActualizar);
-                        
+
                         dispose();
                         JOptionPane.showMessageDialog(this, "Cliente actualizado",
                                 "Actualizar cliente", JOptionPane.INFORMATION_MESSAGE);
+                    } else if (!contrasenaAntigua.isBlank() && contrasenaNueva.isBlank()) {
+                        JOptionPane.showMessageDialog(this, "Teclee una nueva contraseña si desea cambiarla", "Error contraseña", JOptionPane.ERROR_MESSAGE);
+                    } else if (contrasenaAntigua.isBlank() && !contrasenaNueva.isBlank()) {
+                        JOptionPane.showMessageDialog(this, "Teclee la contraseña antigua si desea cambiarla", "Error contraseña", JOptionPane.ERROR_MESSAGE);
                     } else {
-                        JOptionPane.showMessageDialog(this, "La contraseña antigua esta mal", 
-                                "Error contraseña", JOptionPane.ERROR_MESSAGE);
+                        if (clientesDAO.iniciarSesion(cliente.getUsuario(), contrasenaAntigua) != null) {
+                            this.clientesDAO.actualizar(clienteActualizar);
+
+                            dispose();
+                            JOptionPane.showMessageDialog(this, "Cliente actualizado",
+                                    "Actualizar cliente", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(this, "La contraseña antigua esta mal", 
+                                    "Error contraseña", JOptionPane.ERROR_MESSAGE);
+                        }
                     }
                 }
+            } catch (PersistenciaException ex) {
+                JOptionPane.showMessageDialog(this, "No fue posible agregar el cliente.",
+                        "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
+            } catch (ClienteNoValidoException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(),
+                        "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (PersistenciaException ex) {
-            JOptionPane.showMessageDialog(this, "No fue posible agregar el cliente.",
-                    "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
-        } catch (ClienteNoValidoException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(),
-                    "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "La fecha ingresada no cumple con el formato dd/mm/aaaa.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -166,6 +179,7 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
         lblCiudad = new javax.swing.JLabel();
         lblFechaNacimiento = new javax.swing.JLabel();
         txtFechaNacimiento = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         lblCuenta = new javax.swing.JLabel();
         lblUsuario = new javax.swing.JLabel();
@@ -301,6 +315,10 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
         txtFechaNacimiento.setForeground(new java.awt.Color(99, 134, 107));
         txtFechaNacimiento.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 117), 2, true));
 
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 235, 125));
+        jLabel1.setText("(Formato dd/mm/aaaa)");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -317,7 +335,7 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
                     .addComponent(lblDomicilio)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(lblDatosPersonales)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createSequentialGroup()
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                                     .addComponent(lblNombre)
@@ -330,13 +348,19 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
                                     .addGap(23, 23, 23)))
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(txtFechaNacimiento)
-                                .addComponent(lblApellidoPaterno)
-                                .addComponent(txtApellidoPaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lblNumero)
-                                .addComponent(txtCodigoPostal, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lblCodigoPostal)
-                                .addComponent(lblFechaNacimiento)))))
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lblApellidoPaterno)
+                                        .addComponent(txtApellidoPaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(lblNumero)
+                                        .addComponent(txtCodigoPostal, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(lblCodigoPostal)
+                                        .addComponent(lblFechaNacimiento)
+                                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                            .addGap(64, 64, 64)
+                                            .addComponent(jLabel1)))
+                                    .addGap(0, 0, Short.MAX_VALUE))))))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -360,7 +384,9 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtApellidoMaterno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addGap(4, 4, 4)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(lblDomicilio)
@@ -383,10 +409,11 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(lblCodigoPostal)
                         .addGap(33, 33, 33)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblCiudad)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(189, 255, 188));
@@ -443,7 +470,7 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
                                         .addComponent(lblUsuario)
                                         .addComponent(lblCuenta))
                                     .addGap(331, 331, 331))))
-                        .addGap(0, 14, Short.MAX_VALUE))))
+                        .addGap(0, 16, Short.MAX_VALUE))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -546,6 +573,7 @@ public class PantallaActualizarCliente extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

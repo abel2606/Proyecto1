@@ -282,7 +282,6 @@ public class PantallaCuentas extends javax.swing.JDialog {
         try {
             this.cliente = clientesDAO.obtenerUsuario(cliente.getId());
         } catch (PersistenciaException e) {
-
         }
         llenarTabla();
     }//GEN-LAST:event_btnActualizarClienteActionPerformed

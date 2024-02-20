@@ -42,7 +42,7 @@ public class PantallaCuenta extends javax.swing.JDialog {
         txtAlias.setText(cuenta.getAlias());
         txtNumero.setText(cuenta.getNumero().toString());
         txtSaldo.setText(cuenta.getSaldo().toString());
-        
+
         if (cuenta.isActiva()) {
             btnActivarCuenta.setText("Desactivar Cuenta");
         } else {
@@ -93,7 +93,9 @@ public class PantallaCuenta extends javax.swing.JDialog {
             if (filtro.equalsIgnoreCase("NINGUNO")) {
                 for (TransaccionTabla transaccion : listaTransacciones) {
                     String[] datosFechaRealizacion = transaccion.getFechaRealizacion().toStringHora().split(" ");
-                    Object[] fila = {transaccion.getMonto(), datosFechaRealizacion[0], datosFechaRealizacion[1], transaccion.getTipo(), transaccion.getEstado()};
+                    String[] datosFecha = datosFechaRealizacion[0].split("-");
+                    Object[] fila = {transaccion.getMonto(), datosFecha[2] + "/" + datosFecha[1] + "/" + datosFecha[0],
+                        datosFechaRealizacion[1], transaccion.getTipo(), transaccion.getEstado()};
                     modelo.addRow(fila);
                 }
                 tblTransacciones.setModel(modelo);
@@ -101,7 +103,9 @@ public class PantallaCuenta extends javax.swing.JDialog {
                 for (TransaccionTabla transaccion : listaTransacciones) {
                     if (transaccion.getTipo().equalsIgnoreCase("Transferencia")) {
                         String[] datosFechaRealizacion = transaccion.getFechaRealizacion().toStringHora().split(" ");
-                        Object[] fila = {transaccion.getMonto(), datosFechaRealizacion[0], datosFechaRealizacion[1], transaccion.getTipo(), transaccion.getEstado()};
+                        String[] datosFecha = datosFechaRealizacion[0].split("-");
+                        Object[] fila = {transaccion.getMonto(), datosFecha[2] + "/" + datosFecha[1] + "/" + datosFecha[0],
+                            datosFechaRealizacion[1], transaccion.getTipo(), transaccion.getEstado()};
                         modelo.addRow(fila);
                     }
                 }
@@ -110,7 +114,9 @@ public class PantallaCuenta extends javax.swing.JDialog {
                 for (TransaccionTabla transaccion : listaTransacciones) {
                     if (transaccion.getTipo().equalsIgnoreCase("Retiro")) {
                         String[] datosFechaRealizacion = transaccion.getFechaRealizacion().toStringHora().split(" ");
-                        Object[] fila = {transaccion.getMonto(), datosFechaRealizacion[0], datosFechaRealizacion[1], transaccion.getTipo(), transaccion.getEstado()};
+                        String[] datosFecha = datosFechaRealizacion[0].split("-");
+                        Object[] fila = {transaccion.getMonto(), datosFecha[2] + "/" + datosFecha[1] + "/" + datosFecha[0],
+                            datosFechaRealizacion[1], transaccion.getTipo(), transaccion.getEstado()};
                         modelo.addRow(fila);
                     }
                 }
@@ -119,7 +125,9 @@ public class PantallaCuenta extends javax.swing.JDialog {
                 for (TransaccionTabla transaccion : listaTransacciones) {
                     if (periodo.contiene(transaccion.getFechaRealizacion())) {
                         String[] datosFechaRealizacion = transaccion.getFechaRealizacion().toStringHora().split(" ");
-                        Object[] fila = {transaccion.getMonto(), datosFechaRealizacion[0], datosFechaRealizacion[1], transaccion.getTipo(), transaccion.getEstado()};
+                        String[] datosFecha = datosFechaRealizacion[0].split("-");
+                        Object[] fila = {transaccion.getMonto(), datosFecha[2] + "/" + datosFecha[1] + "/" + datosFecha[0],
+                            datosFechaRealizacion[1], transaccion.getTipo(), transaccion.getEstado()};
                         modelo.addRow(fila);
                     }
                 }
@@ -510,7 +518,7 @@ public class PantallaCuenta extends javax.swing.JDialog {
                 } catch (PersistenciaException e) {
                 }
 
-                JOptionPane.showMessageDialog(this, "Se activó la cuenta correctamente",
+                JOptionPane.showMessageDialog(this, "Se desactivó la cuenta correctamente",
                         "Información", JOptionPane.INFORMATION_MESSAGE);
                 btnActivarCuenta.setText("Activar Cuenta");
             }
@@ -523,7 +531,7 @@ public class PantallaCuenta extends javax.swing.JDialog {
                 } catch (PersistenciaException e) {
                 }
 
-                JOptionPane.showMessageDialog(this, "Se desactivó la cuenta correctamente",
+                JOptionPane.showMessageDialog(this, "Se activó la cuenta correctamente",
                         "Información", JOptionPane.INFORMATION_MESSAGE);
                 btnActivarCuenta.setText("Desactivar Cuenta");
             }

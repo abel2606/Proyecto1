@@ -50,7 +50,7 @@ public class TransaccionesDAO implements ITransaccionesDAO {
         try (
                 Connection conexion = this.conexionBD.obtenerConexion(); PreparedStatement comando = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS);) {
             comando.setFloat(1, transaccionNueva.getMonto());
-            comando.setString(2, transaccionNueva.getFechaRealizacion().toString());
+            comando.setString(2, transaccionNueva.getFechaRealizacion().toStringHora());
             comando.setLong(3, transaccionNueva.getNumeroCuentaOrigen());
             comando.setLong(4, transferenciaNueva.getNumeroCuentaDestino());
 
