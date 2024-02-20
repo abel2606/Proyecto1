@@ -62,7 +62,6 @@ public class TransaccionesDAO implements ITransaccionesDAO {
             if (idsGenerados.next()) {
                 idGenerado = idsGenerados.getLong(1);
             }
-
             Transferencia transferencia = new Transferencia(idGenerado, transaccionNueva.getMonto(),
                     transaccionNueva.getFechaRealizacion(), transaccionNueva.getNumeroCuentaOrigen(),
                     transferenciaNueva.getNumeroCuentaDestino());
