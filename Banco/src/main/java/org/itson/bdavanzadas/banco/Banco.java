@@ -27,6 +27,7 @@ public class Banco {
 
         PantallaInicio pantallaInicio = new PantallaInicio(conexion);
         pantallaInicio.setVisible(true);
+        
 //        try {
 //            if (cuentasDAO.existeCuentaDestino(6)) {
 //                System.out.println("Si");
