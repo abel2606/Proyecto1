@@ -3,7 +3,9 @@ package org.itson.bdavanzadas.banco.interfaces;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.sql.SQLException;
+import java.util.Calendar;
 import javax.swing.JOptionPane;
+import org.itson.bdavanzadas.bancodominio.Fecha;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.daos.CuentasDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.ICuentasDAO;
@@ -214,28 +216,60 @@ public class PantallaHacerRetiro extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     public void hacerRetiro() {
-        String folio = txtFolio.getText();
-        String contrasena = pswContrasena.getText();
+        long folio = 0;
+        long contrasena = 0;
         try {
-            if (transaccionesDAO.estadoRetiro(Long.parseLong(folio)).equalsIgnoreCase("EN ESPERA")) {
-                transaccionesDAO.hacerRetiro(Long.parseLong(folio), Long.parseLong(contrasena));
-            }
-            else if(transaccionesDAO.estadoRetiro(Long.parseLong(folio)).equalsIgnoreCase("COBRADO")){
-                JOptionPane.showMessageDialog(this, "El retiro ya ha sido cobrado",
-                    "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
-            }
-              
-            else if(transaccionesDAO.estadoRetiro(Long.parseLong(folio)).equalsIgnoreCase("NO COBRADO")){
-                JOptionPane.showMessageDialog(this, "El retiro ya no es valido pasados 10 minutos",
-                    "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (PersistenciaException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(),
-                    "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
-        } catch(NumberFormatException ex){
+            folio = Long.parseLong(txtFolio.getText());
+            contrasena = Long.parseLong(pswContrasena.getText());
+        } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Solo se pueden introducir valores numericos",
                     "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
         }
+
+        try {
+            if (transaccionesDAO.existeFolioRetiro(folio)) {
+
+                if (transaccionesDAO.existeRetiro(folio, contrasena)) {
+                    Fecha fechaRetiro = transaccionesDAO.consultarFechaTransaccion(folio);
+                    Fecha fechaAcutal = new Fecha();
+
+                    System.out.println(fechaRetiro.toStringHora());
+                    System.out.println(fechaAcutal.toStringHora());
+                    System.out.println(diferenciaMayorA10Minutos(fechaAcutal, fechaAcutal));
+                    if (true) {
+                        if (transaccionesDAO.estadoRetiro(folio).equalsIgnoreCase("COBRADO")) {
+                            JOptionPane.showMessageDialog(this, "El retiro ya ha sido cobrado",
+                                    "Error de estado.", JOptionPane.ERROR_MESSAGE);
+                            transaccionesDAO.hacerRetiro(folio, contrasena);
+                        } else if (transaccionesDAO.estadoRetiro(folio).equalsIgnoreCase("EN ESPERA")) {
+                            transaccionesDAO.hacerRetiro(folio, contrasena);
+                        } else if (transaccionesDAO.estadoRetiro(folio).equalsIgnoreCase("NO COBRADO")) {
+                            JOptionPane.showMessageDialog(this, "El retiro ya no es valido pasados 10 minutos",
+                                    "Error de tiempo", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "La contraseña esta incorrecta",
+                            "Error de folio", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "El folio no existe",
+                        "Error de folio", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (PersistenciaException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+
+    public boolean diferenciaMayorA10Minutos(Fecha fecha1, Fecha fecha2) {
+        long diferenciaMilisegundos = fecha1.getTimeInMillis() - fecha2.getTimeInMillis();
+
+        long diferenciaMinutos = diferenciaMilisegundos / (60 * 1000);
+
+        return diferenciaMinutos > 10 && fecha1.get(Calendar.YEAR) == fecha2.get(Calendar.YEAR) && fecha1.get(Calendar.DAY_OF_YEAR) == fecha2.get(Calendar.DAY_OF_YEAR);
     }
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
         dispose();
