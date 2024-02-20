@@ -232,7 +232,8 @@ public class PantallaHacerRetiro extends javax.swing.JDialog {
                 if (transaccionesDAO.existeRetiro(folio, contrasena)) {
                     Fecha fechaRetiro = transaccionesDAO.consultarFechaTransaccion(folio);
                     Fecha fechaAcutal = new Fecha();
-
+                    System.out.println(fechaRetiro.getTimeInMillis());
+                    System.out.println(fechaAcutal.getTimeInMillis());
                     System.out.println(fechaRetiro.toStringHora());
                     System.out.println(fechaAcutal.toStringHora());
                     System.out.println(diferenciaMayorA10Minutos(fechaAcutal, fechaAcutal));
@@ -240,9 +241,13 @@ public class PantallaHacerRetiro extends javax.swing.JDialog {
                         if (transaccionesDAO.estadoRetiro(folio).equalsIgnoreCase("COBRADO")) {
                             JOptionPane.showMessageDialog(this, "El retiro ya ha sido cobrado",
                                     "Error de estado.", JOptionPane.ERROR_MESSAGE);
-                            transaccionesDAO.hacerRetiro(folio, contrasena);
+
                         } else if (transaccionesDAO.estadoRetiro(folio).equalsIgnoreCase("EN ESPERA")) {
+
                             transaccionesDAO.hacerRetiro(folio, contrasena);
+                            JOptionPane.showMessageDialog(this, "Se ha realizado el retiro",
+                                    "Retiro", JOptionPane.INFORMATION_MESSAGE);
+                            dispose();
                         } else if (transaccionesDAO.estadoRetiro(folio).equalsIgnoreCase("NO COBRADO")) {
                             JOptionPane.showMessageDialog(this, "El retiro ya no es valido pasados 10 minutos",
                                     "Error de tiempo", JOptionPane.ERROR_MESSAGE);
@@ -265,11 +270,13 @@ public class PantallaHacerRetiro extends javax.swing.JDialog {
     }
 
     public boolean diferenciaMayorA10Minutos(Fecha fecha1, Fecha fecha2) {
-        long diferenciaMilisegundos = fecha1.getTimeInMillis() - fecha2.getTimeInMillis();
-
+        long diferenciaMilisegundos = Math.abs(fecha2.getTimeInMillis() - fecha1.getTimeInMillis());
         long diferenciaMinutos = diferenciaMilisegundos / (60 * 1000);
 
-        return diferenciaMinutos > 10 && fecha1.get(Calendar.YEAR) == fecha2.get(Calendar.YEAR) && fecha1.get(Calendar.DAY_OF_YEAR) == fecha2.get(Calendar.DAY_OF_YEAR);
+        // Verificar si la diferencia es mayor a 10 minutos y si son del mismo día
+        return diferenciaMinutos > 10 && fecha1.get(Calendar.YEAR) == fecha2.get(Calendar.YEAR)
+                && fecha1.get(Calendar.MONTH) == fecha2.get(Calendar.MONTH)
+                && fecha1.get(Calendar.DATE) == fecha2.get(Calendar.DATE);
     }
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
         dispose();
