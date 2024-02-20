@@ -2,10 +2,10 @@ package org.itson.bdavanzadas.banco.interfaces;
 
 import java.awt.Dimension;
 import java.awt.Point;
-import java.sql.SQLException;
 import java.util.Calendar;
 import javax.swing.JOptionPane;
 import org.itson.bdavanzadas.bancodominio.Fecha;
+import org.itson.bdavanzadas.bancodominio.Periodo;
 import org.itson.bdavanzadas.bancopersistencia.conexion.IConexion;
 import org.itson.bdavanzadas.bancopersistencia.daos.CuentasDAO;
 import org.itson.bdavanzadas.bancopersistencia.daos.ICuentasDAO;
@@ -225,25 +225,19 @@ public class PantallaHacerRetiro extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Solo se pueden introducir valores numericos",
                     "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
         }
-
         try {
             if (transaccionesDAO.existeFolioRetiro(folio)) {
-
                 if (transaccionesDAO.existeRetiro(folio, contrasena)) {
                     Fecha fechaRetiro = transaccionesDAO.consultarFechaTransaccion(folio);
-                    Fecha fechaAcutal = new Fecha();
-                    System.out.println(fechaRetiro.getTimeInMillis());
-                    System.out.println(fechaAcutal.getTimeInMillis());
-                    System.out.println(fechaRetiro.toStringHora());
-                    System.out.println(fechaAcutal.toStringHora());
-                    System.out.println(diferenciaMayorA10Minutos(fechaAcutal, fechaAcutal));
-                    if (true) {
+                    Fecha fechaActual = new Fecha();
+                    Fecha fechaDiezMinutosMas = new Fecha(fechaActual.toStringHora());
+                    fechaDiezMinutosMas.add(Calendar.MINUTE, 10);
+                    Periodo periodo = new Periodo(fechaActual, fechaDiezMinutosMas);
+                    if (periodo.contiene(fechaRetiro)) {
                         if (transaccionesDAO.estadoRetiro(folio).equalsIgnoreCase("COBRADO")) {
                             JOptionPane.showMessageDialog(this, "El retiro ya ha sido cobrado",
                                     "Error de estado.", JOptionPane.ERROR_MESSAGE);
-
                         } else if (transaccionesDAO.estadoRetiro(folio).equalsIgnoreCase("EN ESPERA")) {
-
                             transaccionesDAO.hacerRetiro(folio, contrasena);
                             JOptionPane.showMessageDialog(this, "Se ha realizado el retiro",
                                     "Retiro", JOptionPane.INFORMATION_MESSAGE);
@@ -252,6 +246,10 @@ public class PantallaHacerRetiro extends javax.swing.JDialog {
                             JOptionPane.showMessageDialog(this, "El retiro ya no es valido pasados 10 minutos",
                                     "Error de tiempo", JOptionPane.ERROR_MESSAGE);
                         }
+                    } else {
+                        transaccionesDAO.actualizarEstadoRetiro(folio, "NO COBRADO");
+                        JOptionPane.showMessageDialog(this, "El retiro ya no es valido pasados 10 minutos",
+                                    "Error de tiempo", JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
                     JOptionPane.showMessageDialog(this, "La contraseña esta incorrecta",
@@ -267,16 +265,6 @@ public class PantallaHacerRetiro extends javax.swing.JDialog {
                     "Error de almacenamiento.", JOptionPane.ERROR_MESSAGE);
         }
 
-    }
-
-    public boolean diferenciaMayorA10Minutos(Fecha fecha1, Fecha fecha2) {
-        long diferenciaMilisegundos = Math.abs(fecha2.getTimeInMillis() - fecha1.getTimeInMillis());
-        long diferenciaMinutos = diferenciaMilisegundos / (60 * 1000);
-
-        // Verificar si la diferencia es mayor a 10 minutos y si son del mismo día
-        return diferenciaMinutos > 10 && fecha1.get(Calendar.YEAR) == fecha2.get(Calendar.YEAR)
-                && fecha1.get(Calendar.MONTH) == fecha2.get(Calendar.MONTH)
-                && fecha1.get(Calendar.DATE) == fecha2.get(Calendar.DATE);
     }
     
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
