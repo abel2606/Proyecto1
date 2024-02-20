@@ -230,10 +230,10 @@ public class PantallaHacerRetiro extends javax.swing.JDialog {
                 if (transaccionesDAO.existeRetiro(folio, contrasena)) {
                     Fecha fechaRetiro = transaccionesDAO.consultarFechaTransaccion(folio);
                     Fecha fechaActual = new Fecha();
-                    Fecha fechaDiezMinutosMas = new Fecha(fechaActual.toStringHora());
+                    Fecha fechaDiezMinutosMas = new Fecha(fechaRetiro.toStringHora());
                     fechaDiezMinutosMas.add(Calendar.MINUTE, 10);
-                    Periodo periodo = new Periodo(fechaActual, fechaDiezMinutosMas);
-                    if (periodo.contiene(fechaRetiro)) {
+                    Periodo periodo = new Periodo(fechaRetiro, fechaDiezMinutosMas);
+                    if (periodo.contiene(fechaActual)) {
                         if (transaccionesDAO.estadoRetiro(folio).equalsIgnoreCase("COBRADO")) {
                             JOptionPane.showMessageDialog(this, "El retiro ya ha sido cobrado",
                                     "Error de estado.", JOptionPane.ERROR_MESSAGE);

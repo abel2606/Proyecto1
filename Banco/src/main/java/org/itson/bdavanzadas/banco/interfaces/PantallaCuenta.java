@@ -42,6 +42,12 @@ public class PantallaCuenta extends javax.swing.JDialog {
         txtAlias.setText(cuenta.getAlias());
         txtNumero.setText(cuenta.getNumero().toString());
         txtSaldo.setText(cuenta.getSaldo().toString());
+        
+        if (cuenta.isActiva()) {
+            btnActivarCuenta.setText("Desactivar Cuenta");
+        } else {
+            btnActivarCuenta.setText("Activar Cuenta");
+        }
 
         llenarTabla("ninguno");
     }
@@ -496,7 +502,7 @@ public class PantallaCuenta extends javax.swing.JDialog {
 
     public void desactivarCuenta() {
         if (btnActivarCuenta.getText().equalsIgnoreCase("Desactivar cuenta")) {
-            int operacion = JOptionPane.showConfirmDialog(this, "¿Deseas " + btnActivarCuenta.getText(),
+            int operacion = JOptionPane.showConfirmDialog(this, "¿Deseas " + btnActivarCuenta.getText() + "?",
                     "Confirmación", JOptionPane.OK_CANCEL_OPTION);
             if (operacion == JOptionPane.OK_OPTION) {
                 try {
@@ -504,12 +510,12 @@ public class PantallaCuenta extends javax.swing.JDialog {
                 } catch (PersistenciaException e) {
                 }
 
-                JOptionPane.showMessageDialog(this, "Se desactivo la cuenta correctamente",
+                JOptionPane.showMessageDialog(this, "Se activó la cuenta correctamente",
                         "Información", JOptionPane.INFORMATION_MESSAGE);
                 btnActivarCuenta.setText("Activar Cuenta");
             }
         } else {
-            int operacion = JOptionPane.showConfirmDialog(this, "¿Deseas " + btnActivarCuenta.getText(),
+            int operacion = JOptionPane.showConfirmDialog(this, "¿Deseas " + btnActivarCuenta.getText() + "?",
                     "Confirmación", JOptionPane.OK_CANCEL_OPTION);
             if (operacion == JOptionPane.OK_OPTION) {
                 try {
@@ -517,9 +523,9 @@ public class PantallaCuenta extends javax.swing.JDialog {
                 } catch (PersistenciaException e) {
                 }
 
-                JOptionPane.showMessageDialog(this, "Se desactivo la cuenta correctamente",
+                JOptionPane.showMessageDialog(this, "Se desactivó la cuenta correctamente",
                         "Información", JOptionPane.INFORMATION_MESSAGE);
-                btnActivarCuenta.setText("Activar Cuenta");
+                btnActivarCuenta.setText("Desactivar Cuenta");
             }
         }
 

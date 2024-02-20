@@ -18,7 +18,7 @@ public class Banco {
     public static void main(String[] args) {
         String cadenaConexion = "jdbc:mysql://localhost/banco";
         String usuario = "root";
-        String contrasenia = "Abel123";
+        String contrasenia = "password";
 
         IConexion conexion = new Conexion(cadenaConexion, usuario, contrasenia);
         ICuentasDAO cuentasDAO = new CuentasDAO(conexion);
