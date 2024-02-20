@@ -1,16 +1,10 @@
 package org.itson.bdavanzadas.banco.interfaces;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.util.List;
 import java.awt.Frame;
 import java.awt.Point;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import org.itson.bdavanzadas.bancodominio.Cliente;
 import org.itson.bdavanzadas.bancodominio.Cuenta;
@@ -95,11 +89,12 @@ public class PantallaCuentas extends javax.swing.JDialog {
             }
             tblCuentas.setModel(modelo);
 
-            ButtonColumn buttonColumn = new ButtonColumn("Ver", (e) -> {
+            ButtonColumn buttonColumn = new ButtonColumn("VER", (e) -> {
                 int fila = tblCuentas.convertRowIndexToModel(tblCuentas.getSelectedRow());
                 Cuenta cuenta = listaCuentas.get(fila);
                 PantallaCuenta pantallaCuenta = new PantallaCuenta(parent, true, conexion, cuenta);
                 pantallaCuenta.setVisible(true);
+                llenarTabla();
             });
             tblCuentas.getColumnModel().getColumn(tblCuentas.getColumnCount() - 1).setCellRenderer(buttonColumn);
             tblCuentas.getColumnModel().getColumn(tblCuentas.getColumnCount() - 1).setCellEditor(buttonColumn);

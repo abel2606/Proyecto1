@@ -147,12 +147,13 @@ public class CuentasDAO implements ICuentasDAO {
      * @throws PersistenciaException Lanza excepcion en caso de un error
      */
     @Override
-    public boolean existeCuentaDestino(long numeroCuentaDestino) throws PersistenciaException {
+    public boolean existeCuenta(long numeroCuenta) throws PersistenciaException {
         String sentenciaSQL = "SELECT COUNT(*) AS total FROM cuentas WHERE numero = ?";
         try (
-                Connection conexion = this.conexionBD.obtenerConexion();
-                PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);) {
-            comando.setLong(1, numeroCuentaDestino);
+            Connection conexion = this.conexionBD.obtenerConexion();
+            PreparedStatement comando = conexion.prepareStatement(sentenciaSQL);
+        ) {
+            comando.setLong(1, numeroCuenta);
             try (ResultSet resultado = comando.executeQuery()) {
                 if (resultado.next()) {
                     int total = resultado.getInt("total");

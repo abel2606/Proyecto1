@@ -38,15 +38,16 @@ public interface ICuentasDAO {
      * @throws PersistenciaException Si no se puede actualizar la cuenta
      */
     Cuenta actualizar(CuentaActualizadaDTO cuentaActualizada) throws PersistenciaException;
-    
+
     /**
      * Permite saber si exite una ceuenta con el numero de la cuenta
-     * @param numeroCuentaDestino El numero de la cuenta
+     *
+     * @param numeroCuenta El numero de la cuenta
      * @return Regersa verdadero si xiste cuenta
      * @throws PersistenciaException Lanza excepcion en caso de un error
      */
-    public boolean existeCuentaDestino(long numeroCuentaDestino) throws PersistenciaException;
-    
+    public boolean existeCuenta(long numeroCuenta) throws PersistenciaException;
+  
     /**
      * Permite saber el estado de una cuenta
      * @param numeroCuenta El numero de la cuenta a buscar
