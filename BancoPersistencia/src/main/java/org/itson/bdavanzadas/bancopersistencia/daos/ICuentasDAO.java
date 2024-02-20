@@ -4,9 +4,7 @@ import java.util.List;
 import org.itson.bdavanzadas.bancodominio.Cuenta;
 import org.itson.bdavanzadas.bancopersistencia.dtos.CuentaActualizadaDTO;
 import org.itson.bdavanzadas.bancopersistencia.dtos.CuentaNuevaDTO;
-import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;
-
-public interface ICuentasDAO {
+import org.itson.bdavanzadas.bancopersistencia.excepciones.PersistenciaException;public interface ICuentasDAO {
 
     /**
      * Permite obtener de la base de datos una lista con las cuentas del cliente
