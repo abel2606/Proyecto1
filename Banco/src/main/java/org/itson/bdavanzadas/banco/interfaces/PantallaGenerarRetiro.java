@@ -68,13 +68,14 @@ public class PantallaGenerarRetiro extends javax.swing.JDialog {
                         "Confirmación", JOptionPane.OK_CANCEL_OPTION);
                 if (operacion == JOptionPane.OK_OPTION) {
                     Retiro retiro = transaccionesDAO.generarRetiro(transaccionNueva, retiroNuevo);
-
+                    
                     dispose();
                     JOptionPane.showMessageDialog(this, "Se generó el retiro correctamente.\n"
                             + "Utiliza los siguientes datos para realizarlo:\n"
                             + "Folio: " + retiro.getFolio() + "\n"
                             + "Contraseña: " + retiro.getContrasena(), 
                             "Información", JOptionPane.INFORMATION_MESSAGE);
+                    System.out.println(retiro.getEstado());
                 }
             } catch (PersistenciaException ex) {
                 JOptionPane.showMessageDialog(this, "No se pudo generar el retiro.",

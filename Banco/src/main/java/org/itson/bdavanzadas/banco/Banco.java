@@ -18,7 +18,7 @@ public class Banco {
     public static void main(String[] args) {
         String cadenaConexion = "jdbc:mysql://localhost/banco";
         String usuario = "root";
-        String contrasenia = "password";
+        String contrasenia = "Abel123";
 
         IConexion conexion = new Conexion(cadenaConexion, usuario, contrasenia);
         ICuentasDAO cuentasDAO = new CuentasDAO(conexion);
@@ -27,7 +27,6 @@ public class Banco {
 
         PantallaInicio pantallaInicio = new PantallaInicio(conexion);
         pantallaInicio.setVisible(true);
-        
 //        try {
 //            if (cuentasDAO.existeCuentaDestino(6)) {
 //                System.out.println("Si");

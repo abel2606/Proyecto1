@@ -67,6 +67,7 @@ public interface ITransaccionesDAO {
      * @return regresa el valor del folio
      * @throws PersistenciaException lanza una excepcion en caso de error
      */
+
     Fecha consultarFechaTransaccion(Long folio) throws PersistenciaException;
 
     /**
